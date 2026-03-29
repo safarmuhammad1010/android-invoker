@@ -1,6 +1,9 @@
 package net.invoker.apk;
 
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.app.Activity;
@@ -129,6 +132,24 @@ public class MainActivity extends Activity {
         }
     }
 
+    public String getClipboardText() {
+        ClipboardManager clipboard = (ClipboardManager) this.getSystemService(Context.CLIPBOARD_SERVICE);
+        String pasteData = null;
+        if (clipboard != null && clipboard.hasPrimaryClip()) {
+            ClipData primaryClip = clipboard.getPrimaryClip();
+            if (primaryClip != null && primaryClip.getItemCount() > 0) {
+                ClipData.Item item = primaryClip.getItemAt(0);
+                CharSequence text = item.getText();
+                if (text != null) {
+                    pasteData = text.toString();
+                } else {
+                    android.util.Log.d("INVOKER", "Clipboard item is not plain text, might be a URI or Intent");
+                }
+            }
+        }
+        return pasteData;
+    }
+
     static class JsInterface {
         MainActivity mainActivity;
 
@@ -139,6 +160,11 @@ public class MainActivity extends Activity {
         @JavascriptInterface
         public void pilihFotoProfil() {
             this.mainActivity.pilihGambar();
+        }
+
+        @JavascriptInterface
+        public String ambilPapanKlip() {
+            return this.mainActivity.getClipboardText();
         }
     }
 
