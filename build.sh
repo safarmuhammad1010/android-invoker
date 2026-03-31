@@ -8,7 +8,9 @@ NAMA_APK='invoker'
 
 
 javac --release 11 -classpath "$PLATFORM/android.jar" -d build/obj \
-      build/gen/$PACKAGE/R.java src/java/$PACKAGE/MainActivity.java \
+      build/gen/$PACKAGE/R.java \
+      src/java/$PACKAGE/MainActivity.java \
+      src/java/$PACKAGE/BrowserActivity.java \
       src/java/$PACKAGE/WebKlien.java &&
 
 

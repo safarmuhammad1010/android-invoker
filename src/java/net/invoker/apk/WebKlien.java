@@ -1,6 +1,7 @@
 package net.invoker.apk;
 
 
+import android.content.Intent;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.webkit.WebResourceResponse;
@@ -14,6 +15,18 @@ public class WebKlien extends WebViewClient {
 
     WebKlien(MainActivity mainActivity) {
         this.mainActivity = mainActivity;
+    }
+
+    @Override
+    public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+        String url = request.getUrl().toString();
+        if ((!url.startsWith("https://app.local/invoker/berkas_lokal/")) && (!url.startsWith("https://kt3xm1nqsn.gt.tc"))) {
+            Intent intent = new Intent(this.mainActivity, BrowserActivity.class);
+            intent.putExtra("url", url);
+            this.mainActivity.startActivity(intent);
+            return true;
+        }
+        return false;
     }
 
     @Override
