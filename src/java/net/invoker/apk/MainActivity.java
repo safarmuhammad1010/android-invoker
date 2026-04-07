@@ -16,67 +16,71 @@ import android.webkit.JavascriptInterface;
 import android.graphics.Color;
 import android.net.Uri;
 import android.content.ContentResolver;
+import android.view.View;
+import android.widget.Toast;
+
 import java.io.InputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 
-import android.widget.Toast;
-
 
 public class MainActivity extends Activity {
 
-    static final String URL = "https://kt3xm1nqsn.gt.tc";
-
     static final String USER_AGENT = "Mozilla/5.0 (Linux; Android 11; SAMSUNG SM-G973U) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/14.2 Chrome/87.0.4280.141 Mobile Safari/537.36";
 
-    WebView webView;
+    WebView mWebView;
+    View mLoading;
+    boolean mSudahSiap = false;
+    Inisiator mInisiator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        android.util.Log.d("INVOKER", "onCreate()");
+        android.util.Log.d("Invoker.MainActivity", "onCreate()");
 
         setContentView(R.layout.activity_main);
 
-        this.webView = findViewById(R.id.webview);
+        mWebView = findViewById(R.id.webview);
+        mLoading = findViewById(R.id.loading);
 
         if (Build.VERSION.SDK_INT >= 21) {
             getWindow().setStatusBarColor(Color.BLACK);
             getWindow().setNavigationBarColor(Color.BLACK);
         }
         if (Build.VERSION.SDK_INT >= 29) {
-            webView.getSettings().setForceDark(WebSettings.FORCE_DARK_ON);
+            mWebView.getSettings().setForceDark(WebSettings.FORCE_DARK_ON);
         }
 
-        this.webView.setWebViewClient(new WebKlien(this));
-        this.webView.addJavascriptInterface(new JsInterface(this), "__android");
+        mWebView.setWebViewClient(new WebKlien(this));
+        mWebView.addJavascriptInterface(new JsInterface(this), "__android");
 
         WebView.setWebContentsDebuggingEnabled(true);
 
-        WebSettings webSettings = this.webView.getSettings();
+        WebSettings webSettings = mWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
-        webSettings.setUserAgentString(MainActivity.USER_AGENT);
+        // webSettings.setUserAgentString(MainActivity.USER_AGENT);
         webSettings.setDomStorageEnabled(true);
         webSettings.setLoadsImagesAutomatically(true);
         webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE);
         webSettings.setAllowFileAccess(true);
         webSettings.setAllowContentAccess(true);
 
-        this.webView.setWebChromeClient(new WebChromeClient() {
+        mWebView.setWebChromeClient(new WebChromeClient() {
             @Override
             public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
-                android.util.Log.d("WebViewConsole", consoleMessage.message());
+                android.util.Log.d("Invoker.WebViewConsole", consoleMessage.message());
                 return true;
             }
         });
 
-        this.webView.loadUrl(MainActivity.URL);
+        mInisiator = new Inisiator(this);
+        mInisiator.inisiasi();
     }
 
     @Override
     public void onBackPressed() {
-        this.webView.evaluateJavascript("__mundur()", null);
+        mWebView.evaluateJavascript("__mundur()", null);
     }
 
     private static final int PICK_FILE_REQUEST_CODE = 1;
@@ -91,15 +95,16 @@ public class MainActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        // Proses Berkas Foto Profil:
         if (requestCode == PICK_FILE_REQUEST_CODE && resultCode == RESULT_OK) {
             if (data != null) {
                 Uri fileUri = data.getData();
-                prosesBerkas(fileUri);
+                prosesBerkasFotoProfil(fileUri);
             }
         }
     }
 
-    private void prosesBerkas(Uri uri) {
+    private void prosesBerkasFotoProfil(Uri uri) {
         try {
             ContentResolver contentResolver = getContentResolver();
 
@@ -124,9 +129,9 @@ public class MainActivity extends Activity {
             long ms = System.currentTimeMillis();
             String namaFotoProfil = String.valueOf(ms);
             String urlFotoProfil = "https://app.local/invoker/berkas_lokal/foto_profil/" + namaFotoProfil + ekstensi;
-            this.webView.evaluateJavascript("__data.simpan('profil.foto', '" + urlFotoProfil + "')", null);
+            mWebView.evaluateJavascript("__data.simpan('profil.foto', '" + urlFotoProfil + "')", null);
 
-            android.util.Log.d("INVOKER", "foto profil berhasil dipilih, dengan nama='" + namaFotoProfil + "', dan ukuran berkas=" + file.length());
+            android.util.Log.d("Invoker.MainActivity", "foto profil berhasil dipilih, dengan nama='" + namaFotoProfil + "', dan ukuran berkas=" + file.length());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -143,28 +148,63 @@ public class MainActivity extends Activity {
                 if (text != null) {
                     pasteData = text.toString();
                 } else {
-                    android.util.Log.d("INVOKER", "Clipboard item is not plain text, might be a URI or Intent");
+                    android.util.Log.d("Invoker.MainActivity", "Clipboard bukan teks");
                 }
             }
         }
         return pasteData;
     }
 
+    public void tos(String pesan) {
+        Toast.makeText(this, pesan, Toast.LENGTH_SHORT).show();
+    }
+
     static class JsInterface {
-        MainActivity mainActivity;
+        MainActivity mMainActivity;
 
         JsInterface(MainActivity mainActivity) {
-            this.mainActivity = mainActivity;
+            mMainActivity = mainActivity;
+        }
+
+        @JavascriptInterface
+        public void siap() {
+            mMainActivity.mLoading.setVisibility(View.GONE);
+            mMainActivity.mSudahSiap = true;
         }
 
         @JavascriptInterface
         public void pilihFotoProfil() {
-            this.mainActivity.pilihGambar();
+            mMainActivity.pilihGambar();
         }
 
         @JavascriptInterface
         public String ambilPapanKlip() {
-            return this.mainActivity.getClipboardText();
+            return mMainActivity.getClipboardText();
+        }
+
+        @JavascriptInterface
+        public void getar() {
+            // ...
+        }
+
+        @JavascriptInterface
+        public void suara1() {
+            // ...
+        }
+
+        @JavascriptInterface
+        public void suara2() {
+            // ...
+        }
+
+        @JavascriptInterface
+        public void suara3() {
+            // ...
+        }
+
+        @JavascriptInterface
+        public void suara4() {
+            // ...
         }
     }
 

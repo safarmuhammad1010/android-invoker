@@ -9,6 +9,7 @@ import android.webkit.WebResourceRequest;
 import java.io.File;
 import java.io.FileInputStream;
 
+
 public class WebKlien extends WebViewClient {
 
     MainActivity mainActivity;
@@ -23,6 +24,7 @@ public class WebKlien extends WebViewClient {
         if ((!url.startsWith("https://app.local/invoker/berkas_lokal/")) && (!url.startsWith("https://kt3xm1nqsn.gt.tc"))) {
             Intent intent = new Intent(this.mainActivity, BrowserActivity.class);
             intent.putExtra("url", url);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             this.mainActivity.startActivity(intent);
             return true;
         }
@@ -32,13 +34,13 @@ public class WebKlien extends WebViewClient {
     @Override
     public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
         String path = request.getUrl().getPath();
-        android.util.Log.d("INVOKER", "mengunduh: " + path);
+        android.util.Log.d("Invoker.WebKlien", "mengunduh: " + path);
 
         if (path != null && path.startsWith("/invoker/berkas_lokal/")) {
             try {
                 String filename = request.getUrl().getLastPathSegment();
                 String mime = WebKlien.getMimeType(filename);
-                android.util.Log.d("INVOKER", "permintaan diintersepsi: " + mime);
+                android.util.Log.d("Invoker.WebKlien", "permintaan diintersepsi: " + mime);
                 // Akali cache <img>
                 if (path.startsWith("/invoker/berkas_lokal/foto_profil/")) {
                     filename = "foto_profil";
