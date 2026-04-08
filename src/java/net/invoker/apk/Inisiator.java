@@ -51,14 +51,16 @@ class Inisiator {
     }
 
     private void unduhMetadata() throws Exception {
-        android.util.Log.d("Invoker.Inisiator", "mengunduh metadata...");
-        URL url = new URL(URL_METADATA);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.connect();
-        InputStream input = conn.getInputStream();
+        android.util.Log.d("Invoker.Inisiator", "mengunduh metadata di: " + URL_METADATA);
+        HttpURLConnection httpConn = buatKoneksi(URL_METADATA);
+        httpConn.connect();
+
+        InputStream input = httpConn.getInputStream();
         String data = bacaInputKeString(input);
-        android.util.Log.d("Invoker.Inisiator", data);
+        // android.util.Log.d("Invoker.Inisiator", data);
+
         mMetadataGlobal = new JSONObject(data);
+
         cekVersi();
     }
 
@@ -66,19 +68,34 @@ class Inisiator {
         String versiGlobal = mMetadataGlobal.getString("versi");
         SharedPreferences pref = mMainActivity.getSharedPreferences(NAMA_PREF, Context.MODE_PRIVATE);
         String versiLokal = pref.getString("versi", null);
+
         if (! ((versiLokal != null) && (!versiLokal.isEmpty()))) {
             android.util.Log.d("Invoker.Inisiator", "APK BARU");
             unduhRepo();
             bukaWeb(versiGlobal);
         } else {
             android.util.Log.d("Invoker.Inisiator", "repo lokal tersedia, versi lokal='" + versiLokal + "', versi global='" + versiGlobal + "'");
+
             if (versiLokal.equals(versiGlobal)) {
                 android.util.Log.d("Invoker.Inisiator", "versi lokal dan global sama");
                 bukaWeb(versiLokal);
                 return;
             }
             android.util.Log.d("Invoker.Inisiator", "versi lokal dan global TIDAK sama");
-            // ...
+
+            String versiLokalMayor = versiLokal.substring(0, versiLokal.indexOf('.'));
+            String versiGlobalMayor = versiGlobal.substring(0, versiGlobal.indexOf('.'));
+            android.util.Log.d("Invoker.Inisiator", "versiLokalMayor=" + versiLokalMayor + ", versiGlobalMayor=" + versiGlobalMayor);
+
+            if (versiGlobalMayor.equals(versiLokalMayor)) {
+                android.util.Log.d("Invoker.Inisiator", "versi MAYOR lokal dan global sama, unduh repo di latar belakang");
+                bukaWeb(versiLokal);
+                unduhRepo();
+            } else {
+                android.util.Log.d("Invoker.Inisiator", "versi MAYOR lokal dan global TIDAK sama");
+                unduhRepo();
+                bukaWeb(versiGlobal);
+            }
         }
     }
 
@@ -107,8 +124,7 @@ class Inisiator {
     private void unduhDanSimpan(String url, File berkas) throws IOException {
         android.util.Log.d("Invoker.Inisiator", "mengunduh " + url + ", lalu simpan ke: " + berkas);
 
-        URL httpUrl = new URL(url);
-        HttpURLConnection httpConn = (HttpURLConnection) httpUrl.openConnection();
+        HttpURLConnection httpConn = buatKoneksi(url);
         httpConn.connect();
 
         InputStream input = httpConn.getInputStream();
@@ -143,6 +159,19 @@ class Inisiator {
                 mMainActivity.mWebView.loadUrl(url);
             }
         });
+    }
+
+    private HttpURLConnection buatKoneksi(String url) throws IOException {
+        URL httpUrl = new URL(url);
+        HttpURLConnection httpConn = (HttpURLConnection) httpUrl.openConnection();
+
+        // Matikan cache:
+        httpConn.setUseCaches(false);
+        httpConn.setRequestProperty("Cache-Control", "no-cache, no-store, must-revalidate");
+        httpConn.setRequestProperty("Pragma", "no-cache");
+        httpConn.setRequestProperty("Expires", "0");
+
+        return httpConn;
     }
 
     private String bacaInputKeString(InputStream input) throws IOException {
