@@ -12,6 +12,8 @@ import java.io.FileInputStream;
 
 public class WebKlien extends WebViewClient {
 
+    static final String FOLDER_LOKAL = "/invoker/berkas_lokal/";
+
     MainActivity mainActivity;
 
     WebKlien(MainActivity mainActivity) {
@@ -21,7 +23,7 @@ public class WebKlien extends WebViewClient {
     @Override
     public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
         String url = request.getUrl().toString();
-        if ((!url.startsWith("https://app.local/invoker/berkas_lokal/")) && (!url.startsWith("https://kt3xm1nqsn.gt.tc"))) {
+        if (! url.startsWith("https://app.local" + FOLDER_LOKAL)) {
             Intent intent = new Intent(this.mainActivity, BrowserActivity.class);
             intent.putExtra("url", url);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -33,21 +35,29 @@ public class WebKlien extends WebViewClient {
 
     @Override
     public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
+        String url = request.getUrl().toString();
         String path = request.getUrl().getPath();
         android.util.Log.d("Invoker.WebKlien", "mengunduh: " + path);
 
-        if (path != null && path.startsWith("/invoker/berkas_lokal/")) {
+        if (url.startsWith("https://app.local" + FOLDER_LOKAL)) {
             try {
-                String filename = request.getUrl().getLastPathSegment();
-                String mime = WebKlien.getMimeType(filename);
-                android.util.Log.d("Invoker.WebKlien", "permintaan diintersepsi: " + mime);
+                String berkas;
                 // Akali cache <img>
-                if (path.startsWith("/invoker/berkas_lokal/foto_profil/")) {
-                    filename = "foto_profil";
+                if (path.startsWith(FOLDER_LOKAL + "foto_profil/")) {
+                    berkas = "foto_profil";
+                } else {
+                    String[] ss = url.split(FOLDER_LOKAL);
+                    berkas = ss[1];
                 }
-                File file = new File(this.mainActivity.getFilesDir(), filename);
+
+                String mime = WebKlien.getMimeType(path);
+                android.util.Log.d("Invoker.WebKlien", "permintaan diintersepsi: " + mime);
+
+                File file = new File(this.mainActivity.getFilesDir(), berkas);
                 FileInputStream input = new FileInputStream(file);
-                return new WebResourceResponse(mime, "UTF-8", input);
+                WebResourceResponse respon = new WebResourceResponse(mime, "UTF-8", input);
+
+                return respon;
             } catch (Exception e) {
                 e.printStackTrace();
             }

@@ -134,8 +134,15 @@ class Inisiator {
     }
 
     private void bukaWeb(String versi) {
-        android.util.Log.d("Invoker.Inisiator", "membuka web " + versi);
-        // ...
+        String url = "https://app.local/invoker/berkas_lokal/repo/" + versi + "/index.html";
+        android.util.Log.d("Invoker.Inisiator", "membuka web: " + url);
+
+        mMainActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mMainActivity.mWebView.loadUrl(url);
+            }
+        });
     }
 
     private String bacaInputKeString(InputStream input) throws IOException {
