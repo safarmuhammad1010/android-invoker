@@ -22,10 +22,31 @@
             android:scaleType="fitXY"/>
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
             android:id="@+id/ikon_loading_1"
             android:src="@drawable/ikon_loading_1"
+            android:layout_centerInParent="true"/>
+
+        <ImageView
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:id="@+id/ikon_loading_2"
+            android:src="@drawable/ikon_loading_2"
+            android:layout_centerInParent="true"/>
+
+        <ImageView
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:id="@+id/ikon_loading_3"
+            android:src="@drawable/ikon_loading_3"
+            android:layout_centerInParent="true"/>
+
+        <ImageView
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:id="@+id/ikon_loading_4"
+            android:src="@drawable/ikon_loading_4"
             android:layout_centerInParent="true"/>
 
     </RelativeLayout>
