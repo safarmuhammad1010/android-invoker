@@ -4,6 +4,7 @@ package net.invoker.apk;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
@@ -48,28 +49,58 @@ class Inisiator {
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.connect();
         InputStream input = conn.getInputStream();
-        String data = readStream(input);
+        String data = bacaInputKeString(input);
         android.util.Log.d("Invoker.Inisiator", data);
         mMetadataGlobal = new JSONObject(data);
-        cekVersiLokal();
+        cekVersi();
     }
 
-    private void unduhRepo() {
-
-    }
-
-    private void cekVersiLokal() {
+    private void cekVersi() throws Exception {
+        String versiGlobal = mMetadataGlobal.getString("versi");
         SharedPreferences pref = mMainActivity.getSharedPreferences(NAMA_PREF, Context.MODE_PRIVATE);
         String versiLokal = pref.getString("versi", null);
         if (! ((versiLokal != null) && (!versiLokal.isEmpty()))) {
-            android.util.Log.d("Invoker.Inisiator", "repo lokal tersedia, cek versi");
-        } else {
-            android.util.Log.d("Invoker.Inisiator", "apk baru, unduh repo lalu tampilkan");
+            android.util.Log.d("Invoker.Inisiator", "APK baru");
             unduhRepo();
+            bukaWeb(versiGlobal);
+        } else {
+            android.util.Log.d("Invoker.Inisiator", "repo lokal tersedia, versi lokal='" + versiLokal + "', versi global='" + versiGlobal + "'");
+            if (versiLokal.equals(versiGlobal)) {
+                android.util.Log.d("Invoker.Inisiator", "versi lokal dan global sama");
+                bukaWeb(versiLokal);
+                return;
+            }
+            // ...
         }
     }
 
-    private String readStream(InputStream input) throws IOException {
+    private void unduhRepo() throws Exception {
+        String versiGlobal = mMetadataGlobal.getString("versi");
+        File folderRepo = new File(mMainActivity.getFilesDir(), versiGlobal);
+        android.util.Log.d("Invoker.Inisiator", "mengunduh repo " + versiGlobal + ", lalu simpan ke folder: " + folderRepo);
+
+        perbaruiVersiLokal(versiGlobal);
+    }
+
+    private void perbaruiVersiLokal(String versiLokalBaru) {
+        SharedPreferences pref = mMainActivity.getSharedPreferences(NAMA_PREF, Context.MODE_PRIVATE);
+        String versiLokalSekarang = pref.getString("versi", null);
+        android.util.Log.d("Invoker.Inisiator", "perbarui versiLokal: " + versiLokalSekarang + " ---> " + versiLokalBaru);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString("versi", versiLokalBaru);
+        editor.apply();
+    }
+
+    private void bukaWeb(String versi) {
+        android.util.Log.d("Invoker.Inisiator", "membuka web " + versi);
+        // ...
+    }
+
+    private void unduhDanSimpan(String url, String berkas) {
+        // ...
+    }
+
+    private String bacaInputKeString(InputStream input) throws IOException {
         StringBuilder result = new StringBuilder();
         BufferedReader reader = new BufferedReader(new InputStreamReader(input));
         String line;
