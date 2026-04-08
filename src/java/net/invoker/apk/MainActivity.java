@@ -29,7 +29,7 @@ public class MainActivity extends Activity {
     static final String USER_AGENT = "Mozilla/5.0 (Linux; Android 11; SAMSUNG SM-G973U) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/14.2 Chrome/87.0.4280.141 Mobile Safari/537.36";
 
     WebView mWebView;
-    View mLoading;
+    Loading mLoading;
     boolean mSudahSiap = false;
     Inisiator mInisiator;
 
@@ -41,8 +41,10 @@ public class MainActivity extends Activity {
 
         setContentView(R.layout.activity_main);
 
+        mLoading = new Loading(this);
+        mLoading.mulai();
+
         mWebView = findViewById(R.id.webview);
-        mLoading = findViewById(R.id.loading);
 
         if (Build.VERSION.SDK_INT >= 21) {
             getWindow().setStatusBarColor(Color.BLACK);
@@ -168,7 +170,7 @@ public class MainActivity extends Activity {
 
         @JavascriptInterface
         public void siap() {
-            mMainActivity.mLoading.setVisibility(View.GONE);
+            //mMainActivity.mLoading.setVisibility(View.GONE);
             mMainActivity.mSudahSiap = true;
         }
 

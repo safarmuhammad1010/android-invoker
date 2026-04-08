@@ -9,11 +9,25 @@
         android:layout_height="match_parent"
         android:id="@+id/webview"/>
 
-    <ImageView
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/loading"
-        android:src="@drawable/latar"
-        android:scaleType="fitXY"/>
+        android:id="@+id/loading">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/latar_loading"
+            android:src="@drawable/latar_loading"
+            android:scaleType="fitXY"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ikon_loading_1"
+            android:src="@drawable/ikon_loading_1"
+            android:layout_centerInParent="true"/>
+
+    </RelativeLayout>
 
 </FrameLayout>
