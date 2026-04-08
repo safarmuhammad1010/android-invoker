@@ -170,7 +170,7 @@ public class MainActivity extends Activity {
 
         @JavascriptInterface
         public void siap() {
-            mMainActivity.mLoading.setVisibility(View.GONE);
+            mMainActivity.mLoading.sembunyikan();
             mMainActivity.mSudahSiap = true;
         }
 

@@ -4,11 +4,14 @@ package net.invoker.apk;
 import android.animation.ObjectAnimator;
 import android.widget.ImageView;
 import android.view.animation.LinearInterpolator;
+import android.view.View;
 
 
 class Loading {
 
     MainActivity mMainActivity;
+
+    View mView;
 
     ObjectAnimator mAnimator1;
     ObjectAnimator mAnimator2;
@@ -17,6 +20,7 @@ class Loading {
 
     Loading(MainActivity mainActivity) {
         mMainActivity = mainActivity;
+        mView = mMainActivity.findViewById(R.id.loading);
         mAnimator1 = buatAnimator1();
         mAnimator2 = buatAnimator2();
         mAnimator3 = buatAnimator3();
@@ -71,6 +75,10 @@ class Loading {
         mAnimator2.cancel();
         mAnimator3.cancel();
         mAnimator4.cancel();
+    }
+
+    void sembunyikan() {
+        mView.setVisibility(View.GONE);
     }
 
 }
