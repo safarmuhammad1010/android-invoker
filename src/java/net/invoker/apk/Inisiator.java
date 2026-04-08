@@ -5,14 +5,21 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
 import java.io.IOException;
+
 import java.net.URL;
 import java.net.HttpURLConnection;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import org.json.JSONObject;
+import org.json.JSONArray;
 
 
 class Inisiator {
@@ -60,7 +67,7 @@ class Inisiator {
         SharedPreferences pref = mMainActivity.getSharedPreferences(NAMA_PREF, Context.MODE_PRIVATE);
         String versiLokal = pref.getString("versi", null);
         if (! ((versiLokal != null) && (!versiLokal.isEmpty()))) {
-            android.util.Log.d("Invoker.Inisiator", "APK baru");
+            android.util.Log.d("Invoker.Inisiator", "APK BARU");
             unduhRepo();
             bukaWeb(versiGlobal);
         } else {
@@ -70,16 +77,51 @@ class Inisiator {
                 bukaWeb(versiLokal);
                 return;
             }
+            android.util.Log.d("Invoker.Inisiator", "versi lokal dan global TIDAK sama");
             // ...
         }
     }
 
     private void unduhRepo() throws Exception {
         String versiGlobal = mMetadataGlobal.getString("versi");
-        File folderRepo = new File(mMainActivity.getFilesDir(), versiGlobal);
+        File folderRepo = new File(new File(mMainActivity.getFilesDir(), "repo"), versiGlobal);
+        buatFolderRepo(folderRepo);
         android.util.Log.d("Invoker.Inisiator", "mengunduh repo " + versiGlobal + ", lalu simpan ke folder: " + folderRepo);
 
+        JSONArray lisUrlKlien = mMetadataGlobal.getJSONArray("url_klien");
+        for (int i = 0; i < lisUrlKlien.length(); i++) {
+            String url = lisUrlKlien.getString(i);
+            String[] ss = url.split("/refs/heads/main/");
+            File berkas =  new File(folderRepo, ss[1]);
+            unduhDanSimpan(url, berkas);
+        }
+
         perbaruiVersiLokal(versiGlobal);
+    }
+
+    private void buatFolderRepo(File folderRepo) throws Exception {
+        Path path = Paths.get(folderRepo.toString());
+        Files.createDirectories(path);
+    }
+
+    private void unduhDanSimpan(String url, File berkas) throws IOException {
+        android.util.Log.d("Invoker.Inisiator", "mengunduh " + url + ", lalu simpan ke: " + berkas);
+
+        URL httpUrl = new URL(url);
+        HttpURLConnection httpConn = (HttpURLConnection) httpUrl.openConnection();
+        httpConn.connect();
+
+        InputStream input = httpConn.getInputStream();
+        FileOutputStream output = new FileOutputStream(berkas);
+
+        byte[] buffer = new byte[4096];
+        int bytesRead;
+        while ((bytesRead = input.read(buffer)) != -1) {
+            output.write(buffer, 0, bytesRead);
+        }
+        output.flush();
+        output.close();
+        input.close();
     }
 
     private void perbaruiVersiLokal(String versiLokalBaru) {
@@ -93,10 +135,6 @@ class Inisiator {
 
     private void bukaWeb(String versi) {
         android.util.Log.d("Invoker.Inisiator", "membuka web " + versi);
-        // ...
-    }
-
-    private void unduhDanSimpan(String url, String berkas) {
         // ...
     }
 
