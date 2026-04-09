@@ -49,6 +49,21 @@
             android:src="@drawable/ikon_loading_4"
             android:layout_centerInParent="true"/>
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/teks_loading"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_horizontal"
+            android:paddingHorizontal="6dp"
+            android:paddingBottom="4dp"
+            android:textSize="14dp"
+            android:textColor="#ffffff"
+            android:alpha="0.2"
+            android:text="[i] Sedang mengunduh data dari server. Lamanya proses ini bergantung pada kecepatan koneksi internet anda."
+            android:visibility="gone"/>
+
     </RelativeLayout>
 
 </FrameLayout>

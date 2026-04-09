@@ -3,6 +3,7 @@ package net.invoker.apk;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.view.View;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -38,14 +39,11 @@ class Inisiator {
     void inisiasi() {
         android.util.Log.d("Invoker.Inisiator", "memulai inisiasi");
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    unduhMetadata();
-                } catch (Exception e) {
-                    android.util.Log.e("Invoker.Inisiator", e.getMessage());
-                }
+        new Thread(() -> {
+            try {
+                unduhMetadata();
+            } catch (Exception e) {
+                android.util.Log.e("Invoker.Inisiator", e.getMessage());
             }
         }).start();
     }
@@ -71,6 +69,7 @@ class Inisiator {
 
         if (! ((versiLokal != null) && (!versiLokal.isEmpty()))) {
             android.util.Log.d("Invoker.Inisiator", "APK BARU");
+            tampilkanTeksLoading();
             unduhRepo();
             bukaWeb(versiGlobal);
         } else {
@@ -93,6 +92,7 @@ class Inisiator {
                 unduhRepo();
             } else {
                 android.util.Log.d("Invoker.Inisiator", "versi MAYOR lokal dan global TIDAK sama");
+                tampilkanTeksLoading();
                 unduhRepo();
                 bukaWeb(versiGlobal);
             }
@@ -153,11 +153,8 @@ class Inisiator {
         String url = "https://app.local/invoker/berkas_lokal/repo/" + versi + "/index.html";
         android.util.Log.d("Invoker.Inisiator", "membuka web: " + url);
 
-        mMainActivity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mMainActivity.mWebView.loadUrl(url);
-            }
+        mMainActivity.runOnUiThread(() -> {
+            mMainActivity.mWebView.loadUrl(url);
         });
     }
 
@@ -183,6 +180,13 @@ class Inisiator {
         }
         reader.close();
         return result.toString();
+    }
+
+    private void tampilkanTeksLoading() {
+        View teksLoading = mMainActivity.findViewById(R.id.teks_loading);
+        mMainActivity.runOnUiThread(() -> {
+            teksLoading.setVisibility(View.VISIBLE);
+        });
     }
 
 }
