@@ -84,7 +84,7 @@
             android:src="@drawable/ikon_koneksi_gagal"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="24dp"/>
 
         <ImageButton
             android:layout_width="172dp"
@@ -97,6 +97,20 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="24dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/tombol_coba_lagi"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_horizontal"
+            android:paddingHorizontal="6dp"
+            android:paddingBottom="24dp"
+            android:textSize="14dp"
+            android:textColor="#ffffff"
+            android:alpha="0.2"
+            android:text="[i] Coba tekan tombol  di bawah. Jika masih tidak bisa, coba hapus data aplikasi, lalu coba lagi. Jika tetap tidak bisa, silahkan download ulang aplikasi ini di browser anda, dengan link: bit.ly/jsdij"
+            />
 
     </RelativeLayout>
 

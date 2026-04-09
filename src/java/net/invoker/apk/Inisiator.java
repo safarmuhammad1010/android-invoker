@@ -56,7 +56,7 @@ class Inisiator {
                 if (! mApaDiUnduhDiLatarBelakang) {
                     if (mPercobaanKe > 0) {
                         try {
-                            Thread.sleep(1000 * 2);
+                            Thread.sleep(1500);
                             tampilkanKoneksiGagal();
                         } catch (InterruptedException ie) {
                             android.util.Log.e("Invoker.Inisiator", ie.getMessage());
