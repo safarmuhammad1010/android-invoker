@@ -27,6 +27,7 @@ class Inisiator {
 
     static final String NAMA_PREF = "inisiator";
     static final String URL_METADATA = "https://raw.githubusercontent.com/repoinvoker1/invoker/refs/heads/main/invoker.json";
+    static final int BATAS_WAKTU_UNDUH = 1000 * 10;
 
     MainActivity mMainActivity;
 
@@ -34,6 +35,10 @@ class Inisiator {
 
     boolean mApaDiUnduhDiLatarBelakang = false;
     int mPercobaanKe = 0;
+    boolean mSedangMengunduh = false;
+    boolean mApaSelesaiDiUnduh = false;
+    boolean mSiap = false;
+    Thread mThreadBatasWaktu;
 
     Inisiator(MainActivity mainActivity) {
         mMainActivity = mainActivity;
@@ -41,7 +46,10 @@ class Inisiator {
             android.util.Log.d("Invoker.Inisiator", "mencoba lagi...");
             mPercobaanKe += 1;
             sembunyikanKoneksiGagal();
-            inisiasi();
+            if (! mSedangMengunduh) {
+                android.util.Log.d("Invoker.Inisiator", "tombol 'coba lagi' ditekan di saat sedang mengunduh, abaikan.");
+                inisiasi();
+            }
         });
     }
 
@@ -50,14 +58,19 @@ class Inisiator {
 
         new Thread(() -> {
             try {
+                mSedangMengunduh = true;
+                tungguBatasWaktu();
                 unduhMetadata();
             } catch (Exception e) {
                 android.util.Log.e("Invoker.Inisiator", e.getMessage());
                 if (! mApaDiUnduhDiLatarBelakang) {
                     if (mPercobaanKe > 0) {
+                        mSedangMengunduh = false;
                         try {
                             Thread.sleep(1500);
-                            tampilkanKoneksiGagal();
+                            if (! mSedangMengunduh) {
+                                tampilkanKoneksiGagal();
+                            }
                         } catch (InterruptedException ie) {
                             android.util.Log.e("Invoker.Inisiator", ie.getMessage());
                         }
@@ -65,21 +78,37 @@ class Inisiator {
                         tampilkanKoneksiGagal();
                     }
                 }
+                mSedangMengunduh = false;
             }
         }).start();
     }
 
+    private void tungguBatasWaktu() {
+        if (mSiap) return;
+        mThreadBatasWaktu = new Thread(() -> {
+            try {
+                Thread.sleep(BATAS_WAKTU_UNDUH);
+                if (! (mApaSelesaiDiUnduh || mSiap)) {
+                    tampilkanKoneksiGagal();
+                }
+            } catch (InterruptedException ie) {
+                android.util.Log.e("Invoker.Inisiator", ie.getMessage());
+            }
+        });
+        mThreadBatasWaktu.start();
+    }
+
     private void unduhMetadata() throws Exception {
-        android.util.Log.d("Invoker.Inisiator", "mengunduh metadata di: " + URL_METADATA);
-        HttpURLConnection httpConn = buatKoneksi(URL_METADATA);
-        httpConn.connect();
+        if (mMetadataGlobal == null) {
+            android.util.Log.d("Invoker.Inisiator", "mengunduh metadata di: " + URL_METADATA);
+            HttpURLConnection httpConn = buatKoneksi(URL_METADATA);
+            httpConn.connect();
 
-        InputStream input = httpConn.getInputStream();
-        String data = bacaInputKeString(input);
-        // android.util.Log.d("Invoker.Inisiator", data);
+            InputStream input = httpConn.getInputStream();
+            String data = bacaInputKeString(input);
 
-        mMetadataGlobal = new JSONObject(data);
-
+            mMetadataGlobal = new JSONObject(data);
+        }
         cekVersi();
     }
 
@@ -135,6 +164,7 @@ class Inisiator {
             unduhDanSimpan(url, berkas);
         }
 
+        mApaSelesaiDiUnduh = true;
         perbaruiVersiLokal(versiGlobal);
     }
 
@@ -172,6 +202,8 @@ class Inisiator {
     }
 
     private void bukaWeb(String versi) {
+        mSiap = true;
+
         String url = "https://app.local/invoker/berkas_lokal/repo/" + versi + "/index.html";
         android.util.Log.d("Invoker.Inisiator", "membuka web: " + url);
 
@@ -212,6 +244,7 @@ class Inisiator {
     }
 
     private void tampilkanKoneksiGagal() {
+        if (mSiap || mApaSelesaiDiUnduh) return;
         View koneksiGagal = mMainActivity.findViewById(R.id.koneksi_gagal);
         mMainActivity.runOnUiThread(() -> {
             koneksiGagal.setVisibility(View.VISIBLE);

@@ -14,6 +14,7 @@
 
     <application android:label="Invoker" android:theme="@style/Theme.MyApp">
         <activity android:name=".MainActivity"
+            android:theme="@style/SplashScreen"
             android:exported="true"
             android:launchMode="singleTop">
             <intent-filter>
