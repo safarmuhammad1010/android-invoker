@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/latar_loading"
-            android:src="@drawable/latar_loading"
+            android:src="@drawable/latar"
             android:scaleType="fitXY"/>
 
         <ImageView
@@ -63,6 +63,40 @@
             android:alpha="0.2"
             android:text="[i] Sedang mengunduh data dari server. Lamanya proses ini bergantung pada kecepatan koneksi internet anda."
             android:visibility="gone"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/koneksi_gagal"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/latar"
+            android:scaleType="fitXY"/>
+
+        <ImageView
+            android:layout_width="240dp"
+            android:layout_height="240dp"
+            android:src="@drawable/ikon_koneksi_gagal"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"/>
+
+        <ImageButton
+            android:layout_width="172dp"
+            android:layout_height="46dp"
+            android:id="@+id/tombol_coba_lagi"
+            android:background="@drawable/tombol_coba_lagi"
+            android:src="@null"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="24dp"/>
 
     </RelativeLayout>
 

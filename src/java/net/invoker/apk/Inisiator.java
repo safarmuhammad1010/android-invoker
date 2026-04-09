@@ -32,8 +32,17 @@ class Inisiator {
 
     JSONObject mMetadataGlobal;
 
+    boolean mApaDiUnduhDiLatarBelakang = false;
+    int mPercobaanKe = 0;
+
     Inisiator(MainActivity mainActivity) {
         mMainActivity = mainActivity;
+        mMainActivity.findViewById(R.id.tombol_coba_lagi).setOnClickListener((v) -> {
+            android.util.Log.d("Invoker.Inisiator", "mencoba lagi...");
+            mPercobaanKe += 1;
+            sembunyikanKoneksiGagal();
+            inisiasi();
+        });
     }
 
     void inisiasi() {
@@ -44,6 +53,18 @@ class Inisiator {
                 unduhMetadata();
             } catch (Exception e) {
                 android.util.Log.e("Invoker.Inisiator", e.getMessage());
+                if (! mApaDiUnduhDiLatarBelakang) {
+                    if (mPercobaanKe > 0) {
+                        try {
+                            Thread.sleep(1000 * 2);
+                            tampilkanKoneksiGagal();
+                        } catch (InterruptedException ie) {
+                            android.util.Log.e("Invoker.Inisiator", ie.getMessage());
+                        }
+                    } else {
+                        tampilkanKoneksiGagal();
+                    }
+                }
             }
         }).start();
     }
@@ -88,6 +109,7 @@ class Inisiator {
 
             if (versiGlobalMayor.equals(versiLokalMayor)) {
                 android.util.Log.d("Invoker.Inisiator", "versi MAYOR lokal dan global sama, unduh repo di latar belakang");
+                mApaDiUnduhDiLatarBelakang = true;
                 bukaWeb(versiLokal);
                 unduhRepo();
             } else {
@@ -186,6 +208,20 @@ class Inisiator {
         View teksLoading = mMainActivity.findViewById(R.id.teks_loading);
         mMainActivity.runOnUiThread(() -> {
             teksLoading.setVisibility(View.VISIBLE);
+        });
+    }
+
+    private void tampilkanKoneksiGagal() {
+        View koneksiGagal = mMainActivity.findViewById(R.id.koneksi_gagal);
+        mMainActivity.runOnUiThread(() -> {
+            koneksiGagal.setVisibility(View.VISIBLE);
+        });
+    }
+
+    private void sembunyikanKoneksiGagal() {
+        View koneksiGagal = mMainActivity.findViewById(R.id.koneksi_gagal);
+        mMainActivity.runOnUiThread(() -> {
+            koneksiGagal.setVisibility(View.GONE);
         });
     }
 
