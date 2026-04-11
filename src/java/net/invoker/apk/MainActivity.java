@@ -18,6 +18,8 @@ import android.net.Uri;
 import android.content.ContentResolver;
 import android.view.View;
 import android.widget.Toast;
+import android.os.Vibrator;
+import android.os.VibrationEffect;
 
 import java.io.InputStream;
 import java.io.File;
@@ -162,10 +164,15 @@ public class MainActivity extends Activity {
     }
 
     static class JsInterface {
+
+        static final int DURASI_GETAR = 150;
+
         MainActivity mMainActivity;
+        Vibrator mVibrator;
 
         JsInterface(MainActivity mainActivity) {
             mMainActivity = mainActivity;
+            mVibrator = (Vibrator) mMainActivity.getSystemService(Context.VIBRATOR_SERVICE);
         }
 
         @JavascriptInterface
@@ -186,7 +193,13 @@ public class MainActivity extends Activity {
 
         @JavascriptInterface
         public void getar() {
-            // ...
+            if (mVibrator != null && mVibrator.hasVibrator()) {
+                if (android.os.Build.VERSION.SDK_INT >= 26) {
+                    mVibrator.vibrate(VibrationEffect.createOneShot(DURASI_GETAR, VibrationEffect.DEFAULT_AMPLITUDE));
+                } else {
+                    mVibrator.vibrate(DURASI_GETAR);
+                }
+            }
         }
 
         @JavascriptInterface
