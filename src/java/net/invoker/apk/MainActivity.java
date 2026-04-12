@@ -95,12 +95,14 @@ public class MainActivity extends Activity {
 
         mBrowser = (WebView) findViewById(R.id.browser);
         mLayoutBrowser = findViewById(R.id.layout_browser);
+        mTombolTutupBrowser = findViewById(R.id.tombol_tutup_browser);
         initBrowser();
     }
 
     private void tutupBrowser() {
         runOnUiThread(() -> {
             mLayoutBrowser.setVisibility(View.GONE);
+            mApaBrowserSedangDitampilkan = false;
         });
     }
 
@@ -132,23 +134,28 @@ public class MainActivity extends Activity {
                 return true;
             }
         });
+
+        mTombolTutupBrowser.setOnClickListener((v) -> {
+            tutupBrowser();
+        });
     }
 
-    String mUrlBrowserTerakhir = null;
+    boolean mApaBrowserSedangDitampilkan = false;
 
     void bukaDiBrowser(String url) {
         runOnUiThread(() -> {
-            if (! url.equals(mUrlBrowserTerakhir)) {
+            if (! url.equals(mWebView.getUrl())) {
+                mBrowser.loadUrl("about:blank");
                 mBrowser.loadUrl(url);
             }
             mLayoutBrowser.setVisibility(View.VISIBLE);
-            mUrlBrowserTerakhir = url;
-            android.util.Log.d("Invoker", url);
+            mApaBrowserSedangDitampilkan = true;
         });
     }
 
     @Override
     public void onBackPressed() {
+        if (mApaBrowserSedangDitampilkan) return;
         mWebView.evaluateJavascript("__mundur()", null);
     }
 
