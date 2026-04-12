@@ -78,7 +78,9 @@ class Loading {
     }
 
     void sembunyikan() {
-        mView.setVisibility(View.GONE);
+        mMainActivity.runOnUiThread(() -> {
+            mView.setVisibility(View.GONE);
+        });
     }
 
 }

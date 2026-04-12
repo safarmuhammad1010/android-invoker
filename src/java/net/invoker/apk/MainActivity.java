@@ -20,6 +20,9 @@ import android.view.View;
 import android.widget.Toast;
 import android.os.Vibrator;
 import android.os.VibrationEffect;
+import android.media.AudioAttributes;
+import android.media.AudioManager;
+import android.media.SoundPool;
 
 import java.io.InputStream;
 import java.io.File;
@@ -34,6 +37,10 @@ public class MainActivity extends Activity {
     Loading mLoading;
     boolean mSudahSiap = false;
     Inisiator mInisiator;
+
+    WebView mBrowser;
+    View mLayoutBrowser;
+    View mTombolTutupBrowser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,18 +80,105 @@ public class MainActivity extends Activity {
         mWebView.setWebChromeClient(new WebChromeClient() {
             @Override
             public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
-                android.util.Log.d("Invoker.WebViewConsole", consoleMessage.message());
+                android.util.Log.d("Invoker.MainActivity", consoleMessage.message());
                 return true;
             }
         });
 
+
         mInisiator = new Inisiator(this);
         mInisiator.inisiasi();
+
+
+        initEfekSuara();
+
+
+        mBrowser = (WebView) findViewById(R.id.browser);
+        mLayoutBrowser = findViewById(R.id.layout_browser);
+        initBrowser();
+    }
+
+    private void tutupBrowser() {
+        runOnUiThread(() -> {
+            mLayoutBrowser.setVisibility(View.GONE);
+        });
+    }
+
+    static class BrowserJsInterface {
+        MainActivity mMainActivity;
+
+        BrowserJsInterface(MainActivity mainActivity) {
+            mMainActivity = mainActivity;
+        }
+
+        @JavascriptInterface
+        public void tutupBrowser() {
+            mMainActivity.tutupBrowser();
+        }
+    }
+
+    private void initBrowser() {
+        mBrowser.setWebViewClient(new BrowserWebKlien(this));
+        mBrowser.addJavascriptInterface(new BrowserJsInterface(this), "__android");
+
+        WebView.setWebContentsDebuggingEnabled(true);
+
+        WebSettings webSettings = mBrowser.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        mBrowser.setWebChromeClient(new WebChromeClient() {
+            @Override
+            public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
+                android.util.Log.d("Invoker", consoleMessage.message());
+                return true;
+            }
+        });
+    }
+
+    String mUrlBrowserTerakhir = null;
+
+    void bukaDiBrowser(String url) {
+        runOnUiThread(() -> {
+            if (! url.equals(mUrlBrowserTerakhir)) {
+                mBrowser.loadUrl(url);
+            }
+            mLayoutBrowser.setVisibility(View.VISIBLE);
+            mUrlBrowserTerakhir = url;
+            android.util.Log.d("Invoker", url);
+        });
     }
 
     @Override
     public void onBackPressed() {
         mWebView.evaluateJavascript("__mundur()", null);
+    }
+
+    SoundPool mSoundPool;
+    int mSuaraTransisi;
+    int mSuaraInsentif;
+
+    private void initEfekSuara() {
+        if (android.os.Build.VERSION.SDK_INT >= 21) {
+            AudioAttributes attrs = new AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_MEDIA)
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .build();
+            mSoundPool = new SoundPool.Builder()
+                .setMaxStreams(5)
+                .setAudioAttributes(attrs)
+                .build();
+        } else {
+            mSoundPool = new SoundPool(5, android.media.AudioManager.STREAM_MUSIC, 0);
+        }
+        mSuaraTransisi = mSoundPool.load(this, R.raw.transisi, 1);
+        mSuaraInsentif = mSoundPool.load(this, R.raw.insentif, 1);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mSoundPool != null) {
+            mSoundPool.release();
+        }
     }
 
     private static final int PICK_FILE_REQUEST_CODE = 1;
@@ -204,7 +298,8 @@ public class MainActivity extends Activity {
 
         @JavascriptInterface
         public void suara1() {
-            // ...
+            float volume = ambilVolumeHp();
+            mMainActivity.mSoundPool.play(mMainActivity.mSuaraTransisi, volume, volume, 1, 0, 1.0f);
         }
 
         @JavascriptInterface
@@ -219,7 +314,21 @@ public class MainActivity extends Activity {
 
         @JavascriptInterface
         public void suara4() {
-            // ...
+            float volume = ambilVolumeHp();
+            mMainActivity.mSoundPool.play(mMainActivity.mSuaraInsentif, volume, volume, 1, 0, 1.0f);
+        }
+
+        private float ambilVolumeHp() {
+            float volume = 1.0f;
+            AudioManager am = (AudioManager) mMainActivity.getSystemService(Context.AUDIO_SERVICE);
+            if (am != null) {
+                float current = (float) am.getStreamVolume(AudioManager.STREAM_MUSIC);
+                float max = (float) am.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+                if (max > 0) {
+                    volume = current / max;
+                }
+            }
+            return volume;
         }
     }
 

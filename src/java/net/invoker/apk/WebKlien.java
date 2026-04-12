@@ -1,7 +1,6 @@
 package net.invoker.apk;
 
 
-import android.content.Intent;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.webkit.WebResourceResponse;
@@ -14,20 +13,17 @@ public class WebKlien extends WebViewClient {
 
     static final String FOLDER_LOKAL = "/invoker/berkas_lokal/";
 
-    MainActivity mainActivity;
+    MainActivity mMainActivity;
 
     WebKlien(MainActivity mainActivity) {
-        this.mainActivity = mainActivity;
+        mMainActivity = mainActivity;
     }
 
     @Override
     public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
         String url = request.getUrl().toString();
         if (! url.startsWith("https://app.local" + FOLDER_LOKAL)) {
-            Intent intent = new Intent(this.mainActivity, BrowserActivity.class);
-            intent.putExtra("url", url);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            this.mainActivity.startActivity(intent);
+            mMainActivity.bukaDiBrowser(url);
             return true;
         }
         return false;
@@ -53,7 +49,7 @@ public class WebKlien extends WebViewClient {
                 String mime = WebKlien.getMimeType(path);
                 android.util.Log.d("Invoker.WebKlien", "permintaan diintersepsi: " + mime);
 
-                File file = new File(this.mainActivity.getFilesDir(), berkas);
+                File file = new File(mMainActivity.getFilesDir(), berkas);
                 FileInputStream input = new FileInputStream(file);
                 WebResourceResponse respon = new WebResourceResponse(mime, "UTF-8", input);
 
