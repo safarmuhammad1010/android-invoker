@@ -102,7 +102,6 @@ public class MainActivity extends Activity {
     private void tutupBrowser() {
         runOnUiThread(() -> {
             mLayoutBrowser.setVisibility(View.GONE);
-            mApaBrowserSedangDitampilkan = false;
         });
     }
 
@@ -140,22 +139,22 @@ public class MainActivity extends Activity {
         });
     }
 
-    boolean mApaBrowserSedangDitampilkan = false;
+    String mUrlTargetBrowser = null;
 
     void bukaDiBrowser(String url) {
+        mUrlTargetBrowser = url;
         runOnUiThread(() -> {
             if (! url.equals(mWebView.getUrl())) {
                 mBrowser.loadUrl("about:blank");
                 mBrowser.loadUrl(url);
             }
             mLayoutBrowser.setVisibility(View.VISIBLE);
-            mApaBrowserSedangDitampilkan = true;
         });
     }
 
     @Override
     public void onBackPressed() {
-        if (mApaBrowserSedangDitampilkan) return;
+        if (mLayoutBrowser.getVisibility() == View.VISIBLE) return;
         mWebView.evaluateJavascript("__mundur()", null);
     }
 
