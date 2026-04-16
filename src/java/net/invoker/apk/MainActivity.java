@@ -80,7 +80,7 @@ public class MainActivity extends Activity {
         mWebView.setWebChromeClient(new WebChromeClient() {
             @Override
             public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
-                android.util.Log.d("Invoker.MainActivity", consoleMessage.message());
+                android.util.Log.d("Invoker.ConsoleMessage", consoleMessage.message());
                 return true;
             }
         });
@@ -129,7 +129,7 @@ public class MainActivity extends Activity {
         mBrowser.setWebChromeClient(new WebChromeClient() {
             @Override
             public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
-                android.util.Log.d("Invoker", consoleMessage.message());
+                android.util.Log.d("Invoker.ConsoleMessage", consoleMessage.message());
                 return true;
             }
         });
@@ -279,6 +279,18 @@ public class MainActivity extends Activity {
         public void siap() {
             mMainActivity.mLoading.sembunyikan();
             mMainActivity.mSudahSiap = true;
+            android.util.Log.d("Invoker.MainActivity", "sudah siap");
+        }
+
+        @JavascriptInterface
+        public String dUrlServer() {
+            String urlServer = null;
+            try {
+                urlServer = mMainActivity.mInisiator.mMetadataGlobal.getString("url_server");
+            } catch (Exception e) {
+                android.util.Log.e("Invoker.MainActivity", e.getMessage());
+            }
+            return urlServer;
         }
 
         @JavascriptInterface

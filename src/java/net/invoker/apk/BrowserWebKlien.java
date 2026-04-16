@@ -20,7 +20,7 @@ public class BrowserWebKlien extends WebViewClient {
     @Override
     public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
         String url = request.getUrl().toString();
-        if (! url.equals(mMainActivity.mUrlTargetBrowser)) {
+        if ((mMainActivity.mUrlTargetBrowser != null) && (!url.equals(mMainActivity.mUrlTargetBrowser))) {
             bukaUrlDiExternal(url);
             return true;
         }

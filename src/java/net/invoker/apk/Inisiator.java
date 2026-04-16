@@ -26,7 +26,7 @@ import org.json.JSONArray;
 class Inisiator {
 
     static final String NAMA_PREF = "inisiator";
-    static final String URL_METADATA = "https://raw.githubusercontent.com/repoinvoker1/invoker/refs/heads/main/invoker.json";
+    static final String URL_METADATA = "https://raw.githubusercontent.com/repoinvoker1/invoker/refs/heads/main/invoker.info";
     static final int BATAS_WAKTU_UNDUH = 1000 * 10;
 
     MainActivity mMainActivity;
@@ -159,7 +159,7 @@ class Inisiator {
         JSONArray lisUrlKlien = mMetadataGlobal.getJSONArray("url_klien");
         for (int i = 0; i < lisUrlKlien.length(); i++) {
             String url = lisUrlKlien.getString(i);
-            String[] ss = url.split("/refs/heads/main/");
+            String[] ss = url.split("/refs/heads/main/web/");
             File berkas =  new File(folderRepo, ss[1]);
             unduhDanSimpan(url, berkas);
         }
@@ -175,6 +175,11 @@ class Inisiator {
 
     private void unduhDanSimpan(String url, File berkas) throws IOException {
         android.util.Log.d("Invoker.Inisiator", "mengunduh " + url + ", lalu simpan ke: " + berkas);
+
+        File folder = berkas.getParentFile();
+        if (folder != null && !folder.exists()) {
+            folder.mkdirs();
+        }
 
         HttpURLConnection httpConn = buatKoneksi(url);
         httpConn.connect();
