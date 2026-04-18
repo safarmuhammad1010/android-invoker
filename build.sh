@@ -13,6 +13,7 @@ javac --release 11 -classpath "$PLATFORM/android.jar" -d build/obj \
       src/java/$PACKAGE/WebKlien.java \
       src/java/$PACKAGE/BrowserWebKlien.java \
       src/java/$PACKAGE/Inisiator.java \
+      src/java/$PACKAGE/Integrator.java \
       src/java/$PACKAGE/Loading.java &&
 
 

@@ -25,8 +25,14 @@ import org.json.JSONArray;
 
 class Inisiator {
 
-    static final String NAMA_PREF = "inisiator";
-    static final String URL_METADATA = "https://raw.githubusercontent.com/repoinvoker1/invoker/refs/heads/main/invoker.info";
+    static final String URL_METADATA = "https://raw.githubusercontent.com/repoinvoker1/invoker/refs/heads/main/dev/v1/metadata.json";
+    static final String K_VERSI_WEB = "versi_web";
+    static final String K_URL_WEB = "url_web";
+
+    static final String NAMA_PREF_METADATA = "metadata";
+
+    static final String URL_REPO_LOKAL = "https://app.local/invoker/berkas_lokal/repo/";
+
     static final int BATAS_WAKTU_UNDUH = 1000 * 10;
 
     MainActivity mMainActivity;
@@ -113,9 +119,9 @@ class Inisiator {
     }
 
     private void cekVersi() throws Exception {
-        String versiGlobal = mMetadataGlobal.getString("versi");
-        SharedPreferences pref = mMainActivity.getSharedPreferences(NAMA_PREF, Context.MODE_PRIVATE);
-        String versiLokal = pref.getString("versi", null);
+        String versiGlobal = mMetadataGlobal.getString(K_VERSI_WEB);
+        SharedPreferences pref = mMainActivity.getSharedPreferences(NAMA_PREF_METADATA, Context.MODE_PRIVATE);
+        String versiLokal = pref.getString(K_VERSI_WEB, null);
 
         if (! ((versiLokal != null) && (!versiLokal.isEmpty()))) {
             android.util.Log.d("Invoker.Inisiator", "APK BARU");
@@ -150,17 +156,23 @@ class Inisiator {
         }
     }
 
+    private static String getFilenameFromUrl(String urlString) throws Exception {
+        URL url = new URL(urlString);
+        String path = url.getPath();
+        return Paths.get(path).getFileName().toString();
+    }
+
     private void unduhRepo() throws Exception {
-        String versiGlobal = mMetadataGlobal.getString("versi");
+        String versiGlobal = mMetadataGlobal.getString(K_VERSI_WEB);
         File folderRepo = new File(new File(mMainActivity.getFilesDir(), "repo"), versiGlobal);
         buatFolderRepo(folderRepo);
         android.util.Log.d("Invoker.Inisiator", "mengunduh repo " + versiGlobal + ", lalu simpan ke folder: " + folderRepo);
 
-        JSONArray lisUrlKlien = mMetadataGlobal.getJSONArray("url_klien");
-        for (int i = 0; i < lisUrlKlien.length(); i++) {
-            String url = lisUrlKlien.getString(i);
-            String[] ss = url.split("/refs/heads/main/web/");
-            File berkas =  new File(folderRepo, ss[1]);
+        JSONArray lisUrlWeb = mMetadataGlobal.getJSONArray(K_URL_WEB);
+        for (int i = 0; i < lisUrlWeb.length(); i++) {
+            String url = lisUrlWeb.getString(i);
+            String namaBerkas = getFilenameFromUrl(url);
+            File berkas =  new File(folderRepo, namaBerkas);
             unduhDanSimpan(url, berkas);
         }
 
@@ -198,18 +210,18 @@ class Inisiator {
     }
 
     private void perbaruiVersiLokal(String versiLokalBaru) {
-        SharedPreferences pref = mMainActivity.getSharedPreferences(NAMA_PREF, Context.MODE_PRIVATE);
-        String versiLokalSekarang = pref.getString("versi", null);
+        SharedPreferences pref = mMainActivity.getSharedPreferences(NAMA_PREF_METADATA, Context.MODE_PRIVATE);
+        String versiLokalSekarang = pref.getString(K_VERSI_WEB, null);
         android.util.Log.d("Invoker.Inisiator", "perbarui versiLokal: " + versiLokalSekarang + " ---> " + versiLokalBaru);
         SharedPreferences.Editor editor = pref.edit();
-        editor.putString("versi", versiLokalBaru);
+        editor.putString(K_VERSI_WEB, versiLokalBaru);
         editor.apply();
     }
 
     private void bukaWeb(String versi) {
         mSiap = true;
 
-        String url = "https://app.local/invoker/berkas_lokal/repo/" + versi + "/index.html";
+        String url = URL_REPO_LOKAL + versi + "/index.html";
         android.util.Log.d("Invoker.Inisiator", "membuka web: " + url);
 
         mMainActivity.runOnUiThread(() -> {
