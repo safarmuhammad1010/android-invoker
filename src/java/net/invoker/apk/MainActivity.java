@@ -36,7 +36,9 @@ public class MainActivity extends Activity {
     WebView mWebView;
     Loading mLoading;
     boolean mSudahSiap = false;
+
     Inisiator mInisiator;
+    Integrator mIntegrator;
 
     WebView mBrowser;
     View mLayoutBrowser;
@@ -50,10 +52,16 @@ public class MainActivity extends Activity {
 
         setContentView(R.layout.activity_main);
 
+        mBrowser = (WebView) findViewById(R.id.browser);
+        mLayoutBrowser = findViewById(R.id.layout_browser);
+        mTombolTutupBrowser = findViewById(R.id.tombol_tutup_browser);
+        mWebView = findViewById(R.id.webview);
+
         mLoading = new Loading(this);
         mLoading.mulai();
 
-        mWebView = findViewById(R.id.webview);
+        mIntegrator = new Integrator(this);
+        mInisiator = new Inisiator(this, mIntegrator);
 
         if (Build.VERSION.SDK_INT >= 21) {
             getWindow().setStatusBarColor(Color.BLACK);
@@ -64,7 +72,8 @@ public class MainActivity extends Activity {
         }
 
         mWebView.setWebViewClient(new WebKlien(this));
-        mWebView.addJavascriptInterface(new JsInterface(this), "__android");
+        mWebView.addJavascriptInterface(new JsInterface(this), "__apk");
+        mWebView.addJavascriptInterface(mIntegrator.mJsInterfaceWeb, "__servis");
 
         WebView.setWebContentsDebuggingEnabled(true);
 
@@ -80,23 +89,17 @@ public class MainActivity extends Activity {
         mWebView.setWebChromeClient(new WebChromeClient() {
             @Override
             public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
-                android.util.Log.d("Invoker.ConsoleMessage", consoleMessage.message());
+                android.util.Log.d("Invoker.WebViewUtama.Console", consoleMessage.message());
                 return true;
             }
         });
 
 
-        mInisiator = new Inisiator(this);
-        mInisiator.inisiasi();
-
-
         initEfekSuara();
 
-
-        mBrowser = (WebView) findViewById(R.id.browser);
-        mLayoutBrowser = findViewById(R.id.layout_browser);
-        mTombolTutupBrowser = findViewById(R.id.tombol_tutup_browser);
         initBrowser();
+
+        mInisiator.mulai();
     }
 
     private void tutupBrowser() {
@@ -129,7 +132,7 @@ public class MainActivity extends Activity {
         mBrowser.setWebChromeClient(new WebChromeClient() {
             @Override
             public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
-                android.util.Log.d("Invoker.ConsoleMessage", consoleMessage.message());
+                android.util.Log.d("Invoker.WebViewBrowser.Console", consoleMessage.message());
                 return true;
             }
         });

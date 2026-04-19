@@ -5,8 +5,10 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebResourceRequest;
+
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 
 
 public class WebKlien extends WebViewClient {
@@ -14,15 +16,17 @@ public class WebKlien extends WebViewClient {
     static final String FOLDER_LOKAL = "/invoker/berkas_lokal/";
 
     MainActivity mMainActivity;
+    RepoLokal mRepoLokal;
 
     WebKlien(MainActivity mainActivity) {
         mMainActivity = mainActivity;
+        mRepoLokal = new RepoLokal(mMainActivity);
     }
 
     @Override
     public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
         String url = request.getUrl().toString();
-        if (! url.startsWith("https://app.local" + FOLDER_LOKAL)) {
+        if (! url.startsWith(K.URL_FOLDER_LOKAL)) {
             mMainActivity.bukaDiBrowser(url);
             return true;
         }
@@ -35,25 +39,32 @@ public class WebKlien extends WebViewClient {
         String path = request.getUrl().getPath();
         android.util.Log.d("Invoker.WebKlien", "mengunduh: " + path);
 
-        if (url.startsWith("https://app.local" + FOLDER_LOKAL)) {
+        if (url.startsWith(K.URL_FOLDER_LOKAL)) {
             try {
-                String berkas;
-                // Akali cache <img>
-                if (path.startsWith(FOLDER_LOKAL + "foto_profil/")) {
-                    berkas = "foto_profil";
-                } else {
-                    String[] ss = url.split(FOLDER_LOKAL);
-                    berkas = ss[1];
+                String mime = WebKlien.getMimeType(path);
+
+                if (url.startsWith(K.URL_REPO_LOKAL)){
+                    String[] ss = path.split("/");
+                    String namaBerkas = ss[ss.length-1];
+                    try {
+                        InputStream input = mRepoLokal.buka(namaBerkas);
+                        return new WebResourceResponse(mime, "UTF-8", input);
+                    } catch (Exception e) {
+                        android.util.Log.e("Invoker.WebKlien", e.getMessage());
+                        throw new RuntimeException(e);
+                    }
                 }
 
-                String mime = WebKlien.getMimeType(path);
-                android.util.Log.d("Invoker.WebKlien", "permintaan diintersepsi: " + mime);
+                // Akali cache <img>
+                if (url.startsWith(K.URL_FOLDER_LOKAL + "foto_profil/")) {
+                    String berkas = "foto_profil";
+                    android.util.Log.d("Invoker.WebKlien", "permintaan diintersepsi: " + mime);
+                    File file = new File(mMainActivity.getFilesDir(), berkas);
+                    FileInputStream input = new FileInputStream(file);
+                    return new WebResourceResponse(mime, "UTF-8", input);
+                }
 
-                File file = new File(mMainActivity.getFilesDir(), berkas);
-                FileInputStream input = new FileInputStream(file);
-                WebResourceResponse respon = new WebResourceResponse(mime, "UTF-8", input);
-
-                return respon;
+                return super.shouldInterceptRequest(view, request);
             } catch (Exception e) {
                 e.printStackTrace();
             }
