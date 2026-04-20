@@ -117,7 +117,7 @@ class Integrator {
 
         @JavascriptInterface
         public void login() {
-            android.util.Log.e("Invoker.Integrator.JsInterfaceServis", "meminta login...");
+            android.util.Log.d("Invoker.Integrator.JsInterfaceServis", "meminta login...");
             mMainActivity.runOnUiThread(() -> {
                 mIntegrator.mWebViewUtama.evaluateJavascript("__harus_login()", null);
             });

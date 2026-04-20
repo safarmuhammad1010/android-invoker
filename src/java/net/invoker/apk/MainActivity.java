@@ -91,12 +91,6 @@ public class MainActivity extends Activity {
         mWebView.setWebChromeClient(new WebChromeClient() {
             @Override
             public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
-                /*
-                if (consoleMessage.messageLevel() == ConsoleMessage.MessageLevel.WARNING)
-                    android.util.Log.w("Invoker.WebViewUtama.Console", consoleMessage.message());
-                else if (consoleMessage.messageLevel() == ConsoleMessage.MessageLevel.ERROR)
-                    android.util.Log.e("Invoker.WebViewUtama.Console", consoleMessage.message());
-                */
                 android.util.Log.d("Invoker.WebViewUtama.Console", consoleMessage.message());
                 return true;
             }
