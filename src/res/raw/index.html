@@ -9,6 +9,12 @@
 <meta name='viewport' content='width=device-width, height=device-height, initial-scale=1.0, user-scalable=0'>
 
 
+<style>body {
+    position: relative;
+}
+
+</style>
+
 <style>* {
     margin: 0;
     padding: 0;
@@ -1172,6 +1178,42 @@ __atur_inventori([
 
 
 }
+})();(()=>{
+
+
+const MAX_INDEX = 2147483647;
+
+
+const objZIndex = {};
+
+
+
+const lisHalaman = [
+    'info',
+    'loading',
+    'error',
+    'login',
+    'harus_login',
+];
+
+
+
+for (let i = 0; i < lisHalaman.length; i++) {
+    const namaHalaman = lisHalaman[i];
+    const index = MAX_INDEX - i;
+    objZIndex[namaHalaman] = function zIndex() { return index; };
+}
+
+
+
+Object.freeze(objZIndex);
+Object.defineProperty(window, '__zindex', {
+    value: objZIndex,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+
 })();(()=>{
 const Sistem = {};
 

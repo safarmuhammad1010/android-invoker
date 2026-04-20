@@ -16,6 +16,6 @@ class K {
     static final String NAMA_PREF_METADATA = "metadata";
     static final String NAMA_FOLDER_REPO_LOKAL = "repo";
 
-    static final int BATAS_WAKTU_UNDUH = 1000 * 10;
+    static final int BATAS_WAKTU_UNDUH = 1000 * 20;
 
 }

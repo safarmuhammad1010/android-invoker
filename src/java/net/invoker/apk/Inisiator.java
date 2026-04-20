@@ -118,9 +118,14 @@ class Inisiator {
 
         if (! ((versiLokal != null) && (!versiLokal.isEmpty()))) {
             android.util.Log.d("Invoker.Inisiator", "APK BARU");
-            tampilkanTeksLoading();
-            unduhRepo();
-            bukaWeb(versiGlobal);
+            if (K.VERSI_WEB.equals(versiGlobal)) {
+                bukaWeb(K.VERSI_WEB);
+                unduhRepo();
+            } else {
+                tampilkanTeksLoading();
+                unduhRepo();
+                bukaWeb(versiGlobal);
+            }
         } else {
             android.util.Log.d("Invoker.Inisiator", "repo lokal tersedia, versi lokal='" + versiLokal + "', versi global='" + versiGlobal + "'");
 
