@@ -33,6 +33,8 @@ public class MainActivity extends Activity {
 
     static final String USER_AGENT = "Mozilla/5.0 (Linux; Android 11; SAMSUNG SM-G973U) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/14.2 Chrome/87.0.4280.141 Mobile Safari/537.36";
 
+    static MainActivity instance;
+
     WebView mWebView;
     Loading mLoading;
     boolean mSudahSiap = false;
@@ -46,8 +48,8 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        instance = this;
         super.onCreate(savedInstanceState);
-
         android.util.Log.d("Invoker.MainActivity", "onCreate()");
 
         setContentView(R.layout.activity_main);
@@ -89,6 +91,12 @@ public class MainActivity extends Activity {
         mWebView.setWebChromeClient(new WebChromeClient() {
             @Override
             public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
+                /*
+                if (consoleMessage.messageLevel() == ConsoleMessage.MessageLevel.WARNING)
+                    android.util.Log.w("Invoker.WebViewUtama.Console", consoleMessage.message());
+                else if (consoleMessage.messageLevel() == ConsoleMessage.MessageLevel.ERROR)
+                    android.util.Log.e("Invoker.WebViewUtama.Console", consoleMessage.message());
+                */
                 android.util.Log.d("Invoker.WebViewUtama.Console", consoleMessage.message());
                 return true;
             }

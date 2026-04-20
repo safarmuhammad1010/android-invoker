@@ -11,6 +11,7 @@ javac --release 11 -classpath "$PLATFORM/android.jar" -d build/obj \
       build/gen/$PACKAGE/R.java \
       src/java/$PACKAGE/K.java \
       src/java/$PACKAGE/V.java \
+      src/java/$PACKAGE/D.java \
       src/java/$PACKAGE/MainActivity.java \
       src/java/$PACKAGE/WebKlien.java \
       src/java/$PACKAGE/BrowserWebKlien.java \

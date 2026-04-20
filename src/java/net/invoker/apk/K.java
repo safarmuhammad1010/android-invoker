@@ -14,6 +14,7 @@ class K {
     static final String N_URL_WEB = "url_web";
 
     static final String NAMA_PREF_METADATA = "metadata";
+    static final String NAMA_FOLDER_REPO_LOKAL = "repo";
 
     static final int BATAS_WAKTU_UNDUH = 1000 * 10;
 

@@ -114,8 +114,7 @@ class Inisiator {
 
     private void cekVersi() throws Exception {
         String versiGlobal = mMetadataGlobal.getString(K.N_VERSI_WEB);
-        SharedPreferences pref = mMainActivity.getSharedPreferences(K.NAMA_PREF_METADATA, Context.MODE_PRIVATE);
-        String versiLokal = pref.getString(K.N_VERSI_WEB, null);
+        String versiLokal = D.versiWeb();
 
         if (! ((versiLokal != null) && (!versiLokal.isEmpty()))) {
             android.util.Log.d("Invoker.Inisiator", "APK BARU");
@@ -204,12 +203,8 @@ class Inisiator {
     }
 
     private void perbaruiVersiLokal(String versiLokalBaru) {
-        SharedPreferences pref = mMainActivity.getSharedPreferences(K.NAMA_PREF_METADATA, Context.MODE_PRIVATE);
-        String versiLokalSekarang = pref.getString(K.N_VERSI_WEB, null);
-        android.util.Log.d("Invoker.Inisiator", "perbarui versiLokal: " + versiLokalSekarang + " ---> " + versiLokalBaru);
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putString(K.N_VERSI_WEB, versiLokalBaru);
-        editor.apply();
+        android.util.Log.d("Invoker.Inisiator", "perbarui versiLokal: " + D.versiWeb() + " ---> " + versiLokalBaru);
+        D.versiWeb(versiLokalBaru);
     }
 
     private void bukaWeb(String versi) {
