@@ -18,8 +18,9 @@ class Integrator {
 
     JsInterfaceWeb mJsInterfaceWeb;
 
-    Integrator(MainActivity mainActivity) {
+    Integrator(MainActivity mainActivity, WebView webViewUtama) {
         mMainActivity = mainActivity;
+        mWebViewUtama = webViewUtama;
         mJsInterfaceWeb = new JsInterfaceWeb(mMainActivity, this);
         initWebViewServis();
     }
@@ -29,12 +30,17 @@ class Integrator {
 
         mWebViewServis.setWebViewClient(new WebViewClientServis(this));
         mWebViewServis.setWebChromeClient(new WebChromeClientServis(this));
+        mWebViewServis.addJavascriptInterface(new JsInterfaceServis(mMainActivity, this), "__integrator");
 
         WebView.setWebContentsDebuggingEnabled(true);
-        mWebViewServis.addJavascriptInterface(new JsInterfaceServis(this), "__integrator");
 
         WebSettings webSettings = mWebViewServis.getSettings();
         webSettings.setJavaScriptEnabled(true);
+        webSettings.setDomStorageEnabled(true);
+        webSettings.setLoadsImagesAutomatically(true);
+        webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE);
+        webSettings.setAllowFileAccess(true);
+        webSettings.setAllowContentAccess(true);
     }
 
     static class WebViewClientServis extends WebViewClient {
@@ -84,22 +90,45 @@ class Integrator {
                 android.util.Log.e("Invoker.Integrator.JsInterfaceWeb", e.getMessage());
                 return;
             }
-            android.util.Log.d("Invoker.Integrator.JsInterfaceWeb", "mulai integrasi, dengan url servis: " + urlServis);
-            if (urlServis != null) {
-                mMainActivity.runOnUiThread(() -> {
-                    mIntegrator.mWebViewServis.loadUrl(urlServis);
-                });
-            }
+            android.util.Log.d("Invoker.Integrator.JsInterfaceWeb", "mulai integrasi, dengan url_servis='" + urlServis + "'");
+            mMainActivity.runOnUiThread(() -> {
+                mIntegrator.mWebViewServis.loadUrl(urlServis);
+            });
+        }
+
+        @JavascriptInterface
+        public void login(String nama, String kata_sandi) {
+            mMainActivity.runOnUiThread(() -> {
+                mIntegrator.mWebViewServis.evaluateJavascript("__login('" + nama + "', '" + kata_sandi + "')", null);
+            });
         }
 
     }
 
     static class JsInterfaceServis {
 
+        MainActivity mMainActivity;
         Integrator mIntegrator;
 
-        JsInterfaceServis(Integrator integrator) {
+        JsInterfaceServis(MainActivity mainActivity, Integrator integrator) {
+            mMainActivity = mainActivity;
             mIntegrator = integrator;
+        }
+
+        @JavascriptInterface
+        public void login() {
+            android.util.Log.e("Invoker.Integrator.JsInterfaceServis", "meminta login...");
+            mMainActivity.runOnUiThread(() -> {
+                mIntegrator.mWebViewUtama.evaluateJavascript("__harus_login()", null);
+            });
+        }
+
+        @JavascriptInterface
+        public void sinkron(String data) {
+            android.util.Log.e("Invoker.Integrator.JsInterfaceServis", "sinkron: " + data);
+            mMainActivity.runOnUiThread(() -> {
+                mIntegrator.mWebViewUtama.evaluateJavascript("__sinkron(" + data + ")", null);
+            });
         }
 
     }

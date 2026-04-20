@@ -62,7 +62,7 @@ public class MainActivity extends Activity {
         mLoading = new Loading(this);
         mLoading.mulai();
 
-        mIntegrator = new Integrator(this);
+        mIntegrator = new Integrator(this, mWebView);
         mInisiator = new Inisiator(this, mIntegrator);
 
         if (Build.VERSION.SDK_INT >= 21) {
@@ -135,8 +135,6 @@ public class MainActivity extends Activity {
 
         WebView.setWebContentsDebuggingEnabled(true);
 
-        WebSettings webSettings = mBrowser.getSettings();
-        webSettings.setJavaScriptEnabled(true);
         mBrowser.setWebChromeClient(new WebChromeClient() {
             @Override
             public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
@@ -144,6 +142,14 @@ public class MainActivity extends Activity {
                 return true;
             }
         });
+
+        WebSettings webSettings = mBrowser.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        webSettings.setDomStorageEnabled(true);
+        webSettings.setLoadsImagesAutomatically(true);
+        webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE);
+        webSettings.setAllowFileAccess(true);
+        webSettings.setAllowContentAccess(true);
 
         mTombolTutupBrowser.setOnClickListener((v) -> {
             tutupBrowser();
