@@ -116,10 +116,20 @@ class Integrator {
         }
 
         @JavascriptInterface
-        public void login() {
+        public void loadingSelesai() {
+            android.util.Log.d("Invoker.Integrator.JsInterfaceServis", "loading selesai");
+            mMainActivity.mSudahSiap = true;
+            mMainActivity.runOnUiThread(() -> {
+                mMainActivity.mLoading.sembunyikan();
+            });
+        }
+
+        @JavascriptInterface
+        public void harusLogin() {
             android.util.Log.d("Invoker.Integrator.JsInterfaceServis", "meminta login...");
             mMainActivity.runOnUiThread(() -> {
                 mIntegrator.mWebViewUtama.evaluateJavascript("__harus_login()", null);
+                loadingSelesai();
             });
         }
 

@@ -287,13 +287,6 @@ public class MainActivity extends Activity {
         }
 
         @JavascriptInterface
-        public void siap() {
-            mMainActivity.mLoading.sembunyikan();
-            mMainActivity.mSudahSiap = true;
-            android.util.Log.d("Invoker.MainActivity", "sudah siap");
-        }
-
-        @JavascriptInterface
         public String dUrlServer() {
             String urlServer = null;
             try {
