@@ -18,6 +18,11 @@ public class BrowserWebKlien extends WebViewClient {
         mMainActivity = mainActivity;
     }
 
+    private void bukaUrlDiExternal(String url) {
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        mMainActivity.startActivity(intent);
+    }
+
     @Override
     public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
         String url = request.getUrl().toString();
@@ -28,13 +33,13 @@ public class BrowserWebKlien extends WebViewClient {
         return false;
     }
 
-    private void bukaUrlDiExternal(String url) {
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-        mMainActivity.startActivity(intent);
+    @JavascriptInterface
+    public void buka(String url) {
+        mMainActivity.bukaBrowser(url);
     }
 
     @JavascriptInterface
-    public void tutupBrowser() {
+    public void tutup() {
         mMainActivity.tutupBrowser();
     }
 

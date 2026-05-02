@@ -2,12 +2,12 @@ package net.invoker.apk;
 
 
 import android.content.Intent;
+import android.net.Uri;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebResourceRequest;
-import android.net.Uri;
 
 
 public class AdvertiserWebKlien extends WebViewClient {
@@ -16,6 +16,11 @@ public class AdvertiserWebKlien extends WebViewClient {
 
     AdvertiserWebKlien(MainActivity mainActivity) {
         mMainActivity = mainActivity;
+    }
+
+    private void bukaUrlDiExternal(String url) {
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        mMainActivity.startActivity(intent);
     }
 
     @Override
@@ -28,13 +33,13 @@ public class AdvertiserWebKlien extends WebViewClient {
         return false;
     }
 
-    private void bukaUrlDiExternal(String url) {
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-        mMainActivity.startActivity(intent);
+    @JavascriptInterface
+    public void buka(String url) {
+        mMainActivity.bukaAdvertiser(url);
     }
 
     @JavascriptInterface
-    public void tutupAdvertiser() {
+    public void tutup() {
         mMainActivity.tutupAdvertiser();
     }
 

@@ -34,7 +34,12 @@ public class PortalWebKlien extends WebViewClient {
     }
 
     @JavascriptInterface
-    public void tutupPortal() {
+    public void buka(String url) {
+        mMainActivity.bukaPortal(url);
+    }
+
+    @JavascriptInterface
+    public void tutup() {
         mMainActivity.tutupPortal();
     }
 

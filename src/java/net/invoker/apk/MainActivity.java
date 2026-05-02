@@ -44,6 +44,11 @@ public class MainActivity extends Activity {
     View mLayoutAdvertiser;
     WebView mAdvertiser;
 
+    WebKlien mWebKlien;
+    PortalWebKlien mPortalWebKlien;
+    BrowserWebKlien mBrowserWebKlien;
+    AdvertiserWebKlien mAdvertiserWebKlien;
+
     Loading mLoading;
     boolean mSudahSiap = false;
 
@@ -73,6 +78,11 @@ public class MainActivity extends Activity {
         mLayoutAdvertiser = findViewById(R.id.advertiser__layout);
         mAdvertiser = findViewById(R.id.advertiser__webview);
 
+        mWebKlien = new WebKlien(this);
+        mPortalWebKlien = new PortalWebKlien(this);
+        mBrowserWebKlien = new BrowserWebKlien(this);
+        mAdvertiserWebKlien = new AdvertiserWebKlien(this);
+
         mLoading = new Loading(this);
         mLoading.mulai();
 
@@ -83,6 +93,7 @@ public class MainActivity extends Activity {
         initPortal();
         initAdvertiser();
         initBrowser();
+
         initEfekSuara();
 
         mInisiator.mulai();
@@ -101,9 +112,14 @@ public class MainActivity extends Activity {
             mWebView.getSettings().setForceDark(WebSettings.FORCE_DARK_ON);
         }
 
-        mWebView.setWebViewClient(new WebKlien(this));
+        mWebView.setWebViewClient(mWebKlien);
+
         mWebView.addJavascriptInterface(new JsInterface(this), "__apk");
         mWebView.addJavascriptInterface(mIntegrator.mJsInterfaceWeb, "__servis");
+
+        mWebView.addJavascriptInterface(mPortalWebKlien, "__portal");
+        mWebView.addJavascriptInterface(mBrowserWebKlien, "__browser");
+        mWebView.addJavascriptInterface(mAdvertiserWebKlien, "__advertiser");
 
         WebSettings webSettings = mWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
@@ -127,9 +143,10 @@ public class MainActivity extends Activity {
             mPortal.getSettings().setForceDark(WebSettings.FORCE_DARK_ON);
         }
 
-        var webKlien = new PortalWebKlien(this);
-        mPortal.setWebViewClient(webKlien);
-        mPortal.addJavascriptInterface(webKlien, "__apk");
+        mPortal.setWebViewClient(mPortalWebKlien);
+
+        mPortal.addJavascriptInterface(mBrowserWebKlien, "__browser");
+        mPortal.addJavascriptInterface(mAdvertiserWebKlien, "__advertiser");
 
         var webSettings = mPortal.getSettings();
         webSettings.setJavaScriptEnabled(true);
@@ -155,9 +172,9 @@ public class MainActivity extends Activity {
             mBrowser.getSettings().setForceDark(WebSettings.FORCE_DARK_ON);
         }
 
-        var webKlien = new BrowserWebKlien(this);
-        mBrowser.setWebViewClient(webKlien);
-        mBrowser.addJavascriptInterface(webKlien, "__apk");
+        mBrowser.setWebViewClient(mBrowserWebKlien);
+
+        mBrowser.addJavascriptInterface(mAdvertiserWebKlien, "__advertiser");
 
         mBrowser.setWebChromeClient(new WebChromeClient() {
             @Override
@@ -187,9 +204,7 @@ public class MainActivity extends Activity {
             mAdvertiser.getSettings().setForceDark(WebSettings.FORCE_DARK_ON);
         }
 
-        var webKlien = new AdvertiserWebKlien(this);
-        mAdvertiser.setWebViewClient(webKlien);
-        mAdvertiser.addJavascriptInterface(webKlien, "__apk");
+        mAdvertiser.setWebViewClient(mAdvertiserWebKlien);
 
         mAdvertiser.setWebChromeClient(new WebChromeClient() {
             @Override
@@ -216,7 +231,7 @@ public class MainActivity extends Activity {
     String mUrlTargetBrowser = null;
     String mUrlTargetAdvertiser = null;
 
-    void bukaDiPortal(String url) {
+    void bukaPortal(String url) {
         mUrlTargetPortal = url;
         runOnUiThread(() -> {
             if (! url.equals(mPortal.getUrl())) {
@@ -227,7 +242,7 @@ public class MainActivity extends Activity {
         });
     }
 
-    void bukaDiBrowser(String url) {
+    void bukaBrowser(String url) {
         mUrlTargetBrowser = url;
         runOnUiThread(() -> {
             if (! url.equals(mBrowser.getUrl())) {
@@ -238,7 +253,7 @@ public class MainActivity extends Activity {
         });
     }
 
-    void bukaDiAdvertiser(String url) {
+    void bukaAdvertiser(String url) {
         mUrlTargetAdvertiser = url;
         runOnUiThread(() -> {
             if (! url.equals(mAdvertiser.getUrl())) {
