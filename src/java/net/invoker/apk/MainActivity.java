@@ -127,10 +127,11 @@ public class MainActivity extends Activity {
             mPortal.getSettings().setForceDark(WebSettings.FORCE_DARK_ON);
         }
 
-        mPortal.setWebViewClient(new WebKlien(this));
-        mPortal.addJavascriptInterface(new JsInterface(this), "__apk");
+        var webKlien = new PortalWebKlien(this);
+        mPortal.setWebViewClient(webKlien);
+        mPortal.addJavascriptInterface(webKlien, "__apk");
 
-        WebSettings webSettings = mPortal.getSettings();
+        var webSettings = mPortal.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setDomStorageEnabled(true);
         webSettings.setLoadsImagesAutomatically(true);
@@ -156,7 +157,7 @@ public class MainActivity extends Activity {
 
         var webKlien = new BrowserWebKlien(this);
         mBrowser.setWebViewClient(webKlien);
-        mBrowser.addJavascriptInterface(webKlien, "__android");
+        mBrowser.addJavascriptInterface(webKlien, "__apk");
 
         mBrowser.setWebChromeClient(new WebChromeClient() {
             @Override
@@ -166,7 +167,7 @@ public class MainActivity extends Activity {
             }
         });
 
-        WebSettings webSettings = mBrowser.getSettings();
+        var webSettings = mBrowser.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setDomStorageEnabled(true);
         webSettings.setLoadsImagesAutomatically(true);
@@ -180,7 +181,35 @@ public class MainActivity extends Activity {
     }
 
     private void initAdvertiser() {
+        View tombolTutupAdvertiser = findViewById(R.id.tombol_tutup_advertiser);
 
+        if (Build.VERSION.SDK_INT >= 29) {
+            mAdvertiser.getSettings().setForceDark(WebSettings.FORCE_DARK_ON);
+        }
+
+        var webKlien = new AdvertiserWebKlien(this);
+        mAdvertiser.setWebViewClient(webKlien);
+        mAdvertiser.addJavascriptInterface(webKlien, "__apk");
+
+        mAdvertiser.setWebChromeClient(new WebChromeClient() {
+            @Override
+            public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
+                android.util.Log.d("Invoker.WebViewAdvertiser.Console", consoleMessage.message());
+                return true;
+            }
+        });
+
+        var webSettings = mAdvertiser.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        webSettings.setDomStorageEnabled(true);
+        webSettings.setLoadsImagesAutomatically(true);
+        webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE);
+        webSettings.setAllowFileAccess(true);
+        webSettings.setAllowContentAccess(true);
+
+        tombolTutupAdvertiser.setOnClickListener((v) -> {
+            tutupAdvertiser();
+        });
     }
 
     String mUrlTargetPortal = null;
@@ -244,7 +273,7 @@ public class MainActivity extends Activity {
 
     private void initEfekSuara() {
         if (android.os.Build.VERSION.SDK_INT >= 21) {
-            AudioAttributes attrs = new AudioAttributes.Builder()
+            var attrs = new AudioAttributes.Builder()
                 .setUsage(AudioAttributes.USAGE_MEDIA)
                 .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
                 .build();
@@ -270,7 +299,7 @@ public class MainActivity extends Activity {
     private static final int PICK_FILE_REQUEST_CODE = 1;
 
     private void pilihGambar() {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        var intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("image/*");
         startActivityForResult(Intent.createChooser(intent, "Pilih Gambar"), PICK_FILE_REQUEST_CODE);
@@ -294,14 +323,14 @@ public class MainActivity extends Activity {
 
             String mime = contentResolver.getType(uri);
             String ekstensi = MainActivity.mimeKeEkstensi(mime);
-            String namaBerkasLokal = "foto_profil";
+            var namaBerkasLokal = "foto_profil";
 
             InputStream input = contentResolver.openInputStream(uri);
 
-            File file = new File(getFilesDir(), namaBerkasLokal);
-            FileOutputStream output = new FileOutputStream(file);
+            var file = new File(getFilesDir(), namaBerkasLokal);
+            var output = new FileOutputStream(file);
 
-            byte[] buffer = new byte[4096];
+            var buffer = new byte[4096];
             int bytesRead;
             while ((bytesRead = input.read(buffer)) != -1) {
                 output.write(buffer, 0, bytesRead);
@@ -311,8 +340,8 @@ public class MainActivity extends Activity {
             input.close();
 
             long ms = System.currentTimeMillis();
-            String namaFotoProfil = String.valueOf(ms);
-            String urlFotoProfil = "https://app.local/invoker/berkas_lokal/foto_profil/" + namaFotoProfil + ekstensi;
+            var namaFotoProfil = String.valueOf(ms);
+            var urlFotoProfil = "https://app.local/invoker/berkas_lokal/foto_profil/" + namaFotoProfil + ekstensi;
             mWebView.evaluateJavascript("__data.simpan('profil.foto', '" + urlFotoProfil + "')", null);
 
             android.util.Log.d("Invoker.MainActivity", "foto profil berhasil dipilih, dengan nama='" + namaFotoProfil + "', dan ukuran berkas=" + file.length());
@@ -322,7 +351,7 @@ public class MainActivity extends Activity {
     }
 
     public String getClipboardText() {
-        ClipboardManager clipboard = (ClipboardManager) this.getSystemService(Context.CLIPBOARD_SERVICE);
+        var clipboard = (ClipboardManager) this.getSystemService(Context.CLIPBOARD_SERVICE);
         String pasteData = null;
         if (clipboard != null && clipboard.hasPrimaryClip()) {
             ClipData primaryClip = clipboard.getPrimaryClip();
@@ -411,7 +440,7 @@ public class MainActivity extends Activity {
 
         private float ambilVolumeHp() {
             float volume = 1.0f;
-            AudioManager am = (AudioManager) mMainActivity.getSystemService(Context.AUDIO_SERVICE);
+            var am = (AudioManager) mMainActivity.getSystemService(Context.AUDIO_SERVICE);
             if (am != null) {
                 float current = (float) am.getStreamVolume(AudioManager.STREAM_MUSIC);
                 float max = (float) am.getStreamMaxVolume(AudioManager.STREAM_MUSIC);

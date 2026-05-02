@@ -67,7 +67,7 @@
         <ImageButton
             android:layout_width="36dp"
             android:layout_height="36dp"
-            android:id="@+id/advertiser__toolbar__tombol_tutup"
+            android:id="@+id/tombol_tutup_advertiser"
             android:background="@drawable/tombol_tutup"
             android:src="@null"
             android:clickable="true"
@@ -79,7 +79,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/advertiser__webview"
-            android:layout_below="@id/advertiser__toolbar__tombol_tutup"/>
+            android:layout_below="@id/toolbar_browser"/>
 
     </RelativeLayout>
 
