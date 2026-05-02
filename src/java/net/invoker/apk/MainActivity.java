@@ -31,20 +31,24 @@ import java.io.FileOutputStream;
 
 public class MainActivity extends Activity {
 
-    static final String USER_AGENT = "Mozilla/5.0 (Linux; Android 11; SAMSUNG SM-G973U) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/14.2 Chrome/87.0.4280.141 Mobile Safari/537.36";
-
     static MainActivity instance;
 
     WebView mWebView;
+
+    View mLayoutBrowser;
+    WebView mBrowser;
+
+    View mLayoutPortal;
+    WebView mPortal;
+
+    View mLayoutAdvertiser;
+    WebView mAdvertiser;
+
     Loading mLoading;
     boolean mSudahSiap = false;
 
     Inisiator mInisiator;
     Integrator mIntegrator;
-
-    WebView mBrowser;
-    View mLayoutBrowser;
-    View mTombolTutupBrowser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,12 +56,22 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         android.util.Log.d("Invoker.MainActivity", "onCreate()");
 
+        WebView.setWebContentsDebuggingEnabled(true);
+
+        if (Build.VERSION.SDK_INT >= 21) {
+            getWindow().setStatusBarColor(Color.BLACK);
+            getWindow().setNavigationBarColor(Color.BLACK);
+        }
+
         setContentView(R.layout.activity_main);
 
-        mBrowser = (WebView) findViewById(R.id.browser);
-        mLayoutBrowser = findViewById(R.id.layout_browser);
-        mTombolTutupBrowser = findViewById(R.id.tombol_tutup_browser);
         mWebView = findViewById(R.id.webview);
+        mLayoutBrowser = findViewById(R.id.browser__layout);
+        mBrowser = findViewById(R.id.browser__webview);
+        mLayoutPortal = findViewById(R.id.portal__webview);
+        mPortal = findViewById(R.id.portal__webview);
+        mLayoutAdvertiser = findViewById(R.id.advertiser__layout);
+        mAdvertiser = findViewById(R.id.advertiser__webview);
 
         mLoading = new Loading(this);
         mLoading.mulai();
@@ -65,10 +79,24 @@ public class MainActivity extends Activity {
         mIntegrator = new Integrator(this, mWebView);
         mInisiator = new Inisiator(this, mIntegrator);
 
-        if (Build.VERSION.SDK_INT >= 21) {
-            getWindow().setStatusBarColor(Color.BLACK);
-            getWindow().setNavigationBarColor(Color.BLACK);
-        }
+        initWebView();
+        initPortal();
+        initAdvertiser();
+        initBrowser();
+        initEfekSuara();
+
+        mInisiator.mulai();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mLayoutBrowser.getVisibility() == View.VISIBLE) return;
+        if (mLayoutPortal.getVisibility() == View.VISIBLE) return;
+        if (mLayoutAdvertiser.getVisibility() == View.VISIBLE) return;
+        mWebView.evaluateJavascript("__mundur()", null);
+    }
+
+    private void initWebView() {
         if (Build.VERSION.SDK_INT >= 29) {
             mWebView.getSettings().setForceDark(WebSettings.FORCE_DARK_ON);
         }
@@ -77,11 +105,8 @@ public class MainActivity extends Activity {
         mWebView.addJavascriptInterface(new JsInterface(this), "__apk");
         mWebView.addJavascriptInterface(mIntegrator.mJsInterfaceWeb, "__servis");
 
-        WebView.setWebContentsDebuggingEnabled(true);
-
         WebSettings webSettings = mWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
-        // webSettings.setUserAgentString(MainActivity.USER_AGENT);
         webSettings.setDomStorageEnabled(true);
         webSettings.setLoadsImagesAutomatically(true);
         webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE);
@@ -95,39 +120,43 @@ public class MainActivity extends Activity {
                 return true;
             }
         });
-
-
-        initEfekSuara();
-
-        initBrowser();
-
-        mInisiator.mulai();
     }
 
-    private void tutupBrowser() {
-        runOnUiThread(() -> {
-            mLayoutBrowser.setVisibility(View.GONE);
+    private void initPortal() {
+        if (Build.VERSION.SDK_INT >= 29) {
+            mPortal.getSettings().setForceDark(WebSettings.FORCE_DARK_ON);
+        }
+
+        mPortal.setWebViewClient(new WebKlien(this));
+        mPortal.addJavascriptInterface(new JsInterface(this), "__apk");
+
+        WebSettings webSettings = mPortal.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        webSettings.setDomStorageEnabled(true);
+        webSettings.setLoadsImagesAutomatically(true);
+        webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE);
+        webSettings.setAllowFileAccess(true);
+        webSettings.setAllowContentAccess(true);
+
+        mPortal.setWebChromeClient(new WebChromeClient() {
+            @Override
+            public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
+                android.util.Log.d("Invoker.WebViewPortal.Console", consoleMessage.message());
+                return true;
+            }
         });
     }
 
-    static class BrowserJsInterface {
-        MainActivity mMainActivity;
-
-        BrowserJsInterface(MainActivity mainActivity) {
-            mMainActivity = mainActivity;
-        }
-
-        @JavascriptInterface
-        public void tutupBrowser() {
-            mMainActivity.tutupBrowser();
-        }
-    }
-
     private void initBrowser() {
-        mBrowser.setWebViewClient(new BrowserWebKlien(this));
-        mBrowser.addJavascriptInterface(new BrowserJsInterface(this), "__android");
+        View tombolTutupBrowser = findViewById(R.id.tombol_tutup_browser);
 
-        WebView.setWebContentsDebuggingEnabled(true);
+        if (Build.VERSION.SDK_INT >= 29) {
+            mBrowser.getSettings().setForceDark(WebSettings.FORCE_DARK_ON);
+        }
+
+        var webKlien = new BrowserWebKlien(this);
+        mBrowser.setWebViewClient(webKlien);
+        mBrowser.addJavascriptInterface(webKlien, "__android");
 
         mBrowser.setWebChromeClient(new WebChromeClient() {
             @Override
@@ -145,17 +174,34 @@ public class MainActivity extends Activity {
         webSettings.setAllowFileAccess(true);
         webSettings.setAllowContentAccess(true);
 
-        mTombolTutupBrowser.setOnClickListener((v) -> {
+        tombolTutupBrowser.setOnClickListener((v) -> {
             tutupBrowser();
         });
     }
 
+    private void initAdvertiser() {
+
+    }
+
+    String mUrlTargetPortal = null;
     String mUrlTargetBrowser = null;
+    String mUrlTargetAdvertiser = null;
+
+    void bukaDiPortal(String url) {
+        mUrlTargetPortal = url;
+        runOnUiThread(() -> {
+            if (! url.equals(mPortal.getUrl())) {
+                mPortal.loadUrl("about:blank");
+                mPortal.loadUrl(url);
+            }
+            mLayoutPortal.setVisibility(View.VISIBLE);
+        });
+    }
 
     void bukaDiBrowser(String url) {
         mUrlTargetBrowser = url;
         runOnUiThread(() -> {
-            if (! url.equals(mWebView.getUrl())) {
+            if (! url.equals(mBrowser.getUrl())) {
                 mBrowser.loadUrl("about:blank");
                 mBrowser.loadUrl(url);
             }
@@ -163,10 +209,33 @@ public class MainActivity extends Activity {
         });
     }
 
-    @Override
-    public void onBackPressed() {
-        if (mLayoutBrowser.getVisibility() == View.VISIBLE) return;
-        mWebView.evaluateJavascript("__mundur()", null);
+    void bukaDiAdvertiser(String url) {
+        mUrlTargetAdvertiser = url;
+        runOnUiThread(() -> {
+            if (! url.equals(mAdvertiser.getUrl())) {
+                mAdvertiser.loadUrl("about:blank");
+                mAdvertiser.loadUrl(url);
+            }
+            mLayoutAdvertiser.setVisibility(View.VISIBLE);
+        });
+    }
+
+    void tutupPortal() {
+        runOnUiThread(() -> {
+            mLayoutPortal.setVisibility(View.GONE);
+        });
+    }
+
+    void tutupBrowser() {
+        runOnUiThread(() -> {
+            mLayoutBrowser.setVisibility(View.GONE);
+        });
+    }
+
+    void tutupAdvertiser() {
+        runOnUiThread(() -> {
+            mLayoutAdvertiser.setVisibility(View.GONE);
+        });
     }
 
     SoundPool mSoundPool;

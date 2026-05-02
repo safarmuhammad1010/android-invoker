@@ -98,6 +98,7 @@ class Integrator {
 
         @JavascriptInterface
         public void login(String nama, String kata_sandi) {
+            android.util.Log.d("Invoker.Integrator.JsInterfaceWeb", "login: nama='" + nama + "', kata_sandi='" + kata_sandi + "'");
             mMainActivity.runOnUiThread(() -> {
                 mIntegrator.mWebViewServis.evaluateJavascript("__login('" + nama + "', '" + kata_sandi + "')", null);
             });
@@ -126,7 +127,7 @@ class Integrator {
 
         @JavascriptInterface
         public void harusLogin() {
-            android.util.Log.d("Invoker.Integrator.JsInterfaceServis", "meminta login...");
+            android.util.Log.d("Invoker.Integrator.JsInterfaceServis", "harusLogin");
             mMainActivity.runOnUiThread(() -> {
                 mIntegrator.mWebViewUtama.evaluateJavascript("__harus_login()", null);
                 loadingSelesai();
@@ -134,8 +135,33 @@ class Integrator {
         }
 
         @JavascriptInterface
+        public void gagalLogin(int kodeGagal, int overlimit) {
+            android.util.Log.d("Invoker.Integrator.JsInterfaceServis", "gagalLogin: kodeGagal=" + kodeGagal + ", overlimit=" + overlimit);
+            mMainActivity.runOnUiThread(() -> {
+                mIntegrator.mWebViewUtama.evaluateJavascript("__gagal_login(" + kodeGagal + "," + overlimit + ")", null);
+            });
+        }
+
+        @JavascriptInterface
+        public void berhasilLogin(String data) {
+            android.util.Log.d("Invoker.Integrator.JsInterfaceServis", "berhasilLogin: " + data);
+            mMainActivity.runOnUiThread(() -> {
+                mIntegrator.mWebViewUtama.evaluateJavascript("__berhasil_login(" + data + ")", null);
+            });
+        }
+
+        @JavascriptInterface
+        public void harusSinkron() {
+            android.util.Log.d("Invoker.Integrator.JsInterfaceServis", "harusSinkron");
+            mMainActivity.runOnUiThread(() -> {
+                mIntegrator.mWebViewUtama.evaluateJavascript("__harus_sinkron()", null);
+                loadingSelesai();
+            });
+        }
+
+        @JavascriptInterface
         public void sinkron(String data) {
-            android.util.Log.e("Invoker.Integrator.JsInterfaceServis", "sinkron: " + data);
+            android.util.Log.d("Invoker.Integrator.JsInterfaceServis", "sinkron: " + data);
             mMainActivity.runOnUiThread(() -> {
                 mIntegrator.mWebViewUtama.evaluateJavascript("__sinkron(" + data + ")", null);
             });

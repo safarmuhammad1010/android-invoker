@@ -14,11 +14,17 @@
         android:layout_height="match_parent"
         android:id="@+id/webview"/>
 
+    <WebView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/portal__webview"
+        android:visibility="gone"/>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/layout_browser"
-        android:background="#131313"
+        android:id="@+id/browser__layout"
+        android:background="#000000"
         android:visibility="gone">
 
         <ImageView
@@ -41,8 +47,39 @@
         <WebView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/browser"
+            android:id="@+id/browser__webview"
             android:layout_below="@id/toolbar_browser"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/advertiser__layout"
+        android:background="#000000"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:src="@drawable/toolbar_browser"/>
+
+        <ImageButton
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:id="@+id/advertiser__toolbar__tombol_tutup"
+            android:background="@drawable/tombol_tutup"
+            android:src="@null"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"/>
+
+        <WebView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/advertiser__webview"
+            android:layout_below="@id/advertiser__toolbar__tombol_tutup"/>
 
     </RelativeLayout>
 

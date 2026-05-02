@@ -2,6 +2,7 @@ package net.invoker.apk;
 
 
 import android.content.Intent;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.webkit.WebResourceResponse;
@@ -20,7 +21,7 @@ public class BrowserWebKlien extends WebViewClient {
     @Override
     public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
         String url = request.getUrl().toString();
-        if ((mMainActivity.mUrlTargetBrowser != null) && (!url.equals(mMainActivity.mUrlTargetBrowser))) {
+        if ((mMainActivity.mUrlTargetBrowser != null) && (!url.startsWith(mMainActivity.mUrlTargetBrowser))) {
             bukaUrlDiExternal(url);
             return true;
         }
@@ -30,6 +31,11 @@ public class BrowserWebKlien extends WebViewClient {
     private void bukaUrlDiExternal(String url) {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         mMainActivity.startActivity(intent);
+    }
+
+    @JavascriptInterface
+    public void tutupBrowser() {
+        mMainActivity.tutupBrowser();
     }
 
 }
