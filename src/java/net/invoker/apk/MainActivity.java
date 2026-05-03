@@ -145,6 +145,7 @@ public class MainActivity extends Activity {
 
         mPortal.setWebViewClient(mPortalWebKlien);
 
+        mPortal.addJavascriptInterface(mPortalWebKlien, "__portal");
         mPortal.addJavascriptInterface(mBrowserWebKlien, "__browser");
         mPortal.addJavascriptInterface(mAdvertiserWebKlien, "__advertiser");
 

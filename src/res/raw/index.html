@@ -1137,13 +1137,12 @@ __atur_misi([
         has: '234232',
         ikon: 'misi-uji_level-aritmatika',
         logo: 'misi-uji_level-aritmatika',
-        nama: 'Uji Gem: Bongkar Pasang Demonstrasi Konstipasi Kognitif',
+        nama: 'Uji Level: Aritmatik 1',
         status: 'AKTIF',
         tenggat: '2026-04-01 08:00',
         insentif: 5,
         tag: [],
-        instruksi: `Mainkan sebuah gem dengan membuka link dibawah:<br/><link-misi href="https://www.google.com/search?q=get+innerText+ofasdhsadhasdasdjhasdkjhasd"></link-misi>Setelah game selesai, akan muncul 4 digit kode. Hapal kode tersebut, lalu tekan tombol dibawah ini:<konfirmasi-misi></konfirmasi-misi>Masukkan kode tadi. Misi selesai.`,
-        kode: 0856,
+        instruksi: `Mainkan 1 level game:<br/><portal-misi href="https://kt3xm1nqsn.gt.tc/user/v1/portal/1/index.html"></portal-misi><br/>Setelah selesai, insentif masuk secara otomatis.`,
     },
 ]);
 
@@ -1668,5 +1667,41 @@ fetch(ksAlamatKonten)
     })
     .then(fKontenDiunduh)
     .catch(fGagalMengunduhKonten);
+})();(()=>{
+
+
+MAKS_WAKTU_OVERLIMIT = 3 * 60; // 3 jam
+
+
+
+function fOverlimitLogin() {
+    const waktuOverlimit = __data.ambil('waktu_overlimit_login');
+    if (! waktuOverlimit) {
+        return MAKS_WAKTU_OVERLIMIT * 2;
+    }
+    const t1 = Math.floor(parseInt(waktuOverlimit) / 60);
+    const t2 = Math.floor(Date.now() / 1000 / 60);
+    const t3 = t2 - t1;
+    //console.warn('t3 = ' + t3);
+    return t3;
+}
+
+
+
+Object.defineProperty(window, '__MAKS_WAKTU_OVERLIMIT', {
+    value: MAKS_WAKTU_OVERLIMIT,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+
+
+
+Object.defineProperty(window, '__overlimitLogin', {
+    value: fOverlimitLogin,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
 })();
 </script>
