@@ -886,30 +886,11 @@ Object.defineProperty(window, '__tema', {
 })();(()=>{
 
 
-const VERSI = 1;
-
-
-
-if (window.localStorage['akun_tes'] != VERSI) {
-    window.localStorage.clear();
-    window.localStorage['akun_tes'] = VERSI + '';
-
-
-console.warn('MEMUAT AKUN TES...');
-
-
-__data.simpan('profil.nama', 'user12');
-__data.simpan('profil.provinsi', 'sulawesi selatan');
-__data.simpan('profil.gender', 'pria');
-__data.simpan('profil.foto', '');
-__data.simpan('profil.biodata', 'warga planet bumi');
-
 
 __data.simpan('performa.determinasi', 93);
 __data.simpan('performa.komprehensi', 84);
 __data.simpan('performa.akurasi', 38);
 __data.simpan('performa.efisiensi', 67);
-
 
 __data.simpan('statistik.total_kredit', 1427);
 __data.simpan('statistik.kredit_perminggu', 1427);
@@ -920,8 +901,9 @@ __data.simpan('statistik.misi_perminggu', 23);
 __data.simpan('statistik.median_reting_misi', 3.5);
 
 
-__data.simpan('xp', 100);
-__data.simpan('kredit', '0');
+
+__data.simpan('profil.foto', '');
+
 __data.simpan('volume_misi', 0);
 __data.simpan('volume_inventori', 0);
 __data.simpan('volume_market', 0);
@@ -956,49 +938,7 @@ __data.simpan('lotre_1B-ikut', '');
 
 
 
-__data.simpan('lotre_1H-riwayat', JSON.stringify([
-    {nama: 'user1', putaran: '10-2-2026'},
-    {nama: 'ananda12', putaran: '9-2-2026'},
-    {nama: 'ararara_oke', putaran: '8-2-2026'},
-    {nama: 'hope188', putaran: '7-2-2026'},
-    {nama: 'user5', putaran: '6-2-2026'},
-    {nama: 'paraiu', putaran: '5-2-2026'},
-    {nama: 'kns6797', putaran: '4-2-2026'},
-    {nama: 'user8', putaran: '3-2-2026'},
-    {nama: 'safarmuhammad1010', putaran: '2-2-2026'},
-    {nama: 'jackson7', putaran: '1-2-2026'},
-]));
-__data.simpan('lotre_7H-riwayat', JSON.stringify([
-    {nama: 'user1', putaran: 'Minggu 10 Tahun 2026'},
-    {nama: 'user2', putaran: 'Minggu 9 Tahun 2026'},
-    {nama: 'user3', putaran: 'Minggu 8 Tahun 2026'},
-    {nama: 'user4', putaran: 'Minggu 7 Tahun 2026'},
-    {nama: 'user5', putaran: 'Minggu 6 Tahun 2026'},
-    {nama: 'user6', putaran: 'Minggu 5 Tahun 2026'},
-    {nama: 'user7', putaran: 'Minggu 4 Tahun 2026'},
-    {nama: 'user8', putaran: 'Minggu 3 Tahun 2026'},
-    {nama: 'user9', putaran: 'Minggu 2 Tahun 2026'},
-    {nama: 'user10', putaran: 'Minggu 1 Tahun 2026'},
-]));
-__data.simpan('lotre_1B-riwayat', JSON.stringify([
-    {nama: 'user1', putaran: 'Bulan 10 Tahun 2026'},
-    {nama: 'user2', putaran: 'Bulan 9 Tahun 2026'},
-    {nama: 'user3', putaran: 'Bulan 8 Tahun 2026'},
-    {nama: 'user4', putaran: 'Bulan 7 Tahun 2026'},
-    {nama: 'user5', putaran: 'Bulan 6 Tahun 2026'},
-    {nama: 'user6', putaran: 'Bulan 5 Tahun 2026'},
-    {nama: 'user7', putaran: 'Bulan 4 Tahun 2026'},
-    {nama: 'user8', putaran: 'Bulan 3 Tahun 2026'},
-    {nama: 'user9', putaran: 'Bulan 2 Tahun 2026'},
-    {nama: 'user10', putaran: 'Bulan 1 Tahun 2026'},
-]));
-
-
-
-
 __data.simpan('referal.link', 'https://example.org');
-__data.simpan('referal.referi', 20217);
-__data.simpan('referal.insentif', 30871);
 
 
 
@@ -1006,177 +946,6 @@ __data.simpan('dadu.hadiah_kartu-A', 2000);
 __data.simpan('dadu.hadiah_kartu-B', 500);
 __data.simpan('dadu.hadiah_kartu-C', 30);
 __data.simpan('dadu.hadiah_kartu-D', 1);
-__data.simpan('dadu.kartu_terpilih', 'B');
-
-
-
-__data.simpan('peti.hadiah', 1);
-
-
-
-__tambah_email({
-    has: '2',
-    subjek: 'Menang Lotre Bulanan Pada Hari Kemarin',
-    pesan: `Berikut adalah contoh cerpen singkat dengan tema kejujuran yang berjudul "
-Dompet yang Kembali". Cerpen ini memiliki pesan moral yang kuat tentang pentingnya dedikasi dan integritas dalam kehidupan sehari-hari, sering digunakan untuk tugas sekolah atau motivasi.
-Dompet yang Kembali
-Aku (Andi) duduk melamun di teras rumah. Sudah berbulan-bulan lamanya aku menganggur semenjak lulus S1 jurusan Manajemen Bisnis. Harapan untuk mendapatkan pekerjaan impian semakin menipis. Panggilan interview tak kunjung datang, sementara tabunganku semakin menipis.
-Suatu sore, saat berjalan di taman kota, aku melihat sebuah dompet kulit coklat tergeletak di bawah bangku. Aku mengambilnya dan membukanya. Kosong, tidak ada identitas sama sekali. Namun, ada uang tunai yang jumlahnya cukup banyak. Pikiranku sempat goyah. Uang ini bisa membayar kosku selama dua bulan.
-Tiba-tiba, seorang bapak tua berpakaian rapi mendekat dengan wajah panik. "Dik, lihat dompet coklat?" tanyanya.
-Aku ragu sejenak, namun nuraniku bicara. Aku mengeluarkannya, "Ini Pak, tadi terjatuh di bawah sana."
-Bapak itu lega. "Terima kasih banyak! Ini uang untuk pengobatan istri saya. Kebetulan saya pengusaha, jarang bertemu orang jujur seperti kamu," katanya.
-Singkat cerita, bapak tersebut ternyata pemilik perusahaan, Pak Aan. Ia terkesan dengan kejujuranku dan menawarkanku posisi staf administrasi keesokan harinya. "Saya butuh orang jujur dan berdedikasi seperti kamu," pungkasnya. Aku bersyukur kejujuran membawa berkah yang tak disangka-sangka.
-`,
-    tanggal: new Date().toISOString(),
-});
-
-
-
-__tambah_histori(100000, 'market');
-__tambah_histori(10, 'dadu');
-__tambah_histori(10, 'lotre');
-__tambah_histori(1000, 'market');
-__tambah_histori(10, 'dadu');
-__tambah_histori(10, 'lotre');
-__tambah_histori(10, 'peti');
-__tambah_histori(10, 'peti');
-__tambah_histori(10, 'peti');
-__tambah_histori(10, 'peti');
-__tambah_histori(10, 'peti');
-__tambah_histori(10, 'peti');
-__tambah_histori(10, 'peti');
-__tambah_histori(10, 'peti');
-__tambah_histori(10, 'peti');
-__tambah_histori(10, 'peti');
-__tambah_histori(10, 'peti');
-__tambah_histori(10, 'peti');
-__tambah_histori(10, 'peti');
-__tambah_histori(10, 'peti');
-__tambah_histori(10, 'peti');
-__tambah_histori(10, 'peti');
-__tambah_histori(10, 'peti');
-__tambah_histori(10, 'peti');
-__tambah_histori(10, 'peti');
-__tambah_histori(10, 'peti');
-__tambah_histori(10, 'peti');
-
-
-
-
-__atur_market([
-    {
-        has: 'produk-dana1rb',
-        ikon: 'produk-dana1rb',
-        logo: 'produk-dana1rb',
-        nama: 'Dana 1.000',
-        stok: 4278,
-        harga: 3000,
-        tag: [],
-    },
-    {
-        has: 'produk-dana10rb',
-        ikon: 'produk-dana10rb',
-        logo: 'produk-dana10rb',
-        nama: 'Dana 10.000',
-        stok: 912,
-        harga: 60000,
-        tag: [],
-    },
-    {
-        has: 'produk-dana50rb',
-        ikon: 'produk-dana50rb',
-        logo: 'produk-dana50rb',
-        nama: 'Dana 50.000',
-        stok: 87,
-        harga: 100000,
-        tag: [],
-    },
-    {
-        has: 'produk-kuota10gb',
-        ikon: 'produk-kuota10gb',
-        logo: 'produk-kuota10gb',
-        nama: 'Kuota 10 GB',
-        stok: 337,
-        harga: 90000,
-        tag: [],
-    },
-    {
-        has: 'produk-kuota20gb',
-        ikon: 'produk-kuota20gb',
-        logo: 'produk-kuota20gb',
-        nama: 'Kuota 20 GB',
-        stok: 489,
-        harga: 120000,
-        tag: [],
-    },
-    {
-        has: 'produk-kuota30gb',
-        ikon: 'produk-kuota30gb',
-        logo: 'produk-kuota30gb',
-        nama: 'Kuota 30 GB',
-        stok: 124,
-        harga: 140000,
-        tag: [],
-    },
-    {
-        has: 'produk-pulsa5rb',
-        ikon: 'produk-pulsa5rb',
-        logo: 'produk-pulsa5rb',
-        nama: 'Pulsa 5.000',
-        stok: 2672,
-        harga: 15000,
-        tag: [],
-    },
-]);
-
-
-
-
-__atur_misi([
-    {
-        has: '234232',
-        ikon: 'misi-uji_level-aritmatika',
-        logo: 'misi-uji_level-aritmatika',
-        nama: 'Uji Level: Aritmatik 1',
-        status: 'AKTIF',
-        tenggat: '2026-04-01 08:00',
-        insentif: 5,
-        tag: [],
-        instruksi: `Mainkan 1 level game:<br/><portal-misi href="https://kt3xm1nqsn.gt.tc/user/v1/portal/1/index.html"></portal-misi><br/>Setelah selesai, insentif masuk secara otomatis.`,
-    },
-]);
-
-
-
-
-
-__atur_inventori([
-/*
-    {
-        has: '1',
-        ikon: 'produk-dana1rb',
-        logo: 'produk-dana1rb',
-        nama: 'Pedang Giok',
-        tipe: 'kolektif',
-        keterangan: 'Pedang legendaris yang sangat langka',
-    },
-*/
-    {
-        has: '1',
-        ikon: 'item-kartu_diskon-10',
-        logo: 'item-kartu_diskon-10',
-        nama: 'Kartu Diskon 10%',
-        tipe: 'konsumtif',
-        berlaku: 24,
-        keterangan: 'Gunakan kartu diskon ini untuk mendapatkan diskon 10% (kelipatan berlaku) untuk setiap produk di market selama 24 jam.',
-    },
-]);
-
-
-
-
-
-}
 })();(()=>{
 
 
@@ -1262,11 +1031,12 @@ function fImporModul(asAlamatSubjek, asNamaModul) {
 
 
 function fImpor(asAlamatSubjek, asAlamatTarget) {
-    console.log(`${asAlamatSubjek} mengimpor ${asAlamatTarget}`);
     if (asAlamatTarget.startsWith('aset/'))
         return fImporAset(asAlamatSubjek, asAlamatTarget);
-    if (asAlamatTarget.startsWith('modul/'))
+    if (asAlamatTarget.startsWith('modul/')) {
+        console.log(`${asAlamatSubjek} mengimpor ${asAlamatTarget}`);
         return fImporModul(asAlamatSubjek, asAlamatTarget);
+    }
     throw new Error(`tidak bisa mengimpor ${asAlamatTarget}`);
 }
 
