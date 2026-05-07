@@ -167,6 +167,15 @@ class Integrator {
             });
         }
 
+        @JavascriptInterface
+        public void tokenInvalid() {
+            android.util.Log.d("Invoker.Integrator.JsInterfaceServis", "tokenInvalid");
+            mMainActivity.runOnUiThread(() -> {
+                mIntegrator.mWebViewUtama.evaluateJavascript("__harus_login(true)", null);
+                loadingSelesai();
+            });
+        }
+
     }
 
 }
