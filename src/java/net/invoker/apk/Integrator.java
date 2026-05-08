@@ -117,6 +117,11 @@ class Integrator {
         }
 
         @JavascriptInterface
+        public String dTahapApk() {
+            return K.TAHAP_APK;
+        }
+
+        @JavascriptInterface
         public int dSdkInt() {
             return android.os.Build.VERSION.SDK_INT;
         }
@@ -174,6 +179,7 @@ class Integrator {
             android.util.Log.d("Invoker.Integrator.JsInterfaceServis", "sinkron: " + data);
             mMainActivity.runOnUiThread(() -> {
                 mIntegrator.mWebViewUtama.evaluateJavascript("__sinkron(" + data + ")", null);
+                loadingSelesai();
             });
         }
 
