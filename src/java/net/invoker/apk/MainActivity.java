@@ -388,6 +388,16 @@ public class MainActivity extends Activity {
         Toast.makeText(this, pesan, Toast.LENGTH_SHORT).show();
     }
 
+    public String namaPerangkat() {
+        String manufacturer = Build.MANUFACTURER;
+        String model = Build.MODEL;
+        if (model.toLowerCase().startsWith(manufacturer.toLowerCase())) {
+            return model;
+        } else {
+            return manufacturer + " " + model;
+        }
+    }
+
     static class JsInterface {
 
         static final int DURASI_GETAR = 150;
@@ -400,15 +410,67 @@ public class MainActivity extends Activity {
             mVibrator = (Vibrator) mMainActivity.getSystemService(Context.VIBRATOR_SERVICE);
         }
 
+        String mUrlServer = null;
         @JavascriptInterface
         public String dUrlServer() {
-            String urlServer = null;
+            if (mUrlServer != null) return mUrlServer;
             try {
-                urlServer = mMainActivity.mInisiator.mMetadataGlobal.getString("url_server");
+                mUrlServer = mMainActivity.mInisiator.mMetadataGlobal.getString("url_server");
             } catch (Exception e) {
                 android.util.Log.e("Invoker.MainActivity", e.getMessage());
             }
-            return urlServer;
+            return mUrlServer;
+        }
+
+        String mUrlMisi = null;
+        @JavascriptInterface
+        public String dUrlMisi() {
+            if (mUrlMisi != null) return mUrlMisi;
+            try {
+                mUrlMisi = mMainActivity.mInisiator.mMetadataGlobal.getString("url_misi");
+            } catch (Exception e) {
+                android.util.Log.e("Invoker.MainActivity", e.getMessage());
+            }
+            return mUrlMisi;
+        }
+
+        String mUrlInventori = null;
+        @JavascriptInterface
+        public String dUrlInventori() {
+            if (mUrlInventori != null) return mUrlInventori;
+            try {
+                mUrlInventori = mMainActivity.mInisiator.mMetadataGlobal.getString("url_inventori");
+            } catch (Exception e) {
+                android.util.Log.e("Invoker.MainActivity", e.getMessage());
+            }
+            return mUrlInventori;
+        }
+
+        String mUrlMarket = null;
+        @JavascriptInterface
+        public String dUrlMarket() {
+            if (mUrlMarket != null) return mUrlMarket;
+            try {
+                mUrlMarket = mMainActivity.mInisiator.mMetadataGlobal.getString("url_market");
+            } catch (Exception e) {
+                android.util.Log.e("Invoker.MainActivity", e.getMessage());
+            }
+            return mUrlMarket;
+        }
+
+        @JavascriptInterface
+        public int dSdkInt() {
+            return Build.VERSION.SDK_INT;
+        }
+
+        @JavascriptInterface
+        public String dNamaPerangkat() {
+            return mMainActivity.namaPerangkat();
+        }
+
+        @JavascriptInterface
+        public String dTahapApk() {
+            return K.TAHAP_APK;
         }
 
         @JavascriptInterface

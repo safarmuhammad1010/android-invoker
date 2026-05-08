@@ -3,6 +3,8 @@ package net.invoker.apk;
 
 class K {
 
+    static final String TAHAP_APK = "pro";
+
     static final String VERSI_WEB = "1.0";
 
     static final String URL_METADATA = "https://raw.githubusercontent.com/repoinvoker1/invoker/refs/heads/main/dev/v1/metadata.json";

@@ -371,6 +371,62 @@ function fAturInventori(dataset) {
 
 
 
+function fMuatInventori(lisItem) {
+    lisItem = lisItem || [];
+    console.info('memuat inventori: ', '[' + lisItem.join() + ']');
+
+    if (lisItem.length === 0) return;
+
+    const urlInventori = __apk.dUrlInventori();
+    if (! urlInventori) {
+        console.error('gagal memuat inventori: url inventori tidak tersedia');
+        return false;
+    }
+
+    const lisDataItem = [];
+
+    for (let i = 0; i < lisItem.length; i++) {
+        const hasItem = lisItem[i];
+        const url = urlInventori + '/' + hasItem + '.json';
+
+        fetch(url)
+            .then(res => {
+                if (! res.ok) {
+                    throw new Error('http status error ' + res.status);
+                }
+                return res.text();
+            })
+            .then(jsonData => {
+                let data;
+                try {
+                    data = JSON.parse(jsonData);
+                } catch (e) {
+                    console.error('gagal memuat inventori, data invalid: ', e);
+                    return;
+                }
+
+                lisDataItem.push({
+                    indeks: i,
+                    data,
+                });
+
+                if (lisDataItem.length == lisItem) {
+                    console.info('mengatur inventori: ' + lisDataItem.length + ' item');
+                    lisDataItem.sort((a, b) => a.indeks - b.indeks);
+                    const dataInventori = lisDataItem.map(x => x.data);
+                    __atur_inventori(dataInventori);
+                }
+            })
+            .catch(e => {
+                console.error('gagal memuat inventori: ', e);
+            });
+    }
+
+    return true;
+}
+
+
+
 
 function fPakaiItem(has) {
     const dataset = JSON.parse(__data.ambil('inventori.data') || '[]');
@@ -404,6 +460,15 @@ Object.defineProperty(window, '__atur_inventori', {
 
 
 
+Object.defineProperty(window, '__muat_inventori', {
+    value: fMuatInventori,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+
+
+
 Object.defineProperty(window, '__pakai_item', {
     value: fPakaiItem,
     writable: false,
@@ -428,6 +493,19 @@ Object.defineProperty(window, '__t', {
 Object.defineProperty(window, '__tanggal', {
     value: () => {
         return new Date().toISOString();
+    },
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+
+
+
+Object.defineProperty(window, '__hari', {
+    value: () => {
+        const lisHari = ["minggu", "senin", "selasa", "rabu", "kamis", "jumat", "sabtu"];
+        const namaHari = lisHari[new Date().getUTCDay()];
+        return namaHari;
     },
     writable: false,
     configurable: false,
@@ -573,6 +651,43 @@ function fAturMarket(dataset) {
 
 
 
+function fMuatMarket() {
+    const urlMarket = __apk.dUrlMarket();
+    if (! urlMarket) {
+        console.error('gagal memuat market: url market tidak tersedia');
+        return false;
+    }
+
+    const url = urlMarket + '/' + __hari() + '.json';
+    console.info('memuat market: ', url);
+
+    fetch(url)
+        .then(res => {
+            if (! res.ok) {
+                throw new Error('http status error ' + res.status);
+            }
+            return res.text();
+        })
+        .then(jsonData => {
+            let data;
+            try {
+                data = JSON.parse(jsonData);
+            } catch (e) {
+                console.error('gagal memuat market, data invalid: ', e);
+                return;
+            }
+            __atur_market(data);
+        })
+        .catch(e => {
+            console.error('gagal memuat market: ', e);
+        });
+
+    return true;
+}
+
+
+
+
 Object.defineProperty(window, '__lihat_market', {
     value: fLihatMarket,
     writable: false,
@@ -589,6 +704,14 @@ Object.defineProperty(window, '__atur_market', {
     enumerable: false,
 });
 
+
+
+Object.defineProperty(window, '__muat_market', {
+    value: fMuatMarket,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
 })();(()=>{
 
 
@@ -646,6 +769,41 @@ function fAmbilMisi(has) {
 
 
 
+function fMuatMisi(step) {
+    console.info('memuat misi: step=' + step);
+
+    const urlMisi = __apk.dUrlMisi();
+    if (! urlMisi) {
+        console.error('gagal memuat misi: url misi tidak tersedia');
+        return false;
+    }
+
+    const url = urlMisi + '/reguler/' + step + '.json';
+    fetch(url)
+        .then(res => {
+            if (! res.ok) {
+                throw new Error('http status error: ' + res.status);
+            }
+            return res.text();
+        })
+        .then(jsonData => {
+            let data;
+            try {
+                data = JSON.parse(jsonData);
+                __atur_misi(data);
+            } catch (e) {
+                throw new Error('format data invalid: ' + e);
+            }
+        })
+        .catch(e => {
+            console.error('gagal memuat misi: ', e);
+        });
+
+    return true;
+}
+
+
+
 Object.defineProperty(window, '__ambil_misi', {
     value: fAmbilMisi,
     writable: false,
@@ -680,6 +838,14 @@ Object.defineProperty(window, '__atur_misi', {
     enumerable: false,
 });
 
+
+
+Object.defineProperty(window, '__muat_misi', {
+    value: fMuatMisi,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
 })();(()=>{
 
 

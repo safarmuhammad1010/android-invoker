@@ -117,6 +117,16 @@ class Integrator {
         }
 
         @JavascriptInterface
+        public int dSdkInt() {
+            return android.os.Build.VERSION.SDK_INT;
+        }
+
+        @JavascriptInterface
+        public String dNamaPerangkat() {
+            return mMainActivity.namaPerangkat();
+        }
+
+        @JavascriptInterface
         public void loadingSelesai() {
             android.util.Log.d("Invoker.Integrator.JsInterfaceServis", "loading selesai");
             mMainActivity.mSudahSiap = true;
