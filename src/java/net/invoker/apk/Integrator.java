@@ -104,6 +104,14 @@ class Integrator {
             });
         }
 
+        @JavascriptInterface
+        public void bukaPeti() {
+            android.util.Log.d("Invoker.Integrator.JsInterfaceWeb", "BUKA PETI");
+            mMainActivity.runOnUiThread(() -> {
+                mIntegrator.mWebViewServis.evaluateJavascript("__buka_peti()", null);
+            });
+        }
+
     }
 
     static class JsInterfaceServis {
@@ -189,6 +197,22 @@ class Integrator {
             mMainActivity.runOnUiThread(() -> {
                 mIntegrator.mWebViewUtama.evaluateJavascript("__harus_login(true)", null);
                 loadingSelesai();
+            });
+        }
+
+        @JavascriptInterface
+        public void error(String kausa) {
+            android.util.Log.d("Invoker.Integrator.JsInterfaceServis", "error('" + kausa + "')");
+            mMainActivity.runOnUiThread(() -> {
+                mIntegrator.mWebViewUtama.evaluateJavascript("__error('" + kausa + "')", null);
+            });
+        }
+
+        @JavascriptInterface
+        public void berhasilBukaPeti(int kredit) {
+            android.util.Log.d("Invoker.Integrator.JsInterfaceServis", "berhasilBukaPeti(" + kredit + ")");
+            mMainActivity.runOnUiThread(() -> {
+                mIntegrator.mWebViewUtama.evaluateJavascript("__berhasilBukaPeti(" + kredit + ")", null);
             });
         }
 

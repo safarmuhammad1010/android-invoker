@@ -410,16 +410,16 @@ public class MainActivity extends Activity {
             mVibrator = (Vibrator) mMainActivity.getSystemService(Context.VIBRATOR_SERVICE);
         }
 
-        String mUrlServer = null;
+        String mUrlServis = null;
         @JavascriptInterface
-        public String dUrlServer() {
-            if (mUrlServer != null) return mUrlServer;
+        public String dUrlServis() {
+            if (mUrlServis != null) return mUrlServis;
             try {
-                mUrlServer = mMainActivity.mInisiator.mMetadataGlobal.getString("url_server");
+                mUrlServis = mMainActivity.mInisiator.mMetadataGlobal.getString("url_servis");
             } catch (Exception e) {
                 android.util.Log.e("Invoker.MainActivity", e.getMessage());
             }
-            return mUrlServer;
+            return mUrlServis;
         }
 
         String mUrlMisi = null;
