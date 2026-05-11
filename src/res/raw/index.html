@@ -557,12 +557,14 @@ const data = {
 
 
 
-data.kredit = parseInt(localStorage['kredit'] || 0);
+data.kredit = parseInt(__data.ambil('kredit') || 0);
 
 
 
 
 function fTambahKredit(kredit, label) {
+    data.kredit = parseInt(__data.ambil('kredit') || 0);
+
     kredit = parseInt(kredit);
     if (isNaN(kredit)) {
         throw new Error('argumen kredit bukan integer');
