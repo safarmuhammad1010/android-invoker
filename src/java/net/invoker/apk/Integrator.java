@@ -169,7 +169,9 @@ class Integrator {
         public void berhasilLogin(String data) {
             android.util.Log.d("Invoker.Integrator.JsInterfaceServis", "berhasilLogin: " + data);
             mMainActivity.runOnUiThread(() -> {
-                mIntegrator.mWebViewUtama.evaluateJavascript("__berhasil_login(" + data + ")", null);
+                mIntegrator.mWebViewUtama.evaluateJavascript(
+                    String.format("__berhasil_login(%s)", data),
+                null);
             });
         }
 
@@ -186,7 +188,9 @@ class Integrator {
         public void sinkron(String data) {
             android.util.Log.d("Invoker.Integrator.JsInterfaceServis", "sinkron: " + data);
             mMainActivity.runOnUiThread(() -> {
-                mIntegrator.mWebViewUtama.evaluateJavascript("__sinkron(" + data + ")", null);
+                mIntegrator.mWebViewUtama.evaluateJavascript(
+                    String.format("__sinkron(%s)", data),
+                null);
                 loadingSelesai();
             });
         }
@@ -201,10 +205,12 @@ class Integrator {
         }
 
         @JavascriptInterface
-        public void error(String kausa) {
-            android.util.Log.d("Invoker.Integrator.JsInterfaceServis", "error('" + kausa + "')");
+        public void error(String pesan, String kausa) {
+            android.util.Log.e("Invoker.Integrator.JsInterfaceServis", "error('" + kausa + "')");
             mMainActivity.runOnUiThread(() -> {
-                mIntegrator.mWebViewUtama.evaluateJavascript("__error('" + kausa + "')", null);
+                mIntegrator.mWebViewUtama.evaluateJavascript(
+                    String.format("__error('%s', '%s')", pesan, kausa),
+                null);
             });
         }
 
@@ -212,7 +218,9 @@ class Integrator {
         public void berhasilBukaPeti(int kredit) {
             android.util.Log.d("Invoker.Integrator.JsInterfaceServis", "berhasilBukaPeti(" + kredit + ")");
             mMainActivity.runOnUiThread(() -> {
-                mIntegrator.mWebViewUtama.evaluateJavascript("__berhasilBukaPeti(" + kredit + ")", null);
+                mIntegrator.mWebViewUtama.evaluateJavascript(
+                    String.format("__berhasilBukaPeti(%d)", kredit),
+                null);
             });
         }
 
