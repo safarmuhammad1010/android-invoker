@@ -112,6 +112,14 @@ class Integrator {
             });
         }
 
+        @JavascriptInterface
+        public void bukaKartu() {
+            android.util.Log.d("Invoker.Integrator.JsInterfaceWeb", "BUKA KARTU");
+            mMainActivity.runOnUiThread(() -> {
+                mIntegrator.mWebViewServis.evaluateJavascript("__buka_kartu()", null);
+            });
+        }
+
     }
 
     static class JsInterfaceServis {
@@ -216,10 +224,20 @@ class Integrator {
 
         @JavascriptInterface
         public void berhasilBukaPeti(int kredit) {
-            android.util.Log.d("Invoker.Integrator.JsInterfaceServis", "berhasilBukaPeti(" + kredit + ")");
+            android.util.Log.d("Invoker.Integrator.JsInterfaceServis", String.format("berhasilBukaPeti(%d)", kredit));
             mMainActivity.runOnUiThread(() -> {
                 mIntegrator.mWebViewUtama.evaluateJavascript(
                     String.format("__berhasilBukaPeti(%d)", kredit),
+                null);
+            });
+        }
+
+        @JavascriptInterface
+        public void berhasilBukaKartu(String namaKartu, int kredit) {
+            android.util.Log.d("Invoker.Integrator.JsInterfaceServis", String.format("berhasilBukaKartu('%s', %d)", namaKartu, kredit));
+            mMainActivity.runOnUiThread(() -> {
+                mIntegrator.mWebViewUtama.evaluateJavascript(
+                    String.format("__berhasilBukaKartu('%s', %d)", namaKartu, kredit),
                 null);
             });
         }

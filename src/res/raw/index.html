@@ -1053,7 +1053,13 @@ Object.defineProperty(window, '__tema', {
 });
 })();(()=>{
 
-if (! window.localStorage.bukan_perdana) {
+
+
+const VERSI_WEB = '1.0';
+
+
+
+if (window.localStorage.versi_web != VERSI_WEB) {
     __data.simpan('profil.foto', '');
 
     __data.simpan('volume_misi', 0);
@@ -1062,17 +1068,14 @@ if (! window.localStorage.bukan_perdana) {
     __data.simpan('jumlah_email_baru', 0);
 
 
-    __data.simpan('hal_email-hal_total', 13);
-
-
     __data.simpan('lotre_1H-harga', 3);
     __data.simpan('lotre_7H-harga', 9);
     __data.simpan('lotre_1B-harga', 33);
 
 
-    __data.simpan('lotre_1H-hadiah', 10000);
-    __data.simpan('lotre_7H-hadiah', 100000);
-    __data.simpan('lotre_1B-hadiah', 1000000);
+    __data.simpan('lotre_1H-hadiah', 2000);
+    __data.simpan('lotre_7H-hadiah', 50000);
+    __data.simpan('lotre_1B-hadiah', 300000);
 
 
     __data.simpan('lotre_1H-minimum', 1000);
@@ -1092,13 +1095,13 @@ if (! window.localStorage.bukan_perdana) {
     __data.simpan('referal.link', 'https://example.org');
 
 
-    __data.simpan('dadu.hadiah_kartu-A', 2000);
+    __data.simpan('dadu.hadiah_kartu-A', 3000);
     __data.simpan('dadu.hadiah_kartu-B', 500);
     __data.simpan('dadu.hadiah_kartu-C', 30);
     __data.simpan('dadu.hadiah_kartu-D', 1);
 
 
-    window.localStorage.bukan_perdana = 'ya';
+    window.localStorage.versi_web = VERSI_WEB;
 }
 })();(()=>{
 
