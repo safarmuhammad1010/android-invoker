@@ -120,6 +120,14 @@ class Integrator {
             });
         }
 
+        @JavascriptInterface
+        public void ambilInsentifReferal() {
+            android.util.Log.d("Invoker.Integrator.JsInterfaceWeb", "AMBIL INSENTIF REFERAL");
+            mMainActivity.runOnUiThread(() -> {
+                mIntegrator.mWebViewServis.evaluateJavascript("__ambil_insentif_referal()", null);
+            });
+        }
+
     }
 
     static class JsInterfaceServis {
@@ -238,6 +246,16 @@ class Integrator {
             mMainActivity.runOnUiThread(() -> {
                 mIntegrator.mWebViewUtama.evaluateJavascript(
                     String.format("__berhasilBukaKartu('%s', %d)", namaKartu, kredit),
+                null);
+            });
+        }
+
+        @JavascriptInterface
+        public void berhasilAmbilInsentifReferal(int kredit) {
+            android.util.Log.d("Invoker.Integrator.JsInterfaceServis", String.format("berhasilAmbilInsentifReferal(%d)", kredit));
+            mMainActivity.runOnUiThread(() -> {
+                mIntegrator.mWebViewUtama.evaluateJavascript(
+                    String.format("__berhasilAmbilInsentifReferal('%s', %d)", kredit),
                 null);
             });
         }
