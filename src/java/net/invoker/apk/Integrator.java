@@ -121,6 +121,16 @@ class Integrator {
         }
 
         @JavascriptInterface
+        public void ikutLotre(String tipe) {
+            android.util.Log.d("Invoker.Integrator.JsInterfaceWeb", "IKUT LOTRE " +  tipe);
+            mMainActivity.runOnUiThread(() -> {
+                mIntegrator.mWebViewServis.evaluateJavascript(
+                    String.format("__ikut_lotre('%s')", tipe),
+                null);
+            });
+        }
+
+        @JavascriptInterface
         public void ambilInsentifReferal() {
             android.util.Log.d("Invoker.Integrator.JsInterfaceWeb", "AMBIL INSENTIF REFERAL");
             mMainActivity.runOnUiThread(() -> {
@@ -251,11 +261,21 @@ class Integrator {
         }
 
         @JavascriptInterface
+        public void berhasilIkutLotre(String tipe) {
+            android.util.Log.d("Invoker.Integrator.JsInterfaceServis", String.format("berhasilIkutLotre('%s')", tipe));
+            mMainActivity.runOnUiThread(() -> {
+                mIntegrator.mWebViewUtama.evaluateJavascript(
+                    String.format("__berhasilIkutLotre('%s')", tipe),
+                null);
+            });
+        }
+
+        @JavascriptInterface
         public void berhasilAmbilInsentifReferal(int kredit) {
             android.util.Log.d("Invoker.Integrator.JsInterfaceServis", String.format("berhasilAmbilInsentifReferal(%d)", kredit));
             mMainActivity.runOnUiThread(() -> {
                 mIntegrator.mWebViewUtama.evaluateJavascript(
-                    String.format("__berhasilAmbilInsentifReferal('%s', %d)", kredit),
+                    String.format("__berhasilAmbilInsentifReferal(%d)", kredit),
                 null);
             });
         }
