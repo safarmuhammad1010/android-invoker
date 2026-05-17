@@ -263,10 +263,16 @@ class Integrator {
         @JavascriptInterface
         public void berhasilIkutLotre(String tipe) {
             android.util.Log.d("Invoker.Integrator.JsInterfaceServis", String.format("berhasilIkutLotre('%s')", tipe));
+            String skrip;
+            if ("1H".equals(tipe)) skrip = "__berhasilIkutLotre1H()";
+            else if ("7H".equals(tipe)) skrip = "__berhasilIkutLotre7H()";
+            else if ("1B".equals(tipe)) skrip = "__berhasilIkutLotre1B()";
+            else {
+                android.util.Log.e("Invoker.Integrator.JsInterfaceServis", String.format("tipe invalid: %s", tipe));
+                return;
+            }
             mMainActivity.runOnUiThread(() -> {
-                mIntegrator.mWebViewUtama.evaluateJavascript(
-                    String.format("__berhasilIkutLotre('%s')", tipe),
-                null);
+                mIntegrator.mWebViewUtama.evaluateJavascript(skrip, null);
             });
         }
 
