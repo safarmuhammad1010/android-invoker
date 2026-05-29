@@ -1060,6 +1060,9 @@ const VERSI_WEB = '1.0';
 
 
 if (window.localStorage.versi_web != VERSI_WEB) {
+
+
+
     __data.simpan('profil.foto', '');
 
     __data.simpan('volume_misi', 0);
@@ -1068,26 +1071,13 @@ if (window.localStorage.versi_web != VERSI_WEB) {
     __data.simpan('jumlah_email_baru', 0);
 
 
-    __data.simpan('lotre_1H-harga', 3);
-    __data.simpan('lotre_7H-harga', 9);
-    __data.simpan('lotre_1B-harga', 33);
-
-
-    __data.simpan('lotre_1H-hadiah', 2000);
-    __data.simpan('lotre_7H-hadiah', 50000);
-    __data.simpan('lotre_1B-hadiah', 300000);
-
-
     __data.simpan('lotre_1H-minimum', 1000);
-    __data.simpan('lotre_7H-minimum', 3000);
-    __data.simpan('lotre_1B-minimum', 5000);
+    __data.simpan('lotre_7H-minimum', 2000);
+    __data.simpan('lotre_1B-minimum', 3000);
 
 
     __data.simpan('lotre_7H-awal', '2026-01-01T00:00:00.000Z');
     __data.simpan('lotre_1B-awal', '2026-01-01T00:00:00.000Z');
-
-
-    __data.simpan('referal.link', 'https://example.org');
 
 
 
