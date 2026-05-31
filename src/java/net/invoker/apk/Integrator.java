@@ -261,12 +261,12 @@ class Integrator {
         }
 
         @JavascriptInterface
-        public void berhasilIkutLotre(String tipe) {
-            android.util.Log.d("Invoker.Integrator.JsInterfaceServis", String.format("berhasilIkutLotre('%s')", tipe));
+        public void berhasilIkutLotre(String tipe, int hargaTiket) {
+            android.util.Log.d("Invoker.Integrator.JsInterfaceServis", String.format("berhasilIkutLotre('%s', %d)", tipe, hargaTiket));
             String skrip;
-            if ("1H".equals(tipe)) skrip = "__berhasilIkutLotre1H()";
-            else if ("7H".equals(tipe)) skrip = "__berhasilIkutLotre7H()";
-            else if ("1B".equals(tipe)) skrip = "__berhasilIkutLotre1B()";
+            if ("1H".equals(tipe)) skrip = String.format("__berhasilIkutLotre1H(%d)", hargaTiket);
+            else if ("7H".equals(tipe)) skrip = String.format("__berhasilIkutLotre7H(%d)", hargaTiket);
+            else if ("1B".equals(tipe)) skrip = String.format("__berhasilIkutLotre1B(%d)", hargaTiket);
             else {
                 android.util.Log.e("Invoker.Integrator.JsInterfaceServis", String.format("tipe invalid: %s", tipe));
                 return;
