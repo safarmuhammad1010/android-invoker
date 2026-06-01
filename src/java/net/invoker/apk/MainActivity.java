@@ -488,10 +488,14 @@ public class MainActivity extends Activity {
         public void getar() {
             if (mVibrator != null && mVibrator.hasVibrator()) {
                 mMainActivity.runOnUiThread(() -> {
-                    mMainActivity.mWebView.evaluateJavascript("__data.ambil('konfig.getar')", new ValueCallback<String>() {
+                    mMainActivity.mWebView.evaluateJavascript("_data.ambil('konfig.getar')", new ValueCallback<String>() {
                         @Override
                         public void onReceiveValue(String value) {
-                            if (! "ya".equals(value)) return;
+                            android.util.Log.d("Invoker.MainActivity", "__data.ambil('konfig.getar') => " + value);
+                            if (value != null && value.startsWith("\"") && value.endsWith("\"")) {
+                                value = value.substring(1, value.length() - 1);
+                            }
+                            if (! "ya".equalsIgnoreCase(value)) return;
                             if (android.os.Build.VERSION.SDK_INT >= 26) {
                                 mVibrator.vibrate(VibrationEffect.createOneShot(DURASI_GETAR, VibrationEffect.DEFAULT_AMPLITUDE));
                             } else {
@@ -509,9 +513,15 @@ public class MainActivity extends Activity {
                 mMainActivity.mWebView.evaluateJavascript("__data.ambil('konfig.suara')", new ValueCallback<String>() {
                     @Override
                     public void onReceiveValue(String value) {
-                        if (! "ya".equals(value)) return;
+                        android.util.Log.d("Invoker.MainActivity", "__data.ambil('konfig.suara') => " + value);
+                        if (value != null && value.startsWith("\"") && value.endsWith("\"")) {
+                            value = value.substring(1, value.length() - 1);
+                        }
+                        if (! "ya".equalsIgnoreCase(value)) return;
+                        android.util.Log.d("Invoker.MainActivity", "suara1()");
                         float volume = ambilVolumeHp();
                         mMainActivity.mSoundPool.play(mMainActivity.mSuaraTransisi, volume, volume, 1, 0, 1.0f);
+                        android.util.Log.d("Invoker.MainActivity", String.format("suara1(), volume=%f", volume));
                     }
                 });
             });
@@ -533,9 +543,15 @@ public class MainActivity extends Activity {
                 mMainActivity.mWebView.evaluateJavascript("__data.ambil('konfig.suara')", new ValueCallback<String>() {
                     @Override
                     public void onReceiveValue(String value) {
-                        if (! "ya".equals(value)) return;
+                        android.util.Log.d("Invoker.MainActivity", "__data.ambil('konfig.suara') => " + value);
+                        if (value != null && value.startsWith("\"") && value.endsWith("\"")) {
+                            value = value.substring(1, value.length() - 1);
+                        }
+                        if (! "ya".equalsIgnoreCase(value)) return;
+                        android.util.Log.d("Invoker.MainActivity", "suara4()");
                         float volume = ambilVolumeHp();
                         mMainActivity.mSoundPool.play(mMainActivity.mSuaraInsentif, volume, volume, 1, 0, 1.0f);
+                        android.util.Log.d("Invoker.MainActivity", String.format("suara4(), volume=%f", volume));
                     }
                 });
             });
