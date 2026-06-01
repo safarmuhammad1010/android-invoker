@@ -13,6 +13,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebChromeClient;
 import android.webkit.ConsoleMessage;
 import android.webkit.JavascriptInterface;
+import android.webkit.ValueCallback;
 import android.graphics.Color;
 import android.net.Uri;
 import android.content.ContentResolver;
@@ -486,18 +487,34 @@ public class MainActivity extends Activity {
         @JavascriptInterface
         public void getar() {
             if (mVibrator != null && mVibrator.hasVibrator()) {
-                if (android.os.Build.VERSION.SDK_INT >= 26) {
-                    mVibrator.vibrate(VibrationEffect.createOneShot(DURASI_GETAR, VibrationEffect.DEFAULT_AMPLITUDE));
-                } else {
-                    mVibrator.vibrate(DURASI_GETAR);
-                }
+                mMainActivity.runOnUiThread(() -> {
+                    mMainActivity.mWebView.evaluateJavascript("__data.ambil('konfig.getar')", new ValueCallback<String>() {
+                        @Override
+                        public void onReceiveValue(String value) {
+                            if (! "ya".equals(value)) return;
+                            if (android.os.Build.VERSION.SDK_INT >= 26) {
+                                mVibrator.vibrate(VibrationEffect.createOneShot(DURASI_GETAR, VibrationEffect.DEFAULT_AMPLITUDE));
+                            } else {
+                                mVibrator.vibrate(DURASI_GETAR);
+                            }
+                        }
+                    });
+                });
             }
         }
 
         @JavascriptInterface
         public void suara1() {
-            float volume = ambilVolumeHp();
-            mMainActivity.mSoundPool.play(mMainActivity.mSuaraTransisi, volume, volume, 1, 0, 1.0f);
+            mMainActivity.runOnUiThread(() -> {
+                mMainActivity.mWebView.evaluateJavascript("__data.ambil('konfig.suara')", new ValueCallback<String>() {
+                    @Override
+                    public void onReceiveValue(String value) {
+                        if (! "ya".equals(value)) return;
+                        float volume = ambilVolumeHp();
+                        mMainActivity.mSoundPool.play(mMainActivity.mSuaraTransisi, volume, volume, 1, 0, 1.0f);
+                    }
+                });
+            });
         }
 
         @JavascriptInterface
@@ -512,8 +529,16 @@ public class MainActivity extends Activity {
 
         @JavascriptInterface
         public void suara4() {
-            float volume = ambilVolumeHp();
-            mMainActivity.mSoundPool.play(mMainActivity.mSuaraInsentif, volume, volume, 1, 0, 1.0f);
+            mMainActivity.runOnUiThread(() -> {
+                mMainActivity.mWebView.evaluateJavascript("__data.ambil('konfig.suara')", new ValueCallback<String>() {
+                    @Override
+                    public void onReceiveValue(String value) {
+                        if (! "ya".equals(value)) return;
+                        float volume = ambilVolumeHp();
+                        mMainActivity.mSoundPool.play(mMainActivity.mSuaraInsentif, volume, volume, 1, 0, 1.0f);
+                    }
+                });
+            });
         }
 
         private float ambilVolumeHp() {
