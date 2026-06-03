@@ -427,17 +427,18 @@ function fMuatInventori(lisItem) {
 
 
 
+function fAmbilLisItemDipakai() {
+    const lis = JSON.parse(__data.ambil('inventori.dipakai') || '[]');
+    return lis;
+}
+
+
 
 function fPakaiItem(has) {
-    const dataset = JSON.parse(__data.ambil('inventori.data') || '[]');
-    const indeks = dataset.findIndex((item) => {
-        if (item.has == has) return true;
-        return false;
-    });
-    const item = dataset[indeks];
-    dataset.splice(indeks, 1);
-    __data.simpan('inventori.data', JSON.stringify(dataset));
-    console.info('item dipakai: ' + item.nama);
+    const lis = JSON.parse(__data.ambil('inventori.dipakai') || '[]');
+    lis.push(has);
+    __data.simpan('inventori.dipakai', JSON.stringify(lis));
+    console.info('item dipakai: ' + has);
 }
 
 
@@ -462,6 +463,15 @@ Object.defineProperty(window, '__atur_inventori', {
 
 Object.defineProperty(window, '__muat_inventori', {
     value: fMuatInventori,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+
+
+
+Object.defineProperty(window, '__lis_item_dipakai', {
+    value: fAmbilLisItemDipakai,
     writable: false,
     configurable: false,
     enumerable: false,
