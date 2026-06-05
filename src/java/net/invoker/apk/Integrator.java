@@ -138,6 +138,16 @@ class Integrator {
             });
         }
 
+        @JavascriptInterface
+        public void pakaiItem(String has) {
+            android.util.Log.d("Invoker.Integrator.JsInterfaceWeb", "PAKAI ITEM " +  has);
+            mMainActivity.runOnUiThread(() -> {
+                mIntegrator.mWebViewServis.evaluateJavascript(
+                    String.format("__pakai_item('%s')", has),
+                null);
+            });
+        }
+
     }
 
     static class JsInterfaceServis {
@@ -282,6 +292,16 @@ class Integrator {
             mMainActivity.runOnUiThread(() -> {
                 mIntegrator.mWebViewUtama.evaluateJavascript(
                     String.format("__berhasilAmbilInsentifReferal(%d)", kredit),
+                null);
+            });
+        }
+
+        @JavascriptInterface
+        public void berhasilPakaiItem(String has) {
+            android.util.Log.d("Invoker.Integrator.JsInterfaceServis", String.format("berhasilPakaiItem('%s')", has));
+            mMainActivity.runOnUiThread(() -> {
+                mIntegrator.mWebViewUtama.evaluateJavascript(
+                    String.format("__berhasilPakaiItem('%s')", has),
                 null);
             });
         }

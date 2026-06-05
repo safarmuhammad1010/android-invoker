@@ -123,6 +123,33 @@ Object.defineProperty(window, '__data', {
     configurable: false,
     enumerable: false,
 });
+
+
+
+
+function fHitungPenggunaanKapasitasData() {
+  let totalBytes = 0;
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    const value = localStorage.getItem(key);
+    // Multiply by 2 because JS strings are UTF-16 (2 bytes per char)
+    totalBytes += (key.length + value.length) * 2;
+  }
+  return {
+    bytes: totalBytes,
+    kilobytes: (totalBytes / 1024).toFixed(2),
+    megabytes: (totalBytes / (1024 * 1024)).toFixed(2)
+  };
+}
+
+
+
+Object.defineProperty(window, '__penggunaan_data', {
+    value: fHitungPenggunaanKapasitasData,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
 })();(()=>{
 
 
@@ -353,9 +380,21 @@ Object.defineProperty(window, '__tambah_histori', {
 })();(()=>{
 
 
+let LIS_ITEM = JSON.parse(__data.ambil('inventori.data') || '[]');
+__data.pantau('inventori.data', (_, str) => {
+    LIS_ITEM = JSON.parse(str || '[]')
+});
+
+
+let LIS_ITEM_DIPAKAI = JSON.parse(__data.ambil('inventori.dipakai') || '[]');
+__data.pantau('inventori.dipakai', (_, str) => {
+    LIS_ITEM_DIPAKAI = JSON.parse(str || '[]')
+});
+
+
+
 function fLihatInventori(ofset, n) {
-    const dataset = JSON.parse(__data.ambil('inventori.data') || '[]');
-    return dataset.slice(ofset, ofset + n);
+    return LIS_ITEM.slice(ofset, ofset + n);
 }
 
 
@@ -375,7 +414,10 @@ function fMuatInventori(lisItem) {
     lisItem = lisItem || [];
     console.info('memuat inventori: ', '[' + lisItem.join() + ']');
 
-    if (lisItem.length === 0) return;
+    if (lisItem.length === 0) {
+        __data.simpan('inventori.data', JSON.stringify([]));
+        return;
+    }
 
     const urlInventori = __apk.dUrlInventori();
     if (! urlInventori) {
@@ -428,17 +470,16 @@ function fMuatInventori(lisItem) {
 
 
 function fAmbilLisItemDipakai() {
-    const lis = JSON.parse(__data.ambil('inventori.dipakai') || '[]');
-    return lis;
+    return LIS_ITEM_DIPAKAI;
 }
 
 
 
 function fPakaiItem(has) {
-    const lis = JSON.parse(__data.ambil('inventori.dipakai') || '[]');
-    lis.push(has);
-    __data.simpan('inventori.dipakai', JSON.stringify(lis));
-    console.info('item dipakai: ' + has);
+    LIS_ITEM_DIPAKAI.push(has);
+    __data.simpan('inventori.dipakai', JSON.stringify(LIS_ITEM_DIPAKAI));
+    console.info('item berhasil dipakai: ' + has);
+    console.log('daftar item dipakai', JSON.stringify(LIS_ITEM_DIPAKAI));
 }
 
 
@@ -644,10 +685,15 @@ Object.defineProperty(window, '__kurangi_kredit', {
 
 })();(()=>{
 
+let LIS_PRODUK = JSON.parse(__data.ambil('market.data') || '[]');
+__data.pantau('market.data', (_, str) => {
+    LIS_PRODUK = JSON.parse(str || '[]')
+});
+
+
 
 function fLihatMarket(ofset, n) {
-    const dataset = JSON.parse(__data.ambil('market.data') || '[]');
-    return dataset.slice(ofset, ofset + n);
+    return LIS_PRODUK.slice(ofset, ofset + n);
 }
 
 
@@ -725,11 +771,15 @@ Object.defineProperty(window, '__muat_market', {
     enumerable: false,
 });
 })();(()=>{
+let LIS_MISI = JSON.parse(__data.ambil('misi.data') || '[]');
+__data.pantau('misi.data', (_, str) => {
+    LIS_MISI = JSON.parse(str || '[]')
+});
+
 
 
 function fLihatMisi(ofset, n) {
-    const dataset = JSON.parse(__data.ambil('misi.data') || '[]');
-    return dataset.slice(ofset, ofset + n);
+    return LIS_MISI.slice(ofset, ofset + n);
 }
 
 
@@ -774,8 +824,7 @@ function fKonfirmasiMisi(has, kode) {
 
 
 function fAmbilMisi(has) {
-   const dataset = JSON.parse(__data.ambil('misi.data') || '[]');
-    const misi = dataset.find((misi) => misi.has == has);
+    const misi = LIS_MISI.find((misi) => misi.has == has);
     return misi;
 }
 
@@ -1408,6 +1457,12 @@ let halSekarang;
 function fBukaHalaman(asNamaHalaman, arg) {
     if (asNamaHalaman == halSekarang) return;
 
+    const objEkspor = window[`__eksporHal-${asNamaHalaman}`];
+    if (! objEkspor) {
+        console.error(`gagal membuka halaman '${asNamaHalaman}', skrip halaman mungkin error`);
+        return false;
+    }
+
     console.log(`membuka halaman '${asNamaHalaman}'`);
     const koObjHalaman = Sistem.halaman.mapObjHalaman[asNamaHalaman];
     if (! koObjHalaman) {
@@ -1422,10 +1477,11 @@ function fBukaHalaman(asNamaHalaman, arg) {
     LIS_HALAMAN.push(asNamaHalaman);
     LIS_ARG.push(arg);
 
-    const objEkspor = window[`__eksporHal-${asNamaHalaman}`];
     if (objEkspor['buka']) objEkspor['buka'](arg);
 
     halSekarang = asNamaHalaman;
+
+    return true;
 }
 
 
