@@ -139,11 +139,11 @@ class Integrator {
         }
 
         @JavascriptInterface
-        public void pakaiItem(String has) {
-            android.util.Log.d("Invoker.Integrator.JsInterfaceWeb", "PAKAI ITEM " +  has);
+        public void pakaiItem(int index, String has) {
+            android.util.Log.d("Invoker.Integrator.JsInterfaceWeb", "PAKAI ITEM (" + index + ", " + has + ")");
             mMainActivity.runOnUiThread(() -> {
                 mIntegrator.mWebViewServis.evaluateJavascript(
-                    String.format("__pakai_item('%s')", has),
+                    String.format("__pakai_item(%d, '%s')", index, has),
                 null);
             });
         }
@@ -297,11 +297,11 @@ class Integrator {
         }
 
         @JavascriptInterface
-        public void berhasilPakaiItem(String has) {
-            android.util.Log.d("Invoker.Integrator.JsInterfaceServis", String.format("berhasilPakaiItem('%s')", has));
+        public void berhasilPakaiItem(int index, String has, String tglBerakhir) {
+            android.util.Log.d("Invoker.Integrator.JsInterfaceServis", String.format("berhasilPakaiItem(%d, '%s', '%s')", index, has, tglBerakhir));
             mMainActivity.runOnUiThread(() -> {
                 mIntegrator.mWebViewUtama.evaluateJavascript(
-                    String.format("__berhasilPakaiItem('%s')", has),
+                    String.format("__berhasilPakaiItem(%d, '%s', '%s')", index, has, tglBerakhir),
                 null);
             });
         }

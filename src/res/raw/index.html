@@ -13,6 +13,12 @@
     position: relative;
 }
 
+img, body {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
 </style>
 
 <style>* {
@@ -380,121 +386,124 @@ Object.defineProperty(window, '__tambah_histori', {
 })();(()=>{
 
 
-let LIS_ITEM = JSON.parse(__data.ambil('inventori.data') || '[]');
-__data.pantau('inventori.data', (_, str) => {
-    LIS_ITEM = JSON.parse(str || '[]')
-});
+let MAP_DETAIL_ITEM = JSON.parse(__data.ambil('inventori.map_detail_item') || '[]');
+let LIS_ITEM = JSON.parse(__data.ambil('inventori.lis_item') || '[]');
 
-
-let LIS_ITEM_DIPAKAI = JSON.parse(__data.ambil('inventori.dipakai') || '[]');
-__data.pantau('inventori.dipakai', (_, str) => {
-    LIS_ITEM_DIPAKAI = JSON.parse(str || '[]')
-});
+let LIS_INFO_ITEM = [];
 
 
 
-function fLihatInventori(ofset, n) {
-    return LIS_ITEM.slice(ofset, ofset + n);
+
+function fAmbilLisInfoItem() {
+    return LIS_INFO_ITEM.filter((item) => {
+        if (item.tipe == 'konsumtif') {
+            if (item.dipakai) {
+                const strTglBerakhir = item.dipakai.tgl_berakhir;
+                const tglBerakhir = new Date(strTglBerakhir);
+                const tglSekarang = new Date();
+                return tglBerakhir >= tglSekarang;
+            }
+        }
+        return true;
+    })
+        .toReversed();
 }
 
 
 
-function fAturInventori(dataset) {
-    __data.simpan('inventori.data', JSON.stringify(dataset));
 
-    __data.simpan('volume_inventori', dataset.length);
+function fLihatInventori(ofset, n) {
+    return fAmbilLisInfoItem().slice(ofset, ofset + n);
+}
 
-    __data.simpan('hal_inventori-hal_total', Math.max(1, Math.ceil(dataset.length / 6)));
+
+
+function fBuatLisInfoItem() {
+    const lisInfoItem = [];
+    for (const item of LIS_ITEM) {
+        const detail = MAP_DETAIL_ITEM[item.has];
+        const info = {
+            ...detail,
+        };
+        if (item.dipakai) {
+            info.dipakai = item.dipakai;
+        }
+        lisInfoItem.push(info);
+    }
+    LIS_INFO_ITEM = lisInfoItem;
+    console.log('LIS INFO ITEM', JSON.stringify(LIS_INFO_ITEM));
+}
+
+
+
+function fMuatInventori(data) {
+    MAP_DETAIL_ITEM = data.map_detail_item;
+    LIS_ITEM = data.lis_item;
+
+    fBuatLisInfoItem();
+
+    __data.simpan('inventori.map_detail_item', JSON.stringify(MAP_DETAIL_ITEM));
+    __data.simpan('inventori.lis_item', JSON.stringify(LIS_ITEM));
+
+    __data.simpan('volume_inventori', LIS_ITEM.length);
+
+    __data.simpan('hal_inventori-hal_total', Math.max(1, Math.ceil(LIS_ITEM.length / 6)));
     __data.simpan('hal_inventori-hal_sekarang', 1);
 }
 
 
 
-function fMuatInventori(lisItem) {
-    lisItem = lisItem || [];
-    console.info('memuat inventori: ', '[' + lisItem.join() + ']');
 
-    if (lisItem.length === 0) {
-        __data.simpan('inventori.data', JSON.stringify([]));
-        return;
-    }
-
-    const urlInventori = __apk.dUrlInventori();
-    if (! urlInventori) {
-        console.error('gagal memuat inventori: url inventori tidak tersedia');
-        return false;
-    }
-
-    const lisDataItem = [];
-
-    for (let i = 0; i < lisItem.length; i++) {
-        const hasItem = lisItem[i];
-        const url = urlInventori + '/' + hasItem + '.json';
-
-        fetch(url)
-            .then(res => {
-                if (! res.ok) {
-                    throw new Error('http status error ' + res.status);
-                }
-                return res.text();
-            })
-            .then(jsonData => {
-                let data;
-                try {
-                    data = JSON.parse(jsonData);
-                } catch (e) {
-                    console.error('gagal memuat inventori, data invalid: ', e);
-                    return;
-                }
-
-                lisDataItem.push({
-                    indeks: i,
-                    data,
-                });
-
-                if (lisDataItem.length == lisItem) {
-                    console.info('mengatur inventori: ' + lisDataItem.length + ' item');
-                    lisDataItem.sort((a, b) => a.indeks - b.indeks);
-                    const dataInventori = lisDataItem.map(x => x.data);
-                    __atur_inventori(dataInventori);
-                }
-            })
-            .catch(e => {
-                console.error('gagal memuat inventori: ', e);
-            });
-    }
-
-    return true;
+function fLisItemDiskonDipakai() {
+    const lisItem = fAmbilLisInfoItem();
+    const lisItemDiskonDipakai = lisItem.filter(info => {
+        const a = (info.tipe == 'konsumtif');
+        const b = (info.efek.nama == 'diskon');
+        const c = (!! info.dipakai);
+        //console.log('INFO', JSON.stringify({a, b, c}));
+        return a && b && c;
+    });
+    return lisItemDiskonDipakai;
 }
 
 
 
-function fAmbilLisItemDipakai() {
-    return LIS_ITEM_DIPAKAI;
+
+function fPakaiItem(index, has, tglBerakhir) {
+    const lisItem = fAmbilLisInfoItem();
+    const infoItem = lisItem[index];
+    if (infoItem.has != has) {
+        throw new Error('malfungsi: infoItem.has != has');
+    }
+    infoItem.dipakai = {
+        'tgl_dipakai': __tanggal(),
+        'tgl_berakhir': tglBerakhir,
+    };
+    console.info('item berhasil dipakai', index, has);
+    console.info(JSON.stringify(fAmbilLisInfoItem()));
 }
 
 
 
-function fPakaiItem(has) {
-    LIS_ITEM_DIPAKAI.push(has);
-    __data.simpan('inventori.dipakai', JSON.stringify(LIS_ITEM_DIPAKAI));
-    console.info('item berhasil dipakai: ' + has);
-    console.log('daftar item dipakai', JSON.stringify(LIS_ITEM_DIPAKAI));
-}
+
+// Buat lis info item dari localStorage
+fBuatLisInfoItem();
+
+
+
+
+
+setInterval(() => {
+    const lisItem = fAmbilLisInfoItem();
+    __data.simpan('volume_inventori', lisItem.length);
+}, 1000 * 5);
+
+
 
 
 
 Object.defineProperty(window, '__lihat_inventori', {
     value: fLihatInventori,
-    writable: false,
-    configurable: false,
-    enumerable: false,
-});
-
-
-
-Object.defineProperty(window, '__atur_inventori', {
-    value: fAturInventori,
     writable: false,
     configurable: false,
     enumerable: false,
@@ -511,8 +520,17 @@ Object.defineProperty(window, '__muat_inventori', {
 
 
 
-Object.defineProperty(window, '__lis_item_dipakai', {
-    value: fAmbilLisItemDipakai,
+Object.defineProperty(window, '__lis_item', {
+    value: fAmbilLisInfoItem,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+
+
+
+Object.defineProperty(window, '__lis_item_diskon', {
+    value: fLisItemDiskonDipakai,
     writable: false,
     configurable: false,
     enumerable: false,
@@ -686,9 +704,7 @@ Object.defineProperty(window, '__kurangi_kredit', {
 })();(()=>{
 
 let LIS_PRODUK = JSON.parse(__data.ambil('market.data') || '[]');
-__data.pantau('market.data', (_, str) => {
-    LIS_PRODUK = JSON.parse(str || '[]')
-});
+
 
 
 
@@ -698,49 +714,16 @@ function fLihatMarket(ofset, n) {
 
 
 
-function fAturMarket(dataset) {
+
+function fMuatMarket(dataset) {
+    LIS_PRODUK = dataset;
+
     __data.simpan('market.data', JSON.stringify(dataset));
 
     __data.simpan('volume_market', dataset.length);
 
     __data.simpan('hal_market-hal_total', Math.max(1, Math.ceil(dataset.length / 6)));
     __data.simpan('hal_market-hal_sekarang', 1);
-}
-
-
-
-function fMuatMarket() {
-    const urlMarket = __apk.dUrlMarket();
-    if (! urlMarket) {
-        console.error('gagal memuat market: url market tidak tersedia');
-        return false;
-    }
-
-    const url = urlMarket + '/' + __hari() + '.json';
-    console.info('memuat market: ', url);
-
-    fetch(url)
-        .then(res => {
-            if (! res.ok) {
-                throw new Error('http status error ' + res.status);
-            }
-            return res.text();
-        })
-        .then(jsonData => {
-            let data;
-            try {
-                data = JSON.parse(jsonData);
-            } catch (e) {
-                console.error('gagal memuat market, data invalid: ', e);
-                return;
-            }
-            __atur_market(data);
-        })
-        .catch(e => {
-            console.error('gagal memuat market: ', e);
-        });
-
-    return true;
 }
 
 
@@ -753,14 +736,6 @@ Object.defineProperty(window, '__lihat_market', {
     enumerable: false,
 });
 
-
-
-Object.defineProperty(window, '__atur_market', {
-    value: fAturMarket,
-    writable: false,
-    configurable: false,
-    enumerable: false,
-});
 
 
 

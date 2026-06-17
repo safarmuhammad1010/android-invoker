@@ -122,6 +122,10 @@ public class MainActivity extends Activity {
         mWebView.addJavascriptInterface(mBrowserWebKlien, "__browser");
         mWebView.addJavascriptInterface(mAdvertiserWebKlien, "__advertiser");
 
+        mWebView.setLongClickable(false);
+        mWebView.setHapticFeedbackEnabled(false);
+        mWebView.setOnLongClickListener((v) -> true);
+
         WebSettings webSettings = mWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setDomStorageEnabled(true);
