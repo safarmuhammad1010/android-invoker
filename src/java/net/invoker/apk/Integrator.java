@@ -148,6 +148,16 @@ class Integrator {
             });
         }
 
+        @JavascriptInterface
+        public void beli(String has, String tgl) {
+            android.util.Log.d("Invoker.Integrator.JsInterfaceServis", String.format("beli('%s', '%s')", has, tgl));
+            mMainActivity.runOnUiThread(() -> {
+                mIntegrator.mWebViewServis.evaluateJavascript(
+                    String.format("__beli('%s', '%s')", has, tgl),
+                null);
+            });
+        }
+
     }
 
     static class JsInterfaceServis {
@@ -302,6 +312,16 @@ class Integrator {
             mMainActivity.runOnUiThread(() -> {
                 mIntegrator.mWebViewUtama.evaluateJavascript(
                     String.format("__berhasilPakaiItem(%d, '%s', '%s')", index, has, tglBerakhir),
+                null);
+            });
+        }
+
+        @JavascriptInterface
+        public void berhasilBeli(String has, int harga) {
+            android.util.Log.d("Invoker.Integrator.JsInterfaceServis", String.format("berhasilBeli('%s', %d)", has, harga));
+            mMainActivity.runOnUiThread(() -> {
+                mIntegrator.mWebViewUtama.evaluateJavascript(
+                    String.format("__berhasilBeli('%s', %d)", has, harga),
                 null);
             });
         }
