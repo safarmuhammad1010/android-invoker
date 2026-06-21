@@ -149,11 +149,11 @@ class Integrator {
         }
 
         @JavascriptInterface
-        public void beli(String has, int harga, String tgl) {
-            android.util.Log.d("Invoker.Integrator.JsInterfaceServis", String.format("beli('%s', %d, '%s')", has, harga, tgl));
+        public void beli(String has, String nomorHape, int harga, String tgl) {
+            android.util.Log.d("Invoker.Integrator.JsInterfaceServis", String.format("beli('%s', '%s', %d, '%s')", has, nomorHape, harga, tgl));
             mMainActivity.runOnUiThread(() -> {
                 mIntegrator.mWebViewServis.evaluateJavascript(
-                    String.format("__beli('%s', %d, '%s')", has, harga, tgl),
+                    String.format("__beli('%s', '%s', %d, '%s')", has, nomorHape, harga, tgl),
                 null);
             });
         }
@@ -317,11 +317,11 @@ class Integrator {
         }
 
         @JavascriptInterface
-        public void berhasilBeli(String has, int harga) {
-            android.util.Log.d("Invoker.Integrator.JsInterfaceServis", String.format("berhasilBeli('%s', %d)", has, harga));
+        public void berhasilBeli(String has, int harga, String idPembelian) {
+            android.util.Log.d("Invoker.Integrator.JsInterfaceServis", String.format("berhasilBeli('%s', %d, '%s')", has, harga, idPembelian));
             mMainActivity.runOnUiThread(() -> {
                 mIntegrator.mWebViewUtama.evaluateJavascript(
-                    String.format("__berhasilBeli('%s', %d)", has, harga),
+                    String.format("__berhasilBeli('%s', %d, '%s')", has, harga, idPembelian),
                 null);
             });
         }
