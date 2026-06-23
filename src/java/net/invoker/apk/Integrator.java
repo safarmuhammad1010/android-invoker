@@ -139,11 +139,11 @@ class Integrator {
         }
 
         @JavascriptInterface
-        public void pakaiItem(int index, String has) {
-            android.util.Log.d("Invoker.Integrator.JsInterfaceWeb", "PAKAI ITEM (" + index + ", " + has + ")");
+        public void pakaiItem(int index, String has, String tgl) {
+            android.util.Log.d("Invoker.Integrator.JsInterfaceWeb", "PAKAI ITEM (" + index + ", " + has + ", " + tgl + ")");
             mMainActivity.runOnUiThread(() -> {
                 mIntegrator.mWebViewServis.evaluateJavascript(
-                    String.format("__pakai_item(%d, '%s')", index, has),
+                    String.format("__pakai_item(%d, '%s', '%s')", index, has, tgl),
                 null);
             });
         }

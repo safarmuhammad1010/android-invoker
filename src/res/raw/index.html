@@ -395,25 +395,40 @@ let LIS_INFO_ITEM = [];
 
 
 function fAmbilLisInfoItem() {
-    return LIS_INFO_ITEM.filter((item) => {
+    const lisItem = [];
+    for (const [index, item] of LIS_INFO_ITEM.entries()) {
         if (item.tipe == 'konsumtif') {
             if (item.dipakai) {
                 const strTglBerakhir = item.dipakai.tgl_berakhir;
                 const tglBerakhir = new Date(strTglBerakhir);
                 const tglSekarang = new Date();
-                return tglBerakhir >= tglSekarang;
+                if (tglBerakhir <= tglSekarang) {
+                    continue;
+                }
             }
         }
-        return true;
-    })
-        .toReversed();
+        lisItem.push({
+            ...item,
+            indexASLI: index,
+        });
+    }
+
+    const lisItemDgnIndex = [];
+    for (const [index, item] of lisItem.entries()) {
+        lisItemDgnIndex.push({
+            ...item,
+            index,
+        });
+    }
+
+    return lisItemDgnIndex;
 }
 
 
 
 
 function fLihatInventori(ofset, n) {
-    return fAmbilLisInfoItem().slice(ofset, ofset + n);
+    return fAmbilLisInfoItem().toReversed().slice(ofset, ofset + n);
 }
 
 
@@ -475,12 +490,14 @@ function fPakaiItem(index, has, tglBerakhir) {
     if (infoItem.has != has) {
         throw new Error('malfungsi: infoItem.has != has');
     }
-    infoItem.dipakai = {
+    const indexASLI = infoItem.indexASLI;
+    const infoItemASLI = LIS_INFO_ITEM[indexASLI];
+    infoItemASLI.dipakai = {
         'tgl_dipakai': __tanggal(),
         'tgl_berakhir': tglBerakhir,
     };
     console.info('item berhasil dipakai', index, has);
-    console.info(JSON.stringify(fAmbilLisInfoItem()));
+    //console.info(JSON.stringify(fAmbilLisInfoItem()));
 }
 
 
@@ -629,6 +646,10 @@ const data = {
 data.kredit = parseInt(__data.ambil('kredit') || 0);
 
 
+__data.pantau('kredit', (_, kredit) => {
+    data.kredit = parseInt(kredit || 0);
+});
+
 
 
 function fTambahKredit(kredit, label) {
@@ -716,6 +737,8 @@ function fLihatMarket(ofset, n) {
 
 
 function fMuatMarket(dataset) {
+    console.log('MUAT MARKET', JSON.stringify(dataset));
+
     LIS_PRODUK = dataset;
 
     __data.simpan('market.data', JSON.stringify(dataset));
