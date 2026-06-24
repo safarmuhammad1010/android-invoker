@@ -326,6 +326,16 @@ class Integrator {
             });
         }
 
+        @JavascriptInterface
+        public void lisPembelianDiproses(String data) {
+            android.util.Log.d("Invoker.Integrator.JsInterfaceServis", String.format("lisPembelianDiproses('%s')", data));
+            mMainActivity.runOnUiThread(() -> {
+                mIntegrator.mWebViewUtama.evaluateJavascript(
+                    String.format("__lisPembelianDiproses('%s')", data),
+                null);
+            });
+        }
+
     }
 
 }
