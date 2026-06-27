@@ -769,129 +769,84 @@ Object.defineProperty(window, '__muat_market', {
     enumerable: false,
 });
 })();(()=>{
-let LIS_MISI = JSON.parse(__data.ambil('misi.data') || '[]');
-__data.pantau('misi.data', (_, str) => {
-    LIS_MISI = JSON.parse(str || '[]')
-});
+let MAP_MISI = JSON.parse(__data.ambil('misi.data') || '[]');
 
 
 
-function fLihatMisi(ofset, n) {
-    return LIS_MISI.slice(ofset, ofset + n);
+
+function fLihatMisiHarian(ofset, n) {
+    const lisMisiHarian = MAP_MISI['misi_harian'];
+    return lisMisiHarian.slice(ofset, ofset + n);
+}
+
+function fLihatMisiTerbatas(ofset, n) {
+    const lisMisiTerbatas = MAP_MISI['misi_terbatas'];
+    return lisMisiTerbatas.slice(ofset, ofset + n);
+}
+
+function fLihatMisiProgresif(ofset, n) {
+    const lisMisiProgresif = MAP_MISI['misi_progresif'];
+    return lisMisiProgresif.slice(ofset, ofset + n);
+}
+
+function fLihatMisiKompetitif(ofset, n) {
+    const lisMisiKompetitif = MAP_MISI['misi_kompetitif'];
+    return lisMisiKompetitif.slice(ofset, ofset + n);
 }
 
 
 
-function fAturMisi(dataset) {
-    __data.simpan('misi.data', JSON.stringify(dataset));
+function fMuatMisi(mapMisi) {
+    MAP_MISI = mapMisi;
+    __data.simpan('misi.data', JSON.stringify(mapMisi));
 
-    __data.simpan('volume_misi', dataset.length);
+    const lisMisiHarian = mapMisi['misi_harian'];
+    const lisMisiTerbatas = mapMisi['misi_terbatas'];
+    const lisMisiProgresif = mapMisi['misi_progresif'];
+    const lisMisiKompetitif = mapMisi['misi_kompetitif'];
 
-    __data.simpan('hal_misi-hal_total', Math.max(1, Math.ceil(dataset.length / 6)));
-    __data.simpan('hal_misi-hal_sekarang', 1);
+    const totalMisi = lisMisiHarian.length + lisMisiTerbatas.length + lisMisiProgresif.length + lisMisiKompetitif.length;
+    __data.simpan('volume_misi', totalMisi);
+
+    __data.simpan('hal_misi_harian-hal_total', Math.max(1, Math.ceil(lisMisiHarian.length / 6)));
+    __data.simpan('hal_misi_harian-hal_sekarang', 1);
+
+    __data.simpan('hal_misi_terbatas-hal_total', Math.max(1, Math.ceil(lisMisiTerbatas.length / 6)));
+    __data.simpan('hal_misi_terbatas-hal_sekarang', 1);
+
+    __data.simpan('hal_misi_progresif-hal_total', Math.max(1, Math.ceil(lisMisiProgresif.length / 6)));
+    __data.simpan('hal_misi_progresif-hal_sekarang', 1);
+
+    __data.simpan('hal_misi_kompetitif-hal_total', Math.max(1, Math.ceil(lisMisiKompetitif.length / 6)));
+    __data.simpan('hal_misi_kompetitif-hal_sekarang', 1);
 }
 
 
 
-function fKonfirmasiMisi(has, kode) {
-    const dataset = JSON.parse(__data.ambil('misi.data') || '[]');
-    const misi = dataset.find((misi) => misi.has == has);
 
-    if (misi.trial >= 3) return 3;
-    if (misi.status != 'AKTIF') throw new Error('misi tidak aktif');
-
-    const kode_asli = misi.kode;
-    if (kode_asli == kode) {
-        misi.status = 'SELESAI';
-        __data.simpan('misi.data', JSON.stringify(dataset));
-        return 0;
-    }
-
-    let trial = ((misi.trial = (misi.trial || 0)));
-    trial += 1;
-    misi.trial = trial;
-
-    if (trial >= 3) {
-        misi.status = 'GAGAL';
-    }
-
-    __data.simpan('misi.data', JSON.stringify(dataset));
-    return trial;
-}
-
-
-
-function fAmbilMisi(has) {
-    const misi = LIS_MISI.find((misi) => misi.has == has);
-    return misi;
-}
-
-
-
-function fMuatMisi(step) {
-    console.info('memuat misi: step=' + step);
-
-    const urlMisi = __apk.dUrlMisi();
-    if (! urlMisi) {
-        console.error('gagal memuat misi: url misi tidak tersedia');
-        return false;
-    }
-
-    const url = urlMisi + '/reguler/' + step + '.json';
-    fetch(url)
-        .then(res => {
-            if (! res.ok) {
-                throw new Error('http status error: ' + res.status);
-            }
-            return res.text();
-        })
-        .then(jsonData => {
-            let data;
-            try {
-                data = JSON.parse(jsonData);
-                __atur_misi(data);
-            } catch (e) {
-                throw new Error('format data invalid: ' + e);
-            }
-        })
-        .catch(e => {
-            console.error('gagal memuat misi: ', e);
-        });
-
-    return true;
-}
-
-
-
-Object.defineProperty(window, '__ambil_misi', {
-    value: fAmbilMisi,
+Object.defineProperty(window, '__lihat_misi_harian', {
+    value: fLihatMisiHarian,
     writable: false,
     configurable: false,
     enumerable: false,
 });
 
-
-
-Object.defineProperty(window, '__konfirmasi_misi', {
-    value: fKonfirmasiMisi,
+Object.defineProperty(window, '__lihat_misi_terbatas', {
+    value: fLihatMisiTerbatas,
     writable: false,
     configurable: false,
     enumerable: false,
 });
 
-
-
-Object.defineProperty(window, '__lihat_misi', {
-    value: fLihatMisi,
+Object.defineProperty(window, '__lihat_misi_progresif', {
+    value: fLihatMisiProgresif,
     writable: false,
     configurable: false,
     enumerable: false,
 });
 
-
-
-Object.defineProperty(window, '__atur_misi', {
-    value: fAturMisi,
+Object.defineProperty(window, '__lihat_misi_kompetitif', {
+    value: fLihatMisiKompetitif,
     writable: false,
     configurable: false,
     enumerable: false,
