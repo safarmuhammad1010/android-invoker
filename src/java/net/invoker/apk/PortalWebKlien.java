@@ -9,6 +9,9 @@ import android.webkit.WebResourceResponse;
 import android.webkit.WebResourceRequest;
 import android.net.Uri;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 
 public class PortalWebKlien extends WebViewClient {
 
@@ -20,10 +23,23 @@ public class PortalWebKlien extends WebViewClient {
 
     @Override
     public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-        String url = request.getUrl().toString();
-        if ((mMainActivity.mUrlTargetPortal != null) && (!url.startsWith(mMainActivity.mUrlTargetPortal))) {
-            bukaUrlDiExternal(url);
+        Uri url = request.getUrl();
+        if (cekApakahUrlExternal(url)) {
+            bukaUrlDiExternal(url.toString());
             return true;
+        }
+        return false;
+    }
+
+    private boolean cekApakahUrlExternal(Uri url) {
+        if (mMainActivity.mUrlTargetPortal != null) {
+            String host1 = getHostFromUrl(mMainActivity.mUrlTargetPortal);
+            String host2 = url.getHost();
+            if (host1 != null) {
+                if (! host1.equals(host2)) {
+                    return true;
+                }
+            }
         }
         return false;
     }
@@ -31,6 +47,16 @@ public class PortalWebKlien extends WebViewClient {
     private void bukaUrlDiExternal(String url) {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         mMainActivity.startActivity(intent);
+    }
+
+    public static String getHostFromUrl(String urlString) {
+        try {
+            URI uri = new URI(urlString);
+            return uri.getHost(); // Returns "www.example.com"
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @JavascriptInterface
