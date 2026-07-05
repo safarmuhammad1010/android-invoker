@@ -794,8 +794,6 @@ function fLihatMisiKompetitif(ofset, n) {
     return lisMisiKompetitif.slice(ofset, ofset + n);
 }
 
-
-
 function fMuatMisi(mapMisi) {
     MAP_MISI = mapMisi;
     __data.simpan('misi.data', JSON.stringify(mapMisi));
@@ -821,6 +819,18 @@ function fMuatMisi(mapMisi) {
     __data.simpan('hal_misi_kompetitif-hal_sekarang', 1);
 }
 
+function fDetailMisi(has) {
+    let detail = MAP_MISI['misi_harian'].find(misi => misi.has == has);
+    if (detail) return detail;
+    detail = MAP_MISI['misi_terbatas'].find(misi => misi.has == has);
+    if (detail) return detail;
+    detail = MAP_MISI['misi_progresif'].find(misi => misi.has == has);
+    if (detail) return detail;
+    detail = MAP_MISI['misi_kompetitif'].find(misi => misi.has == has);
+    if (detail) return detail;
+    console.error('misi tidak ditemukan', has);
+    throw new Error('misi tidak ditemukan');
+}
 
 
 
@@ -856,6 +866,14 @@ Object.defineProperty(window, '__lihat_misi_kompetitif', {
 
 Object.defineProperty(window, '__muat_misi', {
     value: fMuatMisi,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+
+
+Object.defineProperty(window, '__detail_misi', {
+    value: fDetailMisi,
     writable: false,
     configurable: false,
     enumerable: false,
