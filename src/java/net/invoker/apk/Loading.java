@@ -77,6 +77,12 @@ class Loading {
         mAnimator4.cancel();
     }
 
+    void tampilkan() {
+        mMainActivity.runOnUiThread(() -> {
+            mView.setVisibility(View.VISIBLE);
+        });
+    }
+
     void sembunyikan() {
         mMainActivity.runOnUiThread(() -> {
             mView.setVisibility(View.GONE);

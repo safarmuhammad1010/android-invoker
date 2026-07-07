@@ -74,7 +74,7 @@ public class PortalWebKlien extends WebViewClient {
         android.util.Log.d("Invoker.WebViewPortal.Console", String.format("__portal.misiBerhasil('%s')", data));
         mMainActivity.runOnUiThread(() -> {
             mMainActivity.mIntegrator.mWebViewUtama.evaluateJavascript(
-                String.format("__misiBerhasil('%s')", data),
+                String.format("__misi_berhasil('%s')", data),
             null);
         });
     }

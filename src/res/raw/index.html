@@ -434,6 +434,7 @@ function fLihatInventori(ofset, n) {
 
 
 function fBuatLisInfoItem() {
+    console.log('LIS ITEM', JSON.stringify(LIS_ITEM));
     const lisInfoItem = [];
     for (const item of LIS_ITEM) {
         const detail = MAP_DETAIL_ITEM[item.has];
@@ -452,6 +453,8 @@ function fBuatLisInfoItem() {
 
 
 function fMuatInventori(data) {
+    console.log('MUAT INVENTORI', JSON.stringify(data));
+
     MAP_DETAIL_ITEM = data.map_detail_item;
     LIS_ITEM = data.lis_item;
 
@@ -1077,6 +1080,24 @@ Object.defineProperty(window, '__tema', {
         gambar: fGambar,
         indeksZ: fIndeksZ,
     },
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+})();(()=>{
+
+
+
+function fTambahXP(xp) {
+    let xpSekarang = parseInt(__data.ambil('xp'));
+    xpSekarang += xp;
+    __data.simpan('xp', xpSekarang);
+}
+
+
+
+Object.defineProperty(window, '__tambah_xp', {
+    value: fTambahXP,
     writable: false,
     configurable: false,
     enumerable: false,

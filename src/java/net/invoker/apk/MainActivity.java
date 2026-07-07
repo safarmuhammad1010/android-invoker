@@ -415,6 +415,16 @@ public class MainActivity extends Activity {
             mVibrator = (Vibrator) mMainActivity.getSystemService(Context.VIBRATOR_SERVICE);
         }
 
+        @JavascriptInterface
+        public void gagalKoneksiAwal() {
+            android.util.Log.d("Invoker.MainActivity", "gagalKoneksiAwal");
+            View koneksiGagal = mMainActivity.findViewById(R.id.koneksi_gagal);
+            mMainActivity.runOnUiThread(() -> {
+                koneksiGagal.setVisibility(View.VISIBLE);
+                mMainActivity.mLoading.tampilkan();
+            });
+        }
+
         String mUrlServis = null;
         @JavascriptInterface
         public String dUrlServis() {

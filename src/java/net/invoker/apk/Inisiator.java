@@ -46,10 +46,11 @@ class Inisiator {
             android.util.Log.d("Invoker.Inisiator", "mencoba lagi...");
             mPercobaanKe += 1;
             sembunyikanKoneksiGagal();
-            if (! mSedangMengunduh) {
+            if (mSedangMengunduh) {
                 android.util.Log.d("Invoker.Inisiator", "tombol 'coba lagi' ditekan di saat sedang mengunduh, abaikan.");
-                mulai();
+                return;
             }
+            mulai();
         });
     }
 
@@ -213,6 +214,7 @@ class Inisiator {
     }
 
     private void bukaWeb(String versi) {
+        mSedangMengunduh = false;
         mSiap = true;
 
         String url = K.URL_REPO_LOKAL + versi + "/index.html";
@@ -254,7 +256,7 @@ class Inisiator {
         });
     }
 
-    private void tampilkanKoneksiGagal() {
+    void tampilkanKoneksiGagal() {
         if (mSiap || mApaSelesaiDiUnduh) return;
         View koneksiGagal = mMainActivity.findViewById(R.id.koneksi_gagal);
         mMainActivity.runOnUiThread(() -> {
