@@ -7,7 +7,7 @@ class K {
 
     static final String VERSI_WEB = "1.0";
 
-    static final String URL_METADATA = "https://raw.githubusercontent.com/repoinvoker1/invoker/refs/heads/main/dev/v1/metadata.json";
+    static final String URL_METADATA = "https://repoinvoker1.github.io/krediter/dev/v1/metadata.json";
 
     static final String URL_FOLDER_LOKAL = "https://app.local/invoker/berkas_lokal/";
     static final String URL_REPO_LOKAL = "https://app.local/invoker/berkas_lokal/repo/";

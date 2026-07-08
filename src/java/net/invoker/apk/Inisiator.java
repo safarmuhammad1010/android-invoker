@@ -63,7 +63,7 @@ class Inisiator {
                 tungguBatasWaktu();
                 unduhMetadata();
             } catch (Exception e) {
-                android.util.Log.e("Invoker.Inisiator", e.getMessage());
+                android.util.Log.e("Invoker.Inisiator", "Error: " + e.getMessage());
                 if (! mApaDiUnduhDiLatarBelakang) {
                     if (mPercobaanKe > 0) {
                         mSedangMengunduh = false;
@@ -73,7 +73,7 @@ class Inisiator {
                                 tampilkanKoneksiGagal();
                             }
                         } catch (InterruptedException ie) {
-                            android.util.Log.e("Invoker.Inisiator", ie.getMessage());
+                            android.util.Log.e("Invoker.Inisiator", "InterruptedException: " + ie.getMessage());
                         }
                     } else {
                         tampilkanKoneksiGagal();
@@ -90,6 +90,7 @@ class Inisiator {
             try {
                 Thread.sleep(K.BATAS_WAKTU_UNDUH);
                 if (! (mApaSelesaiDiUnduh || mSiap)) {
+                    android.util.Log.e("Invoker.Inisiator", "waktu habis");
                     tampilkanKoneksiGagal();
                 }
             } catch (InterruptedException ie) {

@@ -502,7 +502,7 @@ public class MainActivity extends Activity {
         public void getar() {
             if (mVibrator != null && mVibrator.hasVibrator()) {
                 mMainActivity.runOnUiThread(() -> {
-                    mMainActivity.mWebView.evaluateJavascript("_data.ambil('konfig.getar')", new ValueCallback<String>() {
+                    mMainActivity.mWebView.evaluateJavascript("__data.ambil('konfig.getar')", new ValueCallback<String>() {
                         @Override
                         public void onReceiveValue(String value) {
                             android.util.Log.d("Invoker.MainActivity", "__data.ambil('konfig.getar') => " + value);
