@@ -505,6 +505,13 @@ function fPakaiItem(index, has, tglBerakhir) {
 
 
 
+function fTambahItem(item) {
+    console.log(`__tambah_item(${item.has})`);
+    // ...
+}
+
+
+
 
 // Buat lis info item dari localStorage
 fBuatLisInfoItem();
@@ -560,6 +567,15 @@ Object.defineProperty(window, '__lis_item_diskon', {
 
 Object.defineProperty(window, '__pakai_item', {
     value: fPakaiItem,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+
+
+
+Object.defineProperty(window, '__tambah_item', {
+    value: fTambahItem,
     writable: false,
     configurable: false,
     enumerable: false,
@@ -656,6 +672,8 @@ __data.pantau('kredit', (_, kredit) => {
 
 
 function fTambahKredit(kredit, label) {
+    console.log(`__tambah_kredit(${kredit}, '${label}')`);
+
     data.kredit = parseInt(__data.ambil('kredit') || 0);
 
     kredit = parseInt(kredit);
@@ -1089,6 +1107,7 @@ Object.defineProperty(window, '__tema', {
 
 
 function fTambahXP(xp) {
+    console.log(`__tambah_xp(${xp})`);
     let xpSekarang = parseInt(__data.ambil('xp'));
     xpSekarang += xp;
     __data.simpan('xp', xpSekarang);

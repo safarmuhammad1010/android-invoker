@@ -7,6 +7,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebResourceRequest;
+import android.webkit.ValueCallback;
 import android.net.Uri;
 
 import java.net.URI;
@@ -75,7 +76,13 @@ public class PortalWebKlien extends WebViewClient {
         mMainActivity.runOnUiThread(() -> {
             mMainActivity.mIntegrator.mWebViewUtama.evaluateJavascript(
                 String.format("__misi_berhasil('%s')", data),
-            null);
+                new ValueCallback<String>() {
+                    @Override
+                    public void onReceiveValue(String value) {
+                        mMainActivity.tutupPortal();
+                    }
+                }
+            );
         });
     }
 
