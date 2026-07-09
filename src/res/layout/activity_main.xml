@@ -201,7 +201,7 @@
         <ImageView
             android:layout_width="240dp"
             android:layout_height="240dp"
-            android:src="@drawable/ikon_koneksi_gagal"
+            android:src="@drawable/harus_diperbarui"
             android:layout_centerInParent="true"/>
 
         <ImageButton
