@@ -188,4 +188,51 @@
 
     </RelativeLayout>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/aplikasi_kadaluwarsa"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/latar"
+            android:scaleType="fitXY"/>
+
+        <ImageView
+            android:layout_width="240dp"
+            android:layout_height="240dp"
+            android:src="@drawable/ikon_koneksi_gagal"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="24dp"/>
+
+        <ImageButton
+            android:layout_width="172dp"
+            android:layout_height="46dp"
+            android:id="@+id/tombol_unduh_aplikasi"
+            android:background="@drawable/tombol_coba_lagi"
+            android:src="@null"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="24dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/tombol_unduh_aplikasi"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_horizontal"
+            android:paddingHorizontal="6dp"
+            android:paddingBottom="24dp"
+            android:textSize="14dp"
+            android:textColor="#ffffff"
+            android:alpha="0.2"
+            android:text="[!] Versi aplikasi ini sudah kadaluwarsa, silahkan unduh versi terbarunya."/>
+
+    </RelativeLayout>
+
 </FrameLayout>

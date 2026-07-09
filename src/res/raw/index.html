@@ -386,8 +386,8 @@ Object.defineProperty(window, '__tambah_histori', {
 })();(()=>{
 
 
-let MAP_DETAIL_ITEM = JSON.parse(__data.ambil('inventori.map_detail_item') || '[]');
-let LIS_ITEM = JSON.parse(__data.ambil('inventori.lis_item') || '[]');
+let MAP_DETAIL_ITEM = {};
+let LIS_ITEM = [];
 
 let LIS_INFO_ITEM = [];
 
@@ -460,9 +460,6 @@ function fMuatInventori(data) {
 
     fBuatLisInfoItem();
 
-    __data.simpan('inventori.map_detail_item', JSON.stringify(MAP_DETAIL_ITEM));
-    __data.simpan('inventori.lis_item', JSON.stringify(LIS_ITEM));
-
     __data.simpan('volume_inventori', LIS_ITEM.length);
 
     __data.simpan('hal_inventori-hal_total', Math.max(1, Math.ceil(LIS_ITEM.length / 6)));
@@ -507,7 +504,12 @@ function fPakaiItem(index, has, tglBerakhir) {
 
 function fTambahItem(item) {
     console.log(`__tambah_item(${item.has})`);
-    // ...
+    MAP_DETAIL_ITEM[item.has] = item;
+    LIS_ITEM.push({has: item.has});
+    fMuatInventori({
+        map_detail_item: MAP_DETAIL_ITEM,
+        lis_item: LIS_ITEM,
+    });
 }
 
 
@@ -745,7 +747,7 @@ Object.defineProperty(window, '__kurangi_kredit', {
 
 })();(()=>{
 
-let LIS_PRODUK = JSON.parse(__data.ambil('market.data') || '[]');
+let LIS_PRODUK = [];
 
 
 
@@ -761,8 +763,6 @@ function fMuatMarket(dataset) {
     console.log('MUAT MARKET', JSON.stringify(dataset));
 
     LIS_PRODUK = dataset;
-
-    __data.simpan('market.data', JSON.stringify(dataset));
 
     __data.simpan('volume_market', dataset.length);
 
@@ -817,7 +817,6 @@ function fLihatMisiKompetitif(ofset, n) {
 
 function fMuatMisi(mapMisi) {
     MAP_MISI = mapMisi;
-    __data.simpan('misi.data', JSON.stringify(mapMisi));
 
     const lisMisiHarian = mapMisi['misi_harian'];
     const lisMisiTerbatas = mapMisi['misi_terbatas'];

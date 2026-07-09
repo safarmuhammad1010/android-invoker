@@ -56,6 +56,8 @@ public class MainActivity extends Activity {
     Inisiator mInisiator;
     Integrator mIntegrator;
 
+    View mLayoutAplikasiKadaluwarsa;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         instance = this;
@@ -70,6 +72,8 @@ public class MainActivity extends Activity {
         }
 
         setContentView(R.layout.activity_main);
+
+        mLayoutAplikasiKadaluwarsa = findViewById(R.id.aplikasi_kadaluwarsa);
 
         mWebView = findViewById(R.id.webview);
         mLayoutBrowser = findViewById(R.id.browser__layout);

@@ -108,13 +108,25 @@ class Inisiator {
 
             InputStream input = httpConn.getInputStream();
             String data = bacaInputKeString(input);
+            android.util.Log.d("Invoker.Inisiator", "METADATA: " + data);
 
             mMetadataGlobal = new JSONObject(data);
         }
-        cekVersi();
+        cekVersiApk();
     }
 
-    private void cekVersi() throws Exception {
+    private void cekVersiApk() throws Exception {
+        String versiGlobalApk = mMetadataGlobal.getString(K.N_VERSI_APK);
+        if (! K.VERSI_APK.equals(versiGlobalApk)) {
+            mMainActivity.runOnUiThread(() -> {
+                mMainActivity.mLayoutAplikasiKadaluwarsa.setVisibility(View.VISIBLE);
+            });
+            return;
+        }
+        cekVersiWeb();
+    }
+
+    private void cekVersiWeb() throws Exception {
         String versiGlobal = mMetadataGlobal.getString(K.N_VERSI_WEB);
         String versiLokal = D.versiWeb();
 
