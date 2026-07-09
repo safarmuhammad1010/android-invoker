@@ -118,8 +118,9 @@ class Inisiator {
     private void cekVersiApk() throws Exception {
         String versiGlobalApk = mMetadataGlobal.getString(K.N_VERSI_APK);
         if (! K.VERSI_APK.equals(versiGlobalApk)) {
+            String urlApk = mMetadataGlobal.getString(K.N_URL_APK);
             mMainActivity.runOnUiThread(() -> {
-                mMainActivity.mLayoutAplikasiKadaluwarsa.setVisibility(View.VISIBLE);
+                mMainActivity.butuhPembaruan(urlApk);
             });
             return;
         }

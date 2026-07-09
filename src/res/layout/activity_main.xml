@@ -191,7 +191,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/aplikasi_kadaluwarsa"
+        android:id="@+id/aplikasi_kedaluwarsa"
         android:visibility="gone">
 
         <ImageView
@@ -231,7 +231,7 @@
             android:textSize="14dp"
             android:textColor="#ffffff"
             android:alpha="0.2"
-            android:text="[!] Versi aplikasi ini sudah kadaluwarsa, silahkan unduh versi terbarunya."/>
+            android:text="[!] Versi aplikasi ini sudah kedaluwarsa, silahkan unduh versi terbarunya."/>
 
     </RelativeLayout>
 

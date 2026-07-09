@@ -56,7 +56,8 @@ public class MainActivity extends Activity {
     Inisiator mInisiator;
     Integrator mIntegrator;
 
-    View mLayoutAplikasiKadaluwarsa;
+    View mTombolUnduhApk;
+    View mLayoutAplikasiKedaluwarsa;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +74,8 @@ public class MainActivity extends Activity {
 
         setContentView(R.layout.activity_main);
 
-        mLayoutAplikasiKadaluwarsa = findViewById(R.id.aplikasi_kadaluwarsa);
+        mTombolUnduhApk = findViewById(R.id.tombol_unduh_aplikasi);
+        mLayoutAplikasiKedaluwarsa = findViewById(R.id.aplikasi_kedaluwarsa);
 
         mWebView = findViewById(R.id.webview);
         mLayoutBrowser = findViewById(R.id.browser__layout);
@@ -110,6 +112,19 @@ public class MainActivity extends Activity {
         if (mLayoutPortal.getVisibility() == View.VISIBLE) return;
         if (mLayoutAdvertiser.getVisibility() == View.VISIBLE) return;
         mWebView.evaluateJavascript("__mundur()", null);
+    }
+
+    void bukaUrlDiExternal(String url) {
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        this.startActivity(intent);
+    }
+
+    void butuhPembaruan(String urlApk) {
+        mTombolUnduhApk.setOnClickListener((v) -> {
+            android.util.Log.d("Invoker.MainActivity", "mengunduh aplikasi: " + urlApk);
+            bukaUrlDiExternal(urlApk);
+        });
+        mLayoutAplikasiKedaluwarsa.setVisibility(View.VISIBLE);
     }
 
     private void initWebView() {

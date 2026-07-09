@@ -16,6 +16,7 @@ class K {
 
     static final String N_VERSI_APK = "versi_apk";
     static final String N_VERSI_WEB = "versi_web";
+    static final String N_URL_APK = "url_apk";
     static final String N_URL_WEB = "url_web";
 
     static final String NAMA_PREF_METADATA = "metadata";
