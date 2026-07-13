@@ -1,4 +1,4 @@
-package net.invoker.apk;
+package net.krediter.dev;
 
 
 import android.content.ClipData;
@@ -63,7 +63,7 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         instance = this;
         super.onCreate(savedInstanceState);
-        android.util.Log.d("Invoker.MainActivity", "onCreate()");
+        android.util.Log.d("Krediter.MainActivity", "onCreate()");
 
         WebView.setWebContentsDebuggingEnabled(true);
 
@@ -115,13 +115,14 @@ public class MainActivity extends Activity {
     }
 
     void bukaUrlDiExternal(String url) {
+        android.util.Log.d("Krediter.MainActivity", "buka di external: " + url);
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         this.startActivity(intent);
     }
 
     void butuhPembaruan(String urlApk) {
         mTombolUnduhApk.setOnClickListener((v) -> {
-            android.util.Log.d("Invoker.MainActivity", "mengunduh aplikasi: " + urlApk);
+            android.util.Log.d("Krediter.MainActivity", "mengunduh aplikasi: " + urlApk);
             bukaUrlDiExternal(urlApk);
         });
         mLayoutAplikasiKedaluwarsa.setVisibility(View.VISIBLE);
@@ -156,7 +157,7 @@ public class MainActivity extends Activity {
         mWebView.setWebChromeClient(new WebChromeClient() {
             @Override
             public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
-                android.util.Log.d("Invoker.WebViewUtama.Console", consoleMessage.message());
+                android.util.Log.d("Krediter.WebViewUtama.Console", consoleMessage.message());
                 return true;
             }
         });
@@ -184,7 +185,7 @@ public class MainActivity extends Activity {
         mPortal.setWebChromeClient(new WebChromeClient() {
             @Override
             public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
-                android.util.Log.d("Invoker.WebViewPortal.Console", consoleMessage.message());
+                android.util.Log.d("Krediter.WebViewPortal.Console", consoleMessage.message());
                 return true;
             }
         });
@@ -204,7 +205,7 @@ public class MainActivity extends Activity {
         mBrowser.setWebChromeClient(new WebChromeClient() {
             @Override
             public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
-                android.util.Log.d("Invoker.WebViewBrowser.Console", consoleMessage.message());
+                android.util.Log.d("Krediter.WebViewBrowser.Console", consoleMessage.message());
                 return true;
             }
         });
@@ -234,7 +235,7 @@ public class MainActivity extends Activity {
         mAdvertiser.setWebChromeClient(new WebChromeClient() {
             @Override
             public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
-                android.util.Log.d("Invoker.WebViewAdvertiser.Console", consoleMessage.message());
+                android.util.Log.d("Krediter.WebViewAdvertiser.Console", consoleMessage.message());
                 return true;
             }
         });
@@ -259,10 +260,7 @@ public class MainActivity extends Activity {
     void bukaPortal(String url) {
         mUrlTargetPortal = url;
         runOnUiThread(() -> {
-            if (! url.equals(mPortal.getUrl())) {
-                mPortal.loadUrl("about:blank");
-                mPortal.loadUrl(url);
-            }
+            mPortal.loadUrl(url);
             mLayoutPortal.setVisibility(View.VISIBLE);
         });
     }
@@ -270,10 +268,7 @@ public class MainActivity extends Activity {
     void bukaBrowser(String url) {
         mUrlTargetBrowser = url;
         runOnUiThread(() -> {
-            if (! url.equals(mBrowser.getUrl())) {
-                mBrowser.loadUrl("about:blank");
-                mBrowser.loadUrl(url);
-            }
+            mBrowser.loadUrl(url);
             mLayoutBrowser.setVisibility(View.VISIBLE);
         });
     }
@@ -281,28 +276,28 @@ public class MainActivity extends Activity {
     void bukaAdvertiser(String url) {
         mUrlTargetAdvertiser = url;
         runOnUiThread(() -> {
-            if (! url.equals(mAdvertiser.getUrl())) {
-                mAdvertiser.loadUrl("about:blank");
-                mAdvertiser.loadUrl(url);
-            }
+            mAdvertiser.loadUrl(url);
             mLayoutAdvertiser.setVisibility(View.VISIBLE);
         });
     }
 
     void tutupPortal() {
         runOnUiThread(() -> {
+            mPortal.loadUrl("about:blank");
             mLayoutPortal.setVisibility(View.GONE);
         });
     }
 
     void tutupBrowser() {
         runOnUiThread(() -> {
+            mBrowser.loadUrl("about:blank");
             mLayoutBrowser.setVisibility(View.GONE);
         });
     }
 
     void tutupAdvertiser() {
         runOnUiThread(() -> {
+            mAdvertiser.loadUrl("about:blank");
             mLayoutAdvertiser.setVisibility(View.GONE);
         });
     }
@@ -381,10 +376,10 @@ public class MainActivity extends Activity {
 
             long ms = System.currentTimeMillis();
             var namaFotoProfil = String.valueOf(ms);
-            var urlFotoProfil = "https://app.local/invoker/berkas_lokal/foto_profil/" + namaFotoProfil + ekstensi;
+            var urlFotoProfil = K.URL_FOLDER_LOKAL + "foto_profil/" + namaFotoProfil + ekstensi;
             mWebView.evaluateJavascript("__data.simpan('profil.foto', '" + urlFotoProfil + "')", null);
 
-            android.util.Log.d("Invoker.MainActivity", "foto profil berhasil dipilih, dengan nama='" + namaFotoProfil + "', dan ukuran berkas=" + file.length());
+            android.util.Log.d("Krediter.MainActivity", "foto profil berhasil dipilih, dengan nama='" + namaFotoProfil + "', dan ukuran berkas=" + file.length());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -401,7 +396,7 @@ public class MainActivity extends Activity {
                 if (text != null) {
                     pasteData = text.toString();
                 } else {
-                    android.util.Log.d("Invoker.MainActivity", "Clipboard bukan teks");
+                    android.util.Log.d("Krediter.MainActivity", "Clipboard bukan teks");
                 }
             }
         }
@@ -436,7 +431,7 @@ public class MainActivity extends Activity {
 
         @JavascriptInterface
         public void gagalKoneksiAwal() {
-            android.util.Log.d("Invoker.MainActivity", "gagalKoneksiAwal");
+            android.util.Log.d("Krediter.MainActivity", "gagalKoneksiAwal");
             View koneksiGagal = mMainActivity.findViewById(R.id.koneksi_gagal);
             mMainActivity.runOnUiThread(() -> {
                 koneksiGagal.setVisibility(View.VISIBLE);
@@ -451,7 +446,7 @@ public class MainActivity extends Activity {
             try {
                 mUrlServis = mMainActivity.mInisiator.mMetadataGlobal.getString("url_servis");
             } catch (Exception e) {
-                android.util.Log.e("Invoker.MainActivity", e.getMessage());
+                android.util.Log.e("Krediter.MainActivity", e.getMessage());
             }
             return mUrlServis;
         }
@@ -463,7 +458,7 @@ public class MainActivity extends Activity {
             try {
                 mUrlMisi = mMainActivity.mInisiator.mMetadataGlobal.getString("url_misi");
             } catch (Exception e) {
-                android.util.Log.e("Invoker.MainActivity", e.getMessage());
+                android.util.Log.e("Krediter.MainActivity", e.getMessage());
             }
             return mUrlMisi;
         }
@@ -475,7 +470,7 @@ public class MainActivity extends Activity {
             try {
                 mUrlInventori = mMainActivity.mInisiator.mMetadataGlobal.getString("url_inventori");
             } catch (Exception e) {
-                android.util.Log.e("Invoker.MainActivity", e.getMessage());
+                android.util.Log.e("Krediter.MainActivity", e.getMessage());
             }
             return mUrlInventori;
         }
@@ -487,7 +482,7 @@ public class MainActivity extends Activity {
             try {
                 mUrlMarket = mMainActivity.mInisiator.mMetadataGlobal.getString("url_market");
             } catch (Exception e) {
-                android.util.Log.e("Invoker.MainActivity", e.getMessage());
+                android.util.Log.e("Krediter.MainActivity", e.getMessage());
             }
             return mUrlMarket;
         }
@@ -524,7 +519,7 @@ public class MainActivity extends Activity {
                     mMainActivity.mWebView.evaluateJavascript("__data.ambil('konfig.getar')", new ValueCallback<String>() {
                         @Override
                         public void onReceiveValue(String value) {
-                            android.util.Log.d("Invoker.MainActivity", "__data.ambil('konfig.getar') => " + value);
+                            android.util.Log.d("Krediter.MainActivity", "__data.ambil('konfig.getar') => " + value);
                             if (value != null && value.startsWith("\"") && value.endsWith("\"")) {
                                 value = value.substring(1, value.length() - 1);
                             }
@@ -546,15 +541,15 @@ public class MainActivity extends Activity {
                 mMainActivity.mWebView.evaluateJavascript("__data.ambil('konfig.suara')", new ValueCallback<String>() {
                     @Override
                     public void onReceiveValue(String value) {
-                        android.util.Log.d("Invoker.MainActivity", "__data.ambil('konfig.suara') => " + value);
+                        android.util.Log.d("Krediter.MainActivity", "__data.ambil('konfig.suara') => " + value);
                         if (value != null && value.startsWith("\"") && value.endsWith("\"")) {
                             value = value.substring(1, value.length() - 1);
                         }
                         if (! "ya".equalsIgnoreCase(value)) return;
-                        android.util.Log.d("Invoker.MainActivity", "suara1()");
+                        android.util.Log.d("Krediter.MainActivity", "suara1()");
                         float volume = ambilVolumeHp();
                         mMainActivity.mSoundPool.play(mMainActivity.mSuaraTransisi, volume, volume, 1, 0, 1.0f);
-                        android.util.Log.d("Invoker.MainActivity", String.format("suara1(), volume=%f", volume));
+                        android.util.Log.d("Krediter.MainActivity", String.format("suara1(), volume=%f", volume));
                     }
                 });
             });
@@ -576,15 +571,15 @@ public class MainActivity extends Activity {
                 mMainActivity.mWebView.evaluateJavascript("__data.ambil('konfig.suara')", new ValueCallback<String>() {
                     @Override
                     public void onReceiveValue(String value) {
-                        android.util.Log.d("Invoker.MainActivity", "__data.ambil('konfig.suara') => " + value);
+                        android.util.Log.d("Krediter.MainActivity", "__data.ambil('konfig.suara') => " + value);
                         if (value != null && value.startsWith("\"") && value.endsWith("\"")) {
                             value = value.substring(1, value.length() - 1);
                         }
                         if (! "ya".equalsIgnoreCase(value)) return;
-                        android.util.Log.d("Invoker.MainActivity", "suara4()");
+                        android.util.Log.d("Krediter.MainActivity", "suara4()");
                         float volume = ambilVolumeHp();
                         mMainActivity.mSoundPool.play(mMainActivity.mSuaraInsentif, volume, volume, 1, 0, 1.0f);
-                        android.util.Log.d("Invoker.MainActivity", String.format("suara4(), volume=%f", volume));
+                        android.util.Log.d("Krediter.MainActivity", String.format("suara4(), volume=%f", volume));
                     }
                 });
             });

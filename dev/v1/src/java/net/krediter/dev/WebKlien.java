@@ -1,4 +1,4 @@
-package net.invoker.apk;
+package net.krediter.dev;
 
 
 import android.content.Intent;
@@ -42,7 +42,7 @@ public class WebKlien extends WebViewClient {
     public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
         String url = request.getUrl().toString();
         String path = request.getUrl().getPath();
-        android.util.Log.d("Invoker.WebKlien", "mengunduh: " + path);
+        android.util.Log.d("Krediter.WebKlien", "mengunduh: " + path);
 
         if (url.startsWith(K.URL_FOLDER_LOKAL)) {
             try {
@@ -55,7 +55,7 @@ public class WebKlien extends WebViewClient {
                         InputStream input = mRepoLokal.buka(namaBerkas);
                         return new WebResourceResponse(mime, "UTF-8", input);
                     } catch (Exception e) {
-                        android.util.Log.e("Invoker.WebKlien", e.getMessage());
+                        android.util.Log.e("Krediter.WebKlien", e.getMessage());
                         throw new RuntimeException(e);
                     }
                 }
@@ -63,7 +63,7 @@ public class WebKlien extends WebViewClient {
                 // Akali cache <img>
                 if (url.startsWith(K.URL_FOLDER_LOKAL + "foto_profil/")) {
                     String berkas = "foto_profil";
-                    android.util.Log.d("Invoker.WebKlien", "permintaan diintersepsi: " + mime);
+                    android.util.Log.d("Krediter.WebKlien", "permintaan diintersepsi: " + mime);
                     File file = new File(mMainActivity.getFilesDir(), berkas);
                     FileInputStream input = new FileInputStream(file);
                     return new WebResourceResponse(mime, "UTF-8", input);

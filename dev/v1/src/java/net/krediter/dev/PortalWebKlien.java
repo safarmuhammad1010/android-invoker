@@ -1,4 +1,4 @@
-package net.invoker.apk;
+package net.krediter.dev;
 
 
 import android.content.Intent;
@@ -72,7 +72,7 @@ public class PortalWebKlien extends WebViewClient {
 
     @JavascriptInterface
     public void misiBerhasil(String data) {
-        android.util.Log.d("Invoker.WebViewPortal.Console", String.format("__portal.misiBerhasil('%s')", data));
+        android.util.Log.d("Krediter.WebViewPortal.Console", String.format("__portal.misiBerhasil('%s')", data));
         mMainActivity.runOnUiThread(() -> {
             mMainActivity.mIntegrator.mWebViewUtama.evaluateJavascript(
                 String.format("__misi_berhasil('%s')", data),

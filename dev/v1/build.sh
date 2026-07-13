@@ -1,6 +1,10 @@
 
-PACKAGE='net/invoker/apk'
-NAMA_APK='invoker'
+PACKAGE='net/krediter/dev'
+NAMA_APK='krediter-dev'
+
+
+mkdir -p build/gen/ &&
+mkdir -p build/apk/ &&
 
 
 "$BUILD_TOOLS/aapt" package -f -m -J build/gen/ -S src/res \

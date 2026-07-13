@@ -1,4 +1,4 @@
-package net.invoker.apk;
+package net.krediter.dev;
 
 
 import android.content.Context;
@@ -43,11 +43,11 @@ class Inisiator {
         mIntegrator = integrator;
 
         mMainActivity.findViewById(R.id.tombol_coba_lagi).setOnClickListener((v) -> {
-            android.util.Log.d("Invoker.Inisiator", "mencoba lagi...");
+            android.util.Log.d("Krediter.Inisiator", "mencoba lagi...");
             mPercobaanKe += 1;
             sembunyikanKoneksiGagal();
             if (mSedangMengunduh) {
-                android.util.Log.d("Invoker.Inisiator", "tombol 'coba lagi' ditekan di saat sedang mengunduh, abaikan.");
+                android.util.Log.d("Krediter.Inisiator", "tombol 'coba lagi' ditekan di saat sedang mengunduh, abaikan.");
                 return;
             }
             mulai();
@@ -55,7 +55,7 @@ class Inisiator {
     }
 
     void mulai() {
-        android.util.Log.d("Invoker.Inisiator", "mulai...");
+        android.util.Log.d("Krediter.Inisiator", "mulai...");
 
         new Thread(() -> {
             try {
@@ -63,7 +63,7 @@ class Inisiator {
                 tungguBatasWaktu();
                 unduhMetadata();
             } catch (Exception e) {
-                android.util.Log.e("Invoker.Inisiator", "Error: " + e.getMessage());
+                android.util.Log.e("Krediter.Inisiator", "Error: " + e.getMessage());
                 if (! mApaDiUnduhDiLatarBelakang) {
                     if (mPercobaanKe > 0) {
                         mSedangMengunduh = false;
@@ -73,7 +73,7 @@ class Inisiator {
                                 tampilkanKoneksiGagal();
                             }
                         } catch (InterruptedException ie) {
-                            android.util.Log.e("Invoker.Inisiator", "InterruptedException: " + ie.getMessage());
+                            android.util.Log.e("Krediter.Inisiator", "InterruptedException: " + ie.getMessage());
                         }
                     } else {
                         tampilkanKoneksiGagal();
@@ -90,11 +90,11 @@ class Inisiator {
             try {
                 Thread.sleep(K.BATAS_WAKTU_UNDUH);
                 if (! (mApaSelesaiDiUnduh || mSiap)) {
-                    android.util.Log.e("Invoker.Inisiator", "waktu habis");
+                    android.util.Log.e("Krediter.Inisiator", "waktu habis");
                     tampilkanKoneksiGagal();
                 }
             } catch (InterruptedException ie) {
-                android.util.Log.e("Invoker.Inisiator", ie.getMessage());
+                android.util.Log.e("Krediter.Inisiator", ie.getMessage());
             }
         });
         mThreadBatasWaktu.start();
@@ -102,13 +102,13 @@ class Inisiator {
 
     private void unduhMetadata() throws Exception {
         if (mMetadataGlobal == null) {
-            android.util.Log.d("Invoker.Inisiator", "mengunduh metadata di: " + K.URL_METADATA);
+            android.util.Log.d("Krediter.Inisiator", "mengunduh metadata di: " + K.URL_METADATA);
             HttpURLConnection httpConn = buatKoneksi(K.URL_METADATA);
             httpConn.connect();
 
             InputStream input = httpConn.getInputStream();
             String data = bacaInputKeString(input);
-            android.util.Log.d("Invoker.Inisiator", "METADATA: " + data);
+            android.util.Log.d("Krediter.Inisiator", "METADATA: " + data);
 
             mMetadataGlobal = new JSONObject(data);
         }
@@ -132,7 +132,7 @@ class Inisiator {
         String versiLokal = D.versiWeb();
 
         if (! ((versiLokal != null) && (!versiLokal.isEmpty()))) {
-            android.util.Log.d("Invoker.Inisiator", "APK BARU");
+            android.util.Log.d("Krediter.Inisiator", "APK BARU");
             if (K.VERSI_WEB.equals(versiGlobal)) {
                 bukaWeb(K.VERSI_WEB);
                 unduhRepo();
@@ -142,26 +142,26 @@ class Inisiator {
                 bukaWeb(versiGlobal);
             }
         } else {
-            android.util.Log.d("Invoker.Inisiator", "repo lokal tersedia, versi lokal='" + versiLokal + "', versi global='" + versiGlobal + "'");
+            android.util.Log.d("Krediter.Inisiator", "repo lokal tersedia, versi lokal='" + versiLokal + "', versi global='" + versiGlobal + "'");
 
             if (versiLokal.equals(versiGlobal)) {
-                android.util.Log.d("Invoker.Inisiator", "versi lokal dan global sama");
+                android.util.Log.d("Krediter.Inisiator", "versi lokal dan global sama");
                 bukaWeb(versiLokal);
                 return;
             }
-            android.util.Log.d("Invoker.Inisiator", "versi lokal dan global TIDAK sama");
+            android.util.Log.d("Krediter.Inisiator", "versi lokal dan global TIDAK sama");
 
             String versiLokalMayor = versiLokal.substring(0, versiLokal.indexOf('.'));
             String versiGlobalMayor = versiGlobal.substring(0, versiGlobal.indexOf('.'));
-            android.util.Log.d("Invoker.Inisiator", "versiLokalMayor=" + versiLokalMayor + ", versiGlobalMayor=" + versiGlobalMayor);
+            android.util.Log.d("Krediter.Inisiator", "versiLokalMayor=" + versiLokalMayor + ", versiGlobalMayor=" + versiGlobalMayor);
 
             if (versiGlobalMayor.equals(versiLokalMayor)) {
-                android.util.Log.d("Invoker.Inisiator", "versi MAYOR lokal dan global sama, unduh repo di latar belakang");
+                android.util.Log.d("Krediter.Inisiator", "versi MAYOR lokal dan global sama, unduh repo di latar belakang");
                 mApaDiUnduhDiLatarBelakang = true;
                 bukaWeb(versiLokal);
                 unduhRepo();
             } else {
-                android.util.Log.d("Invoker.Inisiator", "versi MAYOR lokal dan global TIDAK sama");
+                android.util.Log.d("Krediter.Inisiator", "versi MAYOR lokal dan global TIDAK sama");
                 tampilkanTeksLoading();
                 unduhRepo();
                 bukaWeb(versiGlobal);
@@ -179,7 +179,7 @@ class Inisiator {
         String versiGlobal = mMetadataGlobal.getString(K.N_VERSI_WEB);
         File folderRepo = new File(new File(mMainActivity.getFilesDir(), "repo"), versiGlobal);
         buatFolderRepo(folderRepo);
-        android.util.Log.d("Invoker.Inisiator", "mengunduh repo " + versiGlobal + ", lalu simpan ke folder: " + folderRepo);
+        android.util.Log.d("Krediter.Inisiator", "mengunduh repo " + versiGlobal + ", lalu simpan ke folder: " + folderRepo);
 
         JSONArray lisUrlWeb = mMetadataGlobal.getJSONArray(K.N_URL_WEB);
         for (int i = 0; i < lisUrlWeb.length(); i++) {
@@ -199,7 +199,7 @@ class Inisiator {
     }
 
     private void unduhDanSimpan(String url, File berkas) throws IOException {
-        android.util.Log.d("Invoker.Inisiator", "mengunduh " + url + ", lalu simpan ke: " + berkas);
+        android.util.Log.d("Krediter.Inisiator", "mengunduh " + url + ", lalu simpan ke: " + berkas);
 
         File folder = berkas.getParentFile();
         if (folder != null && !folder.exists()) {
@@ -223,7 +223,7 @@ class Inisiator {
     }
 
     private void perbaruiVersiLokal(String versiLokalBaru) {
-        android.util.Log.d("Invoker.Inisiator", "perbarui versiLokal: " + D.versiWeb() + " ---> " + versiLokalBaru);
+        android.util.Log.d("Krediter.Inisiator", "perbarui versiLokal: " + D.versiWeb() + " ---> " + versiLokalBaru);
         D.versiWeb(versiLokalBaru);
     }
 
@@ -232,7 +232,7 @@ class Inisiator {
         mSiap = true;
 
         String url = K.URL_REPO_LOKAL + versi + "/index.html";
-        android.util.Log.d("Invoker.Inisiator", "membuka web: " + url);
+        android.util.Log.d("Krediter.Inisiator", "membuka web: " + url);
 
         mMainActivity.runOnUiThread(() -> {
             mMainActivity.mWebView.loadUrl(url);

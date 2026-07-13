@@ -1,4 +1,4 @@
-package net.invoker.apk;
+package net.krediter.dev;
 
 
 import java.io.BufferedInputStream;
@@ -16,7 +16,7 @@ class RepoLokal {
     }
 
     InputStream buka(String namaBerkas) throws Exception {
-        android.util.Log.d("Invoker.RepoLokal", "buka repo_lokal: " + namaBerkas);
+        android.util.Log.d("Krediter.RepoLokal", "buka repo_lokal: " + namaBerkas);
 
         String versiWebUnduhan = D.versiWeb();
         String versiWebApk = K.VERSI_WEB;
@@ -45,7 +45,7 @@ class RepoLokal {
     }
 
     private InputStream _bukaDariApk(String namaBerkas) throws Exception {
-        android.util.Log.d("Invoker.RepoLokal", "buka repo_lokal dari APK: " + namaBerkas);
+        android.util.Log.d("Krediter.RepoLokal", "buka repo_lokal dari APK: " + namaBerkas);
         int id;
         if ("index.html".equals(namaBerkas)) {
             id = R.raw.index;
@@ -62,11 +62,11 @@ class RepoLokal {
     }
 
     private InputStream _bukaDariInternal(String versiWebUnduhan, String namaBerkas) throws Exception {
-        android.util.Log.d("Invoker.RepoLokal", "buka repo_lokal dari INTERNAL: " + namaBerkas);
+        android.util.Log.d("Krediter.RepoLokal", "buka repo_lokal dari INTERNAL: " + namaBerkas);
         File folderRepo = new File(mMainActivity.getFilesDir(), K.NAMA_FOLDER_REPO_LOKAL);
         folderRepo = new File(folderRepo, versiWebUnduhan);
         File berkas = new File(folderRepo, namaBerkas);
-        android.util.Log.d("Invoker.RepoLokal", "membuka berkas: " + berkas);
+        android.util.Log.d("Krediter.RepoLokal", "membuka berkas: " + berkas);
         InputStream input = new FileInputStream(berkas);
         input = new BufferedInputStream(input);
         return input;
@@ -84,7 +84,7 @@ class RepoLokal {
             int v2 = Integer.parseInt(versiWebUnduhanMayor);
             return v1 - v2;
         } catch (Exception e) {
-            android.util.Log.e("Invoker.RepoLokal", "gagal cek versi mayor: " + e.getMessage());
+            android.util.Log.e("Krediter.RepoLokal", "gagal cek versi mayor: " + e.getMessage());
             throw e;
         }
     }
@@ -101,7 +101,7 @@ class RepoLokal {
             int v2 = Integer.parseInt(versiWebUnduhanMinor);
             return v1 - v2;
         } catch (Exception e) {
-            android.util.Log.e("Invoker.RepoLokal", "gagal cek versi minor: " + e.getMessage());
+            android.util.Log.e("Krediter.RepoLokal", "gagal cek versi minor: " + e.getMessage());
             throw e;
         }
     }

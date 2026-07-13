@@ -1,4 +1,4 @@
-package net.invoker.apk;
+package net.krediter.dev;
 
 
 class K {
@@ -11,8 +11,8 @@ class K {
 
     static final String URL_METADATA = "https://repoinvoker1.github.io/krediter/dev/v1/metadata.json";
 
-    static final String URL_FOLDER_LOKAL = "https://app.local/invoker/berkas_lokal/";
-    static final String URL_REPO_LOKAL = "https://app.local/invoker/berkas_lokal/repo/";
+    static final String URL_FOLDER_LOKAL = "https://app.local/krediter/berkas_lokal/";
+    static final String URL_REPO_LOKAL = "https://app.local/krediter/berkas_lokal/repo/";
 
     static final String N_VERSI_APK = "versi_apk";
     static final String N_VERSI_WEB = "versi_web";

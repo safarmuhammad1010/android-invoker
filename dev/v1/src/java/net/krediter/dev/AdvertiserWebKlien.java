@@ -1,20 +1,20 @@
-package net.invoker.apk;
+package net.krediter.dev;
 
 
 import android.content.Intent;
+import android.net.Uri;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebResourceRequest;
-import android.net.Uri;
 
 
-public class BrowserWebKlien extends WebViewClient {
+public class AdvertiserWebKlien extends WebViewClient {
 
     MainActivity mMainActivity;
 
-    BrowserWebKlien(MainActivity mainActivity) {
+    AdvertiserWebKlien(MainActivity mainActivity) {
         mMainActivity = mainActivity;
     }
 
@@ -26,7 +26,7 @@ public class BrowserWebKlien extends WebViewClient {
     @Override
     public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
         String url = request.getUrl().toString();
-        if ((mMainActivity.mUrlTargetBrowser != null) && (!url.startsWith(mMainActivity.mUrlTargetBrowser))) {
+        if ((mMainActivity.mUrlTargetAdvertiser != null) && (!url.startsWith(mMainActivity.mUrlTargetAdvertiser))) {
             bukaUrlDiExternal(url);
             return true;
         }
@@ -35,12 +35,12 @@ public class BrowserWebKlien extends WebViewClient {
 
     @JavascriptInterface
     public void buka(String url) {
-        mMainActivity.bukaBrowser(url);
+        mMainActivity.bukaAdvertiser(url);
     }
 
     @JavascriptInterface
     public void tutup() {
-        mMainActivity.tutupBrowser();
+        mMainActivity.tutupAdvertiser();
     }
 
 }
