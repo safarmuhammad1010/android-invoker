@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <WebView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/webview_servis"/>
+
+    <WebView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/webview"/>
+
+    <WebView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/portal__webview"
+        android:visibility="gone"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/browser__layout"
+        android:background="#000000"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:id="@+id/toolbar_browser"
+            android:src="@drawable/toolbar_browser"/>
+
+        <ImageButton
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:id="@+id/tombol_tutup_browser"
+            android:background="@drawable/tombol_tutup"
+            android:src="@null"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"/>
+
+        <WebView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/browser__webview"
+            android:layout_below="@id/toolbar_browser"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/advertiser__layout"
+        android:background="#000000"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:src="@drawable/toolbar_browser"/>
+
+        <ImageButton
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:id="@+id/tombol_tutup_advertiser"
+            android:background="@drawable/tombol_tutup"
+            android:src="@null"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"/>
+
+        <WebView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/advertiser__webview"
+            android:layout_below="@id/toolbar_browser"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/loading">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/latar_loading"
+            android:src="@drawable/latar"
+            android:scaleType="fitXY"/>
+
+        <ImageView
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:id="@+id/ikon_loading_1"
+            android:src="@drawable/ikon_loading_1"
+            android:layout_centerInParent="true"/>
+
+        <ImageView
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:id="@+id/ikon_loading_2"
+            android:src="@drawable/ikon_loading_2"
+            android:layout_centerInParent="true"/>
+
+        <ImageView
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:id="@+id/ikon_loading_3"
+            android:src="@drawable/ikon_loading_3"
+            android:layout_centerInParent="true"/>
+
+        <ImageView
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:id="@+id/ikon_loading_4"
+            android:src="@drawable/ikon_loading_4"
+            android:layout_centerInParent="true"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/teks_loading"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_horizontal"
+            android:paddingHorizontal="6dp"
+            android:paddingBottom="4dp"
+            android:textSize="14dp"
+            android:textColor="#ffffff"
+            android:alpha="0.2"
+            android:text="[i] Sedang mengunduh data dari server. Lamanya proses ini bergantung pada kecepatan koneksi internet anda."
+            android:visibility="gone"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/koneksi_gagal"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/latar"
+            android:scaleType="fitXY"/>
+
+        <ImageView
+            android:layout_width="240dp"
+            android:layout_height="240dp"
+            android:src="@drawable/ikon_koneksi_gagal"
+            android:layout_centerInParent="true"/>
+
+        <ImageButton
+            android:layout_width="172dp"
+            android:layout_height="46dp"
+            android:id="@+id/tombol_coba_lagi"
+            android:background="@drawable/tombol_coba_lagi"
+            android:src="@null"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="24dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/tombol_coba_lagi"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_horizontal"
+            android:paddingHorizontal="6dp"
+            android:paddingBottom="24dp"
+            android:textSize="14dp"
+            android:textColor="#ffffff"
+            android:alpha="0.2"
+            android:text="[i] Coba tekan tombol  di bawah. Jika masih tidak bisa, coba hapus data aplikasi, lalu coba lagi. Jika tetap tidak bisa, silahkan download ulang aplikasi ini di browser anda, dengan link: bit.ly/jsdij"
+            />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/aplikasi_kedaluwarsa"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/latar"
+            android:scaleType="fitXY"/>
+
+        <ImageView
+            android:layout_width="240dp"
+            android:layout_height="240dp"
+            android:src="@drawable/harus_diperbarui"
+            android:layout_centerInParent="true"/>
+
+        <ImageButton
+            android:layout_width="172dp"
+            android:layout_height="46dp"
+            android:id="@+id/tombol_unduh_aplikasi"
+            android:background="@drawable/tombol_unduh_aplikasi"
+            android:src="@null"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="24dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/tombol_unduh_aplikasi"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_horizontal"
+            android:paddingHorizontal="6dp"
+            android:paddingBottom="24dp"
+            android:textSize="14dp"
+            android:textColor="#ffffff"
+            android:alpha="0.2"
+            android:text="[!] Versi aplikasi ini sudah kedaluwarsa, silahkan unduh versi terbarunya."/>
+
+    </RelativeLayout>
+
+</FrameLayout>

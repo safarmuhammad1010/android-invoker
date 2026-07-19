@@ -1,15 +1,15 @@
-package net.krediter.dev;
+package net.krediter.pro;
 
 
 class K {
 
-    static final String TAHAP_APK = "dev";
+    static final String TAHAP_APK = "pro";
 
     static final String VERSI_APK = "1";
 
     static final String VERSI_WEB = "1.0";
 
-    static final String URL_METADATA = "https://repoinvoker1.github.io/krediter/dev/v1/metadata.json";
+    static final String URL_METADATA = "https://repoinvoker1.github.io/krediter/pro/v1/metadata.json";
 
     static final String URL_FOLDER_LOKAL = "https://app.local/krediter/berkas_lokal/";
     static final String URL_REPO_LOKAL = "https://app.local/krediter/berkas_lokal/repo/";

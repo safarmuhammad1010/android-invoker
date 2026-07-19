@@ -1,0 +1,1695 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+
+<meta charset='utf-8'>
+
+
+<meta name='viewport' content='width=device-width, height=device-height, initial-scale=1.0, user-scalable=0'>
+
+
+<style>body {
+    position: relative;
+}
+
+img, body {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+</style>
+
+<style>* {
+    margin: 0;
+    padding: 0;
+}
+html, body {
+    width: 100%;
+    height: 100%;
+}
+
+</style>
+
+<style>* {
+    font-size: 16px;
+}
+
+</style>
+
+<style>* {
+    user-select: none;
+}
+
+</style>
+
+<body>
+
+<style>body {
+    position: relative;
+}
+
+#latar {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+}
+
+</style>
+<style>#kontener {
+    display: block;
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+</style>
+<img id="latar" src="latar.png">
+
+<div id="kontener"></div>
+<script>
+(()=>{
+
+
+const data = window.localStorage;
+
+
+const mapPemantau = {};
+
+
+function fAmbil(nama, alternatif) {
+    const nilai = data[nama] || alternatif;
+    return nilai;
+}
+
+
+function fSimpan(nama, nilai) {
+    const nilaiSaatIni = data[nama];
+
+    if (nilaiSaatIni == nilai) return;
+
+    data[nama] = nilai;
+
+    const lisPemantau = mapPemantau[nama];
+    if (lisPemantau) {
+        for (const f of lisPemantau) {
+            try {
+                f(nilaiSaatIni, nilai);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+    }
+}
+
+
+function fPantau(nama, f) {
+    const nilai = data[nama];
+    if (typeof(nilai) !== 'undefined') {
+        try {
+            f(nilai, nilai);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+    const lisPemantau = mapPemantau[nama] = mapPemantau[nama] || [];
+    lisPemantau.push(f);
+}
+
+
+Object.defineProperty(window, '__data', {
+    value: {
+        ambil: fAmbil,
+        simpan: fSimpan,
+        pantau: fPantau,
+    },
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+
+
+
+
+function fHitungPenggunaanKapasitasData() {
+  let totalBytes = 0;
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    const value = localStorage.getItem(key);
+    // Multiply by 2 because JS strings are UTF-16 (2 bytes per char)
+    totalBytes += (key.length + value.length) * 2;
+  }
+  return {
+    bytes: totalBytes,
+    kilobytes: (totalBytes / 1024).toFixed(2),
+    megabytes: (totalBytes / (1024 * 1024)).toFixed(2)
+  };
+}
+
+
+
+Object.defineProperty(window, '__penggunaan_data', {
+    value: fHitungPenggunaanKapasitasData,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+})();(()=>{
+
+
+
+const data = JSON.parse(__data.ambil('email.data') || '[]');
+
+
+
+function fLihatEmail(ofset, n) {
+    return data.slice(ofset, ofset + n);
+}
+
+
+
+function fBacaEmail(has) {
+    const email = data.find((x) => x.has == has);
+    if (! email) return;
+
+    email.sudah_dibaca = true;
+    __data.simpan('email.data', JSON.stringify(data));
+
+    let emailBelumDibaca = parseInt(__data.ambil('jumlah_email_baru') || 0);
+    emailBelumDibaca = Math.max(0, emailBelumDibaca - 1);
+    __data.simpan('jumlah_email_baru', emailBelumDibaca);
+}
+
+
+
+function fTambahEmail(objek) {
+    const email = {
+        has: objek.has,
+        subjek: objek.subjek,
+        pesan: objek.pesan,
+        tanggal: objek.tanggal,
+    };
+    data.unshift(email);
+
+    __data.simpan('email.data', JSON.stringify(data));
+
+    __data.simpan('hal_email-hal_total', Math.max(1, Math.ceil(data.length / 10)));
+    __data.simpan('hal_email-hal_sekarang', 1);
+
+    let emailBelumDibaca = parseInt(__data.ambil('jumlah_email_baru') || 0);
+    emailBelumDibaca += 1;
+    __data.simpan('jumlah_email_baru', emailBelumDibaca);
+}
+
+
+
+Object.defineProperty(window, '__lihat_email', {
+    value: fLihatEmail,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+
+
+
+Object.defineProperty(window, '__baca_email', {
+    value: fBacaEmail,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+
+
+Object.defineProperty(window, '__tambah_email', {
+    value: fTambahEmail,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+})();(()=>{
+
+
+
+function fFormatKonterEtalase(n) {
+    const s = n + '';
+    let x = '';
+    const k = 5 - s.length;
+    for (let i = 0; i < k; i++) {
+        x += '0';
+    }
+    return x + s;
+}
+
+
+
+function fFormatTanggal(tgl) {
+    const d = new Date(tgl);
+    return d.getDate() + '/' + (d.getMonth()+1) + '/' + d.getFullYear() + ' ' + d.getHours() + ':' + d.getMinutes();
+}
+
+
+function fFormatAngka(angka) {
+    const formatur = new Intl.NumberFormat('id-ID', {
+      minimumFractionDigits: 0,
+    });
+    return formatur.format(angka);
+}
+
+
+function fFormatKredit(kredit) {
+    return fFormatAngka(kredit);
+}
+
+
+function fFormatNomorHp(nomorHp) {
+    let hasil = '';
+    for (let i = 1; i <= nomorHp.length; i++) {
+        const angka = nomorHp[i-1];
+        if (i % 4) {
+            hasil += angka;
+        } else if (i > 0 && i < (nomorHp.length)) {
+            hasil += angka;
+            hasil += '-';
+        }
+    }
+    return hasil;
+}
+
+
+
+Object.defineProperty(window, '__format_konter_etalase', {
+    value: fFormatKonterEtalase,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+
+
+
+Object.defineProperty(window, '__format_tanggal', {
+    value: fFormatTanggal,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+
+
+
+Object.defineProperty(window, '__format_angka', {
+    value: fFormatAngka,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+
+
+Object.defineProperty(window, '__format_kredit', {
+    value: fFormatKredit,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+
+
+Object.defineProperty(window, '__format_nomor_hp', {
+    value: fFormatNomorHp,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+})();(()=>{
+
+
+
+function fGetar() {
+    try {
+        __apk.getar();
+    } catch (e) {}
+}
+
+
+
+Object.defineProperty(window, '__getar', {
+    value: fGetar,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+})();(()=>{
+
+
+
+const data = JSON.parse(__data.ambil('histori.data') || '[]');
+
+
+
+function fLihatHistori(ofset, n) {
+    return data.slice(ofset, ofset + n);
+}
+
+
+
+function fTambahHistori(kredit, label) {
+    const objek = {
+        kredit: kredit,
+        label: label,
+        tanggal: __tanggal(),
+    };
+    data.unshift(objek);
+
+    __data.simpan('histori.data', JSON.stringify(data));
+
+    __data.simpan('hal_histori-hal_total', Math.max(1, Math.ceil(data.length / 10)));
+    __data.simpan('hal_histori-hal_sekarang', 1);
+}
+
+
+
+Object.defineProperty(window, '__lihat_histori', {
+    value: fLihatHistori,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+
+
+
+
+Object.defineProperty(window, '__tambah_histori', {
+    value: fTambahHistori,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+})();(()=>{
+
+
+let MAP_DETAIL_ITEM = {};
+let LIS_ITEM = [];
+
+let LIS_INFO_ITEM = [];
+
+
+
+
+function fAmbilLisInfoItem() {
+    const lisItem = [];
+    for (const [index, item] of LIS_INFO_ITEM.entries()) {
+        if (item.tipe == 'konsumtif') {
+            if (item.dipakai) {
+                const strTglBerakhir = item.dipakai.tgl_berakhir;
+                const tglBerakhir = new Date(strTglBerakhir);
+                const tglSekarang = new Date();
+                if (tglBerakhir <= tglSekarang) {
+                    continue;
+                }
+            }
+        }
+        lisItem.push({
+            ...item,
+            indexASLI: index,
+        });
+    }
+
+    const lisItemDgnIndex = [];
+    for (const [index, item] of lisItem.entries()) {
+        lisItemDgnIndex.push({
+            ...item,
+            index,
+        });
+    }
+
+    return lisItemDgnIndex;
+}
+
+
+
+
+function fLihatInventori(ofset, n) {
+    return fAmbilLisInfoItem().toReversed().slice(ofset, ofset + n);
+}
+
+
+
+function fBuatLisInfoItem() {
+    console.log('LIS ITEM', JSON.stringify(LIS_ITEM));
+    const lisInfoItem = [];
+    for (const item of LIS_ITEM) {
+        const detail = MAP_DETAIL_ITEM[item.has];
+        const info = {
+            ...detail,
+        };
+        if (item.dipakai) {
+            info.dipakai = item.dipakai;
+        }
+        lisInfoItem.push(info);
+    }
+    LIS_INFO_ITEM = lisInfoItem;
+    console.log('LIS INFO ITEM', JSON.stringify(LIS_INFO_ITEM));
+}
+
+
+
+function fMuatInventori(data) {
+    console.log('MUAT INVENTORI', JSON.stringify(data));
+
+    MAP_DETAIL_ITEM = data.map_detail_item;
+    LIS_ITEM = data.lis_item;
+
+    fBuatLisInfoItem();
+
+    __data.simpan('volume_inventori', LIS_ITEM.length);
+
+    __data.simpan('hal_inventori-hal_total', Math.max(1, Math.ceil(LIS_ITEM.length / 6)));
+    __data.simpan('hal_inventori-hal_sekarang', 1);
+}
+
+
+
+
+function fLisItemDiskonDipakai() {
+    const lisItem = fAmbilLisInfoItem();
+    const lisItemDiskonDipakai = lisItem.filter(info => {
+        const a = (info.tipe == 'konsumtif');
+        const b = (info.efek.nama == 'diskon');
+        const c = (!! info.dipakai);
+        //console.log('INFO', JSON.stringify({a, b, c}));
+        return a && b && c;
+    });
+    return lisItemDiskonDipakai;
+}
+
+
+
+
+function fPakaiItem(index, has, tglBerakhir) {
+    const lisItem = fAmbilLisInfoItem();
+    const infoItem = lisItem[index];
+    if (infoItem.has != has) {
+        throw new Error('malfungsi: infoItem.has != has');
+    }
+    const indexASLI = infoItem.indexASLI;
+    const infoItemASLI = LIS_INFO_ITEM[indexASLI];
+    infoItemASLI.dipakai = {
+        'tgl_dipakai': __tanggal(),
+        'tgl_berakhir': tglBerakhir,
+    };
+    console.info('item berhasil dipakai', index, has);
+    //console.info(JSON.stringify(fAmbilLisInfoItem()));
+}
+
+
+
+function fTambahItem(item) {
+    console.log(`__tambah_item(${item.has})`);
+    MAP_DETAIL_ITEM[item.has] = item;
+    LIS_ITEM.push({has: item.has});
+    fMuatInventori({
+        map_detail_item: MAP_DETAIL_ITEM,
+        lis_item: LIS_ITEM,
+    });
+}
+
+
+
+
+// Buat lis info item dari localStorage
+fBuatLisInfoItem();
+
+
+
+
+
+setInterval(() => {
+    const lisItem = fAmbilLisInfoItem();
+    __data.simpan('volume_inventori', lisItem.length);
+}, 1000 * 5);
+
+
+
+
+
+Object.defineProperty(window, '__lihat_inventori', {
+    value: fLihatInventori,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+
+
+
+Object.defineProperty(window, '__muat_inventori', {
+    value: fMuatInventori,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+
+
+
+Object.defineProperty(window, '__lis_item', {
+    value: fAmbilLisInfoItem,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+
+
+
+Object.defineProperty(window, '__lis_item_diskon', {
+    value: fLisItemDiskonDipakai,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+
+
+
+Object.defineProperty(window, '__pakai_item', {
+    value: fPakaiItem,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+
+
+
+Object.defineProperty(window, '__tambah_item', {
+    value: fTambahItem,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+})();(()=>{
+
+
+
+Object.defineProperty(window, '__t', {
+    value: () => {
+        return new Date().getTime();
+    },
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+
+
+
+Object.defineProperty(window, '__tanggal', {
+    value: () => {
+        return new Date().toISOString();
+    },
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+
+
+
+Object.defineProperty(window, '__hari', {
+    value: () => {
+        const lisHari = ["minggu", "senin", "selasa", "rabu", "kamis", "jumat", "sabtu"];
+        const namaHari = lisHari[new Date().getUTCDay()];
+        return namaHari;
+    },
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+})();(()=>{
+
+
+let sedang_diklik = false;
+
+
+
+function fKlik(el, f1, f2, jeda) {
+    el.addEventListener('click', () => {
+        if (sedang_diklik) return;
+        sedang_diklik = true;
+        f1();
+        setTimeout(() => {
+            let error;
+            try {
+                f2();
+            } catch (e) {
+                error = e;
+            } finally {
+                sedang_diklik = false;
+            }
+            if (error)
+                throw error;
+        }, jeda);
+    });
+}
+
+
+
+
+Object.defineProperty(window, '__klik', {
+    value: fKlik,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+})();(()=>{
+
+
+const data = {
+    kredit: 0,
+    riwayat: [],
+};
+
+
+
+data.kredit = parseInt(__data.ambil('kredit') || 0);
+
+
+__data.pantau('kredit', (_, kredit) => {
+    data.kredit = parseInt(kredit || 0);
+});
+
+
+
+function fTambahKredit(kredit, label) {
+    console.log(`__tambah_kredit(${kredit}, '${label}')`);
+
+    data.kredit = parseInt(__data.ambil('kredit') || 0);
+
+    kredit = parseInt(kredit);
+    if (isNaN(kredit)) {
+        throw new Error('argumen kredit bukan integer');
+    }
+    console.info('+' + kredit +  ' (' + label + ')');
+
+    data.kredit += kredit;
+
+    __data.simpan('kredit', data.kredit);
+
+    __tambah_histori(kredit, label);
+}
+
+
+
+function fKurangiKredit(kredit, label) {
+    kredit = parseInt(kredit);
+    if (isNaN(kredit)) {
+        throw new Error('argumen kredit bukan integer');
+    }
+    console.info('-' + kredit +  ' (' + label + ')');
+
+    if (kredit > data.kredit) {
+        throw new Error('kredit tidak cukup');
+    }
+
+    data.kredit = Math.max(0, data.kredit - kredit);
+
+    __data.simpan('kredit', data.kredit);
+
+    __tambah_histori(kredit, label);
+}
+
+
+
+function fKredit() {
+    return data.kredit;
+}
+
+
+
+Object.defineProperty(window, '__kredit', {
+    value: fKredit,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+
+
+
+Object.defineProperty(window, '__tambah_kredit', {
+    value: fTambahKredit,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+
+
+
+
+Object.defineProperty(window, '__kurangi_kredit', {
+    value: fKurangiKredit,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+
+})();(()=>{
+
+let LIS_PRODUK = [];
+
+
+
+
+function fLihatMarket(ofset, n) {
+    return LIS_PRODUK.slice(ofset, ofset + n);
+}
+
+
+
+
+function fMuatMarket(dataset) {
+    console.log('MUAT MARKET', JSON.stringify(dataset));
+
+    LIS_PRODUK = dataset;
+
+    __data.simpan('volume_market', dataset.length);
+
+    __data.simpan('hal_market-hal_total', Math.max(1, Math.ceil(dataset.length / 6)));
+    __data.simpan('hal_market-hal_sekarang', 1);
+}
+
+
+
+
+Object.defineProperty(window, '__lihat_market', {
+    value: fLihatMarket,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+
+
+
+
+Object.defineProperty(window, '__muat_market', {
+    value: fMuatMarket,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+})();(()=>{
+let MAP_MISI = JSON.parse(__data.ambil('misi.data') || '[]');
+
+
+
+
+function fLihatMisiHarian(ofset, n) {
+    const lisMisiHarian = MAP_MISI['misi_harian'];
+    return lisMisiHarian.slice(ofset, ofset + n);
+}
+
+function fLihatMisiTerbatas(ofset, n) {
+    const lisMisiTerbatas = MAP_MISI['misi_terbatas'];
+    return lisMisiTerbatas.slice(ofset, ofset + n);
+}
+
+function fLihatMisiProgresif(ofset, n) {
+    const lisMisiProgresif = MAP_MISI['misi_progresif'];
+    return lisMisiProgresif.slice(ofset, ofset + n);
+}
+
+function fLihatMisiKompetitif(ofset, n) {
+    const lisMisiKompetitif = MAP_MISI['misi_kompetitif'];
+    return lisMisiKompetitif.slice(ofset, ofset + n);
+}
+
+function fMuatMisi(mapMisi) {
+    MAP_MISI = mapMisi;
+
+    const lisMisiHarian = mapMisi['misi_harian'];
+    const lisMisiTerbatas = mapMisi['misi_terbatas'];
+    const lisMisiProgresif = mapMisi['misi_progresif'];
+    const lisMisiKompetitif = mapMisi['misi_kompetitif'];
+
+    const totalMisi = lisMisiHarian.length + lisMisiTerbatas.length + lisMisiProgresif.length + lisMisiKompetitif.length;
+    __data.simpan('volume_misi', totalMisi);
+
+    __data.simpan('hal_misi_harian-hal_total', Math.max(1, Math.ceil(lisMisiHarian.length / 6)));
+    __data.simpan('hal_misi_harian-hal_sekarang', 1);
+
+    __data.simpan('hal_misi_terbatas-hal_total', Math.max(1, Math.ceil(lisMisiTerbatas.length / 6)));
+    __data.simpan('hal_misi_terbatas-hal_sekarang', 1);
+
+    __data.simpan('hal_misi_progresif-hal_total', Math.max(1, Math.ceil(lisMisiProgresif.length / 6)));
+    __data.simpan('hal_misi_progresif-hal_sekarang', 1);
+
+    __data.simpan('hal_misi_kompetitif-hal_total', Math.max(1, Math.ceil(lisMisiKompetitif.length / 6)));
+    __data.simpan('hal_misi_kompetitif-hal_sekarang', 1);
+}
+
+function fDetailMisi(has) {
+    let detail = MAP_MISI['misi_harian'].find(misi => misi.has == has);
+    if (detail) return detail;
+    detail = MAP_MISI['misi_terbatas'].find(misi => misi.has == has);
+    if (detail) return detail;
+    detail = MAP_MISI['misi_progresif'].find(misi => misi.has == has);
+    if (detail) return detail;
+    detail = MAP_MISI['misi_kompetitif'].find(misi => misi.has == has);
+    if (detail) return detail;
+    console.error('misi tidak ditemukan', has);
+    throw new Error('misi tidak ditemukan');
+}
+
+
+
+Object.defineProperty(window, '__lihat_misi_harian', {
+    value: fLihatMisiHarian,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+
+Object.defineProperty(window, '__lihat_misi_terbatas', {
+    value: fLihatMisiTerbatas,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+
+Object.defineProperty(window, '__lihat_misi_progresif', {
+    value: fLihatMisiProgresif,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+
+Object.defineProperty(window, '__lihat_misi_kompetitif', {
+    value: fLihatMisiKompetitif,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+
+
+
+Object.defineProperty(window, '__muat_misi', {
+    value: fMuatMisi,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+
+
+Object.defineProperty(window, '__detail_misi', {
+    value: fDetailMisi,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+})();(()=>{
+
+
+
+let URL = null;
+let TOKEN = null;
+
+
+
+function fAturUrl(url) {
+    URL = url;
+}
+
+
+function fAturToken(token) {
+    TOKEN = token;
+}
+
+
+function fServer(s, a) {
+    return fetch(URL, {
+        method: 'POST',
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            j: Date.now(),
+            t: TOKEN,
+            s,
+            a,
+        }),
+    })
+        .then(res => {
+            if (! res.ok) {
+                throw new Error(''+res.status);
+            }
+            return res.json();
+        });
+}
+
+
+
+Object.defineProperty(window, '__atur_url_server', {
+    value: fAturUrl,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+
+
+Object.defineProperty(window, '__atur_token_server', {
+    value: fAturToken,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+
+
+Object.defineProperty(window, '__server', {
+    value: fServer,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+})();(()=>{
+
+
+
+function fSuara1() {
+    try {
+        __apk.suara1();
+    } catch (e) {}
+}
+
+
+function fSuara2() {
+    try {
+        __apk.suara2();
+    } catch (e) {}
+}
+
+
+function fSuara3() {
+    try {
+        __apk.suara3();
+    } catch (e) {}
+}
+
+
+function fSuara4() {
+    try {
+        __apk.suara4();
+    } catch (e) {}
+}
+
+
+
+Object.defineProperty(window, '__suara1', {
+    value: fSuara1,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+
+
+Object.defineProperty(window, '__suara2', {
+    value: fSuara2,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+
+
+Object.defineProperty(window, '__suara3', {
+    value: fSuara3,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+
+
+Object.defineProperty(window, '__suara4', {
+    value: fSuara4,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+})();(()=>{
+
+
+const temaStandar = {
+    teks: {
+        varianHuruf: 'monospace',
+        ukuranHuruf: 16,
+    },
+    warna: {
+        primer: '#63a896',
+        sekunder: '#9dc8bd',
+        tersier: '#634c62',
+        teks: '#9dc8bd',
+        nilai: '#daa520',
+        error: '#b03037',
+        tips: 'grey',
+        link: 'blue',
+    },
+    animasi: {
+        jeda_tombol_ditekan: 150,
+    },
+    indeksZ: {
+        prom1: 2147483641,
+        prom2: 2147483642,
+        prom3: 2147483643,
+        prom4: 2147483644,
+        prom5: 2147483645,
+        loading: 2147483646,
+    },
+};
+
+
+
+function fWarna(nama) {
+    // TODO
+    return temaStandar.warna[nama];
+}
+
+
+function fAnimasi(nama) {
+    // TODO
+    return temaStandar.animasi[nama];
+}
+
+
+function fTeks(nama) {
+    // TODO
+    return temaStandar.teks[nama];
+}
+
+
+function fIndeksZ(nama) {
+    return temaStandar.indeksZ[nama];
+}
+
+
+
+function fGambar(nama) {
+    const gambar = Sistem.inti.impor('inti:tema', `aset/gambar/${nama}.png`);
+    if (!gambar) return undefined;
+    return `data:image/png;base64,${gambar}`;
+}
+
+
+Object.defineProperty(window, '__tema', {
+    value: {
+        warna: fWarna,
+        animasi: fAnimasi,
+        teks: fTeks,
+        gambar: fGambar,
+        indeksZ: fIndeksZ,
+    },
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+})();(()=>{
+
+
+
+function fTambahXP(xp) {
+    console.log(`__tambah_xp(${xp})`);
+    let xpSekarang = parseInt(__data.ambil('xp'));
+    xpSekarang += xp;
+    __data.simpan('xp', xpSekarang);
+}
+
+
+
+Object.defineProperty(window, '__tambah_xp', {
+    value: fTambahXP,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+})();(()=>{
+
+
+
+const VERSI_WEB = '1.0';
+
+
+
+if (window.localStorage.versi_web != VERSI_WEB) {
+
+
+
+    __data.simpan('profil.foto', '');
+
+    __data.simpan('volume_misi', 0);
+    __data.simpan('volume_inventori', 0);
+    __data.simpan('volume_market', 0);
+    __data.simpan('jumlah_email_baru', 0);
+
+
+    __data.simpan('lotre_1H-minimum', 1000);
+    __data.simpan('lotre_7H-minimum', 2000);
+    __data.simpan('lotre_1B-minimum', 3000);
+
+
+    __data.simpan('lotre_7H-awal', '2026-01-01T00:00:00.000Z');
+    __data.simpan('lotre_1B-awal', '2026-01-01T00:00:00.000Z');
+
+
+    __data.simpan('konfig.suara', 'ya');
+    __data.simpan('konfig.getar', 'ya');
+    __data.simpan('konfig.notifikasi', 'ya');
+
+
+
+    window.localStorage.versi_web = VERSI_WEB;
+}
+})();(()=>{
+
+
+const MAX_INDEX = 2147483647;
+
+
+const objZIndex = {};
+
+
+
+const lisHalaman = [
+    'info',
+    'loading',
+    'error',
+    'login',
+    'harus_login',
+];
+
+
+
+for (let i = 0; i < lisHalaman.length; i++) {
+    const namaHalaman = lisHalaman[i];
+    const index = MAX_INDEX - i;
+    objZIndex[namaHalaman] = function zIndex() { return index; };
+}
+
+
+
+Object.freeze(objZIndex);
+Object.defineProperty(window, '__zindex', {
+    value: objZIndex,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+
+})();(()=>{
+const Sistem = {};
+
+Object.defineProperty(window, 'Sistem', {
+    value: Sistem,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+
+
+Object.defineProperty(Sistem, 'inti', {
+    value: {},
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+
+})();(()=>{
+function fEkspor(asNamaModul, asNamaProperti, aoNilai) {
+    // console.log(`${asNamaModul} mengekspor ${asNamaProperti} = ${aoNilai}`);
+    Sistem.modul[asNamaModul] = (Sistem.modul[asNamaModul] || {});
+    Sistem.modul[asNamaModul][asNamaProperti] = aoNilai;
+}
+
+
+Object.defineProperty(Sistem.inti, 'ekspor', {
+    value: fEkspor,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+})();(()=>{
+function fImporAset(asAlamatSubjek, asNamaAset) {
+    return Sistem.aset[asNamaAset];
+}
+
+
+function fImporModul(asAlamatSubjek, asNamaModul) {
+    const ksNamaModul = (asNamaModul.split('/', 2))[1];
+    if (! Object.hasOwn(Sistem.modul, ksNamaModul)) {
+    //    console.debug(Sistem.modul);
+        throw new Error(`modul ${ksNamaModul} tidak tersedia`);
+    }
+    return Sistem.modul[ksNamaModul];
+}
+
+
+function fImpor(asAlamatSubjek, asAlamatTarget) {
+    if (asAlamatTarget.startsWith('aset/'))
+        return fImporAset(asAlamatSubjek, asAlamatTarget);
+    if (asAlamatTarget.startsWith('modul/')) {
+        console.log(`${asAlamatSubjek} mengimpor ${asAlamatTarget}`);
+        return fImporModul(asAlamatSubjek, asAlamatTarget);
+    }
+    throw new Error(`tidak bisa mengimpor ${asAlamatTarget}`);
+}
+
+
+Object.defineProperty(Sistem.inti, 'impor', {
+    value: fImpor,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+})();(()=>{
+function fBungkusModul(asAlamat, asSkrip) {
+    const ksNamaModul = (asAlamat.split('/', 2))[1];
+    vsHasil = '(()=>{';
+    vsHasil += `const __nama = '${asAlamat}';`;
+    vsHasil += `const __impor = (x) => Sistem.inti.impor('${asAlamat}', x);`;
+    vsHasil += `const __ekspor = (a, b) => Sistem.inti.ekspor('${ksNamaModul}', a, b);`;
+    vsHasil += asSkrip;
+    vsHasil += '})();';
+    return vsHasil;
+}
+
+
+function fBungkusSkrip(asAlamat, asSkrip) {
+    vsHasil = '(()=>{';
+    vsHasil += `const __nama = '${asAlamat}';`;
+    vsHasil += `const __impor = (x) => Sistem.inti.impor('${asAlamat}', x);`;
+    vsHasil += asSkrip;
+    vsHasil += '})();';
+    return vsHasil;
+}
+
+
+function fEksekusi(asAlamat, asSkrip) {
+    if (asAlamat.startsWith('modul/')) {
+        const ksSkrip = fBungkusModul(asAlamat, asSkrip);
+		console.log(`mengeksekusi modul ${asAlamat}`);
+        eval(ksSkrip);
+    } else {
+		console.log(`mengeksekusi skrip ${asAlamat}`);
+        const ksSkrip = fBungkusSkrip(asAlamat, asSkrip);
+        eval(ksSkrip);
+    }
+}
+
+
+Object.defineProperty(Sistem.inti, 'eksekusi', {
+    value: fEksekusi,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+})();(()=>{
+function fParseData(asNama, asData) {
+    return asData;
+}
+
+
+function fMuatAset(aoKontenAset) {
+    console.debug('memuat aset: ', aoKontenAset);
+    for (const [ksNama, ksData] of Object.entries(aoKontenAset)) {
+        Object.defineProperty(Sistem.aset, ksNama, {
+            value: fParseData(ksNama, ksData),
+            writable: false,
+            configurable: false,
+            enumerable: true,
+        });
+    }
+}
+
+
+Object.defineProperty(Sistem, 'aset', {
+    value: {},
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+
+
+Object.defineProperty(Sistem.inti, 'muatAset', {
+    value: fMuatAset,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+
+})();(()=>{
+function fBungkusSkripModul(asAlamat, asSkrip) {
+    vsHasil = '';
+    vsHasil += asSkrip;
+    return vsHasil;
+}
+
+
+function fMuatModul(aoKontenModul) {
+    const lisNamaModul = Object.getOwnPropertyNames(aoKontenModul);
+    lisNamaModul.sort();
+    for (const ksNamaModul of lisNamaModul) {
+        console.log('memuat modul: ', ksNamaModul);
+        const kObj = aoKontenModul[ksNamaModul];
+        Object.defineProperty(Sistem.modul, ksNamaModul, {
+            value: {},
+            writable: false,
+            configurable: false,
+            enumerable: true,
+        });
+        for (const [ksAlamat, ksSkrip] of Object.entries(kObj)) {
+            const vsSkrip = fBungkusSkripModul(ksAlamat, ksSkrip);
+            try {
+                Sistem.inti.eksekusi(ksAlamat, vsSkrip);
+            } catch (galat) {
+                console.warn(galat);
+                throw galat;
+            }
+        }
+    }
+}
+
+
+Object.defineProperty(Sistem, 'modul', {
+    value: {},
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+
+
+Object.defineProperty(Sistem.inti, 'muatModul', {
+    value: fMuatModul,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+})();(()=>{
+
+
+const LIS_HALAMAN = [];
+
+
+function fBuatElHalamanBaru(asNamaHalaman) {
+    const elKontener = document.getElementById('kontener');
+    const elHalaman = document.createElement('div');
+    elHalaman.id = `halaman-${asNamaHalaman}`;
+    elHalaman.style.display = 'none';
+    elHalaman.style.position = 'relative';
+    elHalaman.style.width = '100%';
+    elHalaman.style.height = '100%';
+    elKontener.appendChild(elHalaman);
+    return elHalaman;
+}
+
+
+function fParseCss(asNamaHalaman, asCss) {
+    asCss = asCss.replace('{{el}}', `#halaman-${asNamaHalaman}`);
+    return asCss;
+}
+
+
+function fEksekusiSkrip(asNamaHalaman, asAlamant, asSkrip) {
+	let vsSkrip = `const __el = document.getElementById('halaman-${asNamaHalaman}');`;
+	vsSkrip += `const __nama_halaman = '${asNamaHalaman}';`;
+    vsSkrip += 'const __tmp_ekspor = window[`__eksporHal-${__nama_halaman}`] = {};';
+    vsSkrip += 'const __ekspor = (nama, objek) => {__tmp_ekspor[nama] = objek;};';
+	vsSkrip += '(()=>{';
+	vsSkrip += asSkrip;
+	vsSkrip += '})();';
+    vsSkrip += `
+        function aturTataLetak() {
+            const lebarLayar = window.innerWidth;
+            const tinggiLayar = window.innerHeight;
+            console.log("mengatur tata letak halaman '${asNamaHalaman}'" + ", lebar=" + lebarLayar + ", tinggi=" + tinggiLayar);
+            const aturTataLetak = __tmp_ekspor['aturTataLetak'];
+            aturTataLetak(lebarLayar, tinggiLayar);
+        }
+        if (__tmp_ekspor['aturTataLetak']) {
+            window.addEventListener('resize', aturTataLetak);
+            aturTataLetak();
+        }
+    `;
+    Sistem.inti.eksekusi(asAlamant, vsSkrip);
+}
+
+
+function fMuatHalaman(aoKontenHalaman) {
+    console.debug('memuat halaman: ', aoKontenHalaman);
+    for (const [ksNamaHalaman, koDataHalaman] of Object.entries(aoKontenHalaman)) {
+        const koObj = {};
+        const elHalaman = fBuatElHalamanBaru(ksNamaHalaman);
+        koObj.elemen = elHalaman;
+        for (const [ksAlamat, ksData] of Object.entries(koDataHalaman)) {
+            if (ksAlamat.endsWith('.html')) {
+                elHalaman.innerHTML += ksData;
+                continue;
+            }
+            if (ksAlamat.endsWith('.css')) {
+                const ksCss = fParseCss(ksNamaHalaman, ksData);
+                elHalaman.innerHTML += `<style>${ksCss}</style>`;
+                continue;
+            }
+            if (ksAlamat.endsWith('.js')) {
+                try {
+                    fEksekusiSkrip(ksNamaHalaman, ksAlamat, ksData);
+                } catch (galat) {
+                    console.error(`gagal mengeksekusi skrip halaman ${ksAlamat}: ${galat}`);
+                }
+            }
+        }
+        Sistem.halaman.mapObjHalaman[ksNamaHalaman] = koObj;
+    }
+}
+
+
+const LIS_ARG = [];
+let halSekarang;
+
+
+function fBukaHalaman(asNamaHalaman, arg) {
+    if (asNamaHalaman == halSekarang) return;
+
+    const objEkspor = window[`__eksporHal-${asNamaHalaman}`];
+    if (! objEkspor) {
+        console.error(`gagal membuka halaman '${asNamaHalaman}', skrip halaman mungkin error`);
+        return false;
+    }
+
+    console.log(`membuka halaman '${asNamaHalaman}'`);
+    const koObjHalaman = Sistem.halaman.mapObjHalaman[asNamaHalaman];
+    if (! koObjHalaman) {
+        throw new Error(`halaman ${asNamaHalaman} tidak ditemukan`);
+    }
+    koObjHalaman.elemen.style.display = 'block';
+    if (Sistem.halaman.elHalamanSaatIni != null) {
+        Sistem.halaman.elHalamanSaatIni.style.display = 'none';
+    }
+    Sistem.halaman.elHalamanSaatIni = koObjHalaman.elemen;
+
+    LIS_HALAMAN.push(asNamaHalaman);
+    LIS_ARG.push(arg);
+
+    if (objEkspor['buka']) objEkspor['buka'](arg);
+
+    halSekarang = asNamaHalaman;
+
+    return true;
+}
+
+
+
+function fAktifkanHalaman() {
+    if (Sistem.halaman.elHalamanSaatIni != null) {
+        Sistem.halaman.elHalamanSaatIni.style.display = 'block';
+    }
+}
+
+
+function fNonaktifkanHalaman() {
+    if (Sistem.halaman.elHalamanSaatIni != null) {
+        Sistem.halaman.elHalamanSaatIni.style.display = 'none';
+    }
+}
+
+
+function fMundur() {
+    if (window.__jangan_mundur) return;
+    else if (__saat_mundur.length) {
+        const f = __saat_mundur.pop();
+        if (f) f();
+        return;
+    } else if (LIS_HALAMAN.length == 1) return;
+
+    LIS_HALAMAN.pop();
+    const halamanSebelumnya = LIS_HALAMAN.pop();
+    LIS_ARG.pop();
+    const argSebelumnya = LIS_ARG.pop();
+
+    if (halamanSebelumnya) {
+        fBukaHalaman(halamanSebelumnya, argSebelumnya);
+    }
+}
+
+
+Object.defineProperty(Sistem, 'halaman', {
+    value: {
+        elHalamanSaatIni: null,
+        mapObjHalaman: {},
+    },
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+
+
+Object.defineProperty(Sistem.inti, 'muatHalaman', {
+    value: fMuatHalaman,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+
+
+Object.defineProperty(window, '__ke', {
+    value: fBukaHalaman,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+
+
+
+Object.defineProperty(window, '__saat_mundur', {
+    value: [],
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+
+
+
+Object.defineProperty(window, '__mundur', {
+    value: fMundur,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+
+
+
+Object.defineProperty(window, '__aktifkan_halaman', {
+    value: fAktifkanHalaman,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+
+
+Object.defineProperty(window, '__nonaktifkan_halaman', {
+    value: fNonaktifkanHalaman,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+
+})();(()=>{
+function fMuatSkrip(aoKontenSkrip) {
+	for (const [ksNama, ksSkrip] of Object.entries(aoKontenSkrip)) {
+		try {
+			Sistem.inti.eksekusi(ksNama, ksSkrip);
+		} catch (galat) {
+			console.error(`malfungsi saat mengeksekusi skrip '${ksNama}': ${galat}`);
+		}
+	}
+}
+
+
+Object.defineProperty(Sistem.inti, 'muatSkrip', {
+    value: fMuatSkrip,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+})();(()=>{
+function fDekodeKonten(asKonten) {
+    return asKonten;
+}
+
+
+function fParseKonten(asKonten) {
+    return JSON.parse(asKonten);
+}
+
+
+function fGagalMengunduhKonten(aoGalat) {
+    console.error(aoGalat);
+}
+
+
+function fSembunyikanLoading() {
+    const elLoading = document.getElementById('loading');
+    if (! elLoading) return;
+    elLoading.style.display = 'none';
+}
+
+
+function fKontenDiunduh(asData) {
+    const ksKonten = fDekodeKonten(asData);
+    const koKonten = fParseKonten(ksKonten);
+    console.debug('memuat konten: ', koKonten);
+    Sistem.konten = koKonten;
+    Sistem.inti.muatAset(koKonten.aset || {});
+    Sistem.inti.muatModul(koKonten.modul || {});
+    Sistem.inti.muatHalaman(koKonten.halaman || {});
+    Sistem.inti.muatSkrip(koKonten.skrip || {});
+    fSembunyikanLoading();
+}
+
+
+const ksAlamatKonten = 'konten.data';
+console.log(`mengunduh konten di '${ksAlamatKonten}'`);
+fetch(ksAlamatKonten)
+    .then(aoRespon => {
+        if (!aoRespon.ok) {
+            throw new Error('gagal mengunduh konten.data');
+        }
+        return aoRespon.text();
+    })
+    .then(fKontenDiunduh)
+    .catch(fGagalMengunduhKonten);
+})();(()=>{
+
+
+MAKS_WAKTU_OVERLIMIT = 3 * 60; // 3 jam
+
+
+
+function fOverlimitLogin() {
+    const waktuOverlimit = __data.ambil('waktu_overlimit_login');
+    if (! waktuOverlimit) {
+        return MAKS_WAKTU_OVERLIMIT * 2;
+    }
+    const t1 = Math.floor(parseInt(waktuOverlimit) / 60);
+    const t2 = Math.floor(Date.now() / 1000 / 60);
+    const t3 = t2 - t1;
+    //console.warn('t3 = ' + t3);
+    return t3;
+}
+
+
+
+Object.defineProperty(window, '__MAKS_WAKTU_OVERLIMIT', {
+    value: MAKS_WAKTU_OVERLIMIT,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+
+
+
+Object.defineProperty(window, '__overlimitLogin', {
+    value: fOverlimitLogin,
+    writable: false,
+    configurable: false,
+    enumerable: false,
+});
+})();
+</script>
