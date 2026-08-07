@@ -158,6 +158,16 @@ class Integrator {
             });
         }
 
+        @JavascriptInterface
+        public void resetKataSandi(String nama, String kata_sandi_baru) {
+            android.util.Log.d("Krediter.Integrator.JsInterfaceWeb", String.format("resetKataSandi('%s', '%s')", nama, kata_sandi_baru));
+            mMainActivity.runOnUiThread(() -> {
+                mIntegrator.mWebViewServis.evaluateJavascript(
+                    String.format("__reset_kata_sandi('%s', '%s')", nama, kata_sandi_baru),
+                null);
+            });
+        }
+
     }
 
     static class JsInterfaceServis {
@@ -332,6 +342,16 @@ class Integrator {
             mMainActivity.runOnUiThread(() -> {
                 mIntegrator.mWebViewUtama.evaluateJavascript(
                     String.format("__lisPembelianDiproses('%s')", data),
+                null);
+            });
+        }
+
+        @JavascriptInterface
+        public void berhasilResetKataSandi(String kode_keamanan) {
+            android.util.Log.d("Krediter.Integrator.JsInterfaceServis", String.format("berhasilResetKataSandi('%s')", kode_keamanan));
+            mMainActivity.runOnUiThread(() -> {
+                mIntegrator.mWebViewUtama.evaluateJavascript(
+                    String.format("__berhasilResetKataSandi('%s')", kode_keamanan),
                 null);
             });
         }
