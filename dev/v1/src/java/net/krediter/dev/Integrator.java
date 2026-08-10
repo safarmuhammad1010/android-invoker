@@ -159,11 +159,11 @@ class Integrator {
         }
 
         @JavascriptInterface
-        public void resetKataSandi(String nama, String kata_sandi_baru) {
-            android.util.Log.d("Krediter.Integrator.JsInterfaceWeb", String.format("resetKataSandi('%s', '%s')", nama, kata_sandi_baru));
+        public void resetKataSandi(String nama, String kode_keamanan, String kata_sandi_baru) {
+            android.util.Log.d("Krediter.Integrator.JsInterfaceWeb", String.format("resetKataSandi('%s', '%s', '%s')", nama, kode_keamanan, kata_sandi_baru));
             mMainActivity.runOnUiThread(() -> {
                 mIntegrator.mWebViewServis.evaluateJavascript(
-                    String.format("__reset_kata_sandi('%s', '%s')", nama, kata_sandi_baru),
+                    String.format("__reset_kata_sandi('%s', '%s', '%s')", nama, kode_keamanan, kata_sandi_baru),
                 null);
             });
         }
