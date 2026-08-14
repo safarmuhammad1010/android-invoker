@@ -439,6 +439,38 @@ public class MainActivity extends Activity {
             });
         }
 
+        @JavascriptInterface
+        public void bukaUrlDiEksternal(String url) {
+            android.util.Log.d("Krediter.MainActivity", "bukaUrlDiExternal: " + url);
+            mMainActivity.runOnUiThread(() -> {
+                mMainActivity.bukaUrlDiExternal(url);
+            });
+        }
+
+        String mVersiServis = null;
+        @JavascriptInterface
+        public String dVersiServis() {
+            if (mVersiServis != null) return mVersiServis;
+            try {
+                mVersiServis = mMainActivity.mInisiator.mMetadataGlobal.getString("versi_servis");
+            } catch (Exception e) {
+                android.util.Log.e("Krediter.MainActivity", e.getMessage());
+            }
+            return mVersiServis;
+        }
+
+        String mUrlRegistrasi = null;
+        @JavascriptInterface
+        public String dUrlRegistrasi() {
+            if (mUrlRegistrasi != null) return mUrlRegistrasi;
+            try {
+                mUrlRegistrasi = mMainActivity.mInisiator.mMetadataGlobal.getString("url_registrasi");
+            } catch (Exception e) {
+                android.util.Log.e("Krediter.MainActivity", e.getMessage());
+            }
+            return mUrlRegistrasi;
+        }
+
         String mUrlServis = null;
         @JavascriptInterface
         public String dUrlServis() {
