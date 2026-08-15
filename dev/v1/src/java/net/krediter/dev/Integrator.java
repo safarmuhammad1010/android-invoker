@@ -1,6 +1,8 @@
 package net.krediter.dev;
 
 
+import net.krediter.dev.Utilitas;
+
 import android.webkit.ConsoleMessage;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
@@ -178,6 +180,25 @@ class Integrator {
         JsInterfaceServis(MainActivity mainActivity, Integrator integrator) {
             mMainActivity = mainActivity;
             mIntegrator = integrator;
+        }
+
+        @JavascriptInterface
+        public String ll0(String plainJson) {
+            String s = Utilitas.enAlp0(plainJson);
+            android.util.Log.d("Krediter.Integrator.JsInterfaceServis", "enAlp0 => " + s);
+            return s;
+        }
+
+        @JavascriptInterface
+        public String ll1(String plainJson) {
+            String s = "";
+            try {
+                s = Utilitas.enAlp1(plainJson);
+            } catch (Exception e) {
+                android.util.Log.e("Krediter.Integrator.JsInterfaceServis", "ERROR enAlp1: " + e.getMessage());
+            }
+            android.util.Log.d("Krediter.Integrator.JsInterfaceServis", "enAlp0 => " + s);
+            return s;
         }
 
         @JavascriptInterface
