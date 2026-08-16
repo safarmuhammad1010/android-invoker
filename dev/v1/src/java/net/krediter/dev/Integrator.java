@@ -202,6 +202,18 @@ class Integrator {
         }
 
         @JavascriptInterface
+        public String zz1(String data_teks) {
+            String s = "";
+            try {
+                s = Utilitas.unAlp1(data_teks);
+            } catch (Exception e) {
+                android.util.Log.e("Krediter.Integrator.JsInterfaceServis", "ERROR unAlp1: " + e.getMessage());
+            }
+            android.util.Log.d("Krediter.Integrator.JsInterfaceServis", "unAlp0 => " + s);
+            return s;
+        }
+
+        @JavascriptInterface
         public String dTahapApk() {
             return K.TAHAP_APK;
         }

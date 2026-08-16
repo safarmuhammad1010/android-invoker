@@ -11,6 +11,8 @@ import java.security.SecureRandom;
 import java.util.Base64;
 import java.nio.charset.StandardCharsets;
 
+import java.util.Arrays;
+
 
 public final class Utilitas {
 
@@ -49,6 +51,24 @@ public final class Utilitas {
         System.arraycopy(encrypted, 0, combined, iv.length, encrypted.length);
 
         return Base64.getEncoder().encodeToString(combined);
+    }
+
+    public static String unAlp1(String encryptedBase64) throws Exception {
+        byte[] combined = Base64.getDecoder().decode(encryptedBase64);
+
+        byte[] iv = Arrays.copyOfRange(combined, 0, 16);
+        byte[] ciphertext = Arrays.copyOfRange(combined, 16, combined.length);
+
+        byte[] keyBytes = ALP1.getBytes(StandardCharsets.UTF_8);
+        SecretKeySpec keySpec = new SecretKeySpec(keyBytes, "AES");
+        IvParameterSpec ivSpec = new IvParameterSpec(iv);
+
+        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+        cipher.init(Cipher.DECRYPT_MODE, keySpec, ivSpec);
+
+        byte[] decrypted = cipher.doFinal(ciphertext);
+
+        return new String(decrypted, StandardCharsets.UTF_8);
     }
 
 }
