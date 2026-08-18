@@ -13,6 +13,9 @@ import android.net.Uri;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import net.krediter.dev.Utilitas;
 
 
@@ -22,6 +25,7 @@ public class PortalWebKlien extends WebViewClient {
 
     private int konter_debug = 0;
 
+    private String has_misi_aktif = "NIHIL";
     private int skor_misi = -1;
     private long waktu1 = 0;
     private long waktu2 = 0;
@@ -31,17 +35,42 @@ public class PortalWebKlien extends WebViewClient {
         mMainActivity = mainActivity;
     }
 
-    @Override
-    public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
+    private boolean qqqqq(WebView view, WebResourceRequest request) {
         Uri url = request.getUrl();
-        String path = url.getPath();
-        if (path.endsWith("konfirmasi.php")) {
-            android.util.Log.d("Krediter.WebViewPortal.Console", "KONFIRMASI skor_misi = " + skor_misi);
-            android.util.Log.d("Krediter.WebViewPortal.Console", "KONFIRMASI waktu1 = " + waktu1);
-            android.util.Log.d("Krediter.WebViewPortal.Console", "KONFIRMASI waktu2 = " + waktu2);
-            android.util.Log.d("Krediter.WebViewPortal.Console", "KONFIRMASI waktu3 = " + waktu3);
+        android.util.Log.d("Krediter.WebViewPortal.Console", "KONFIRMASI skor_misi = " + skor_misi);
+        android.util.Log.d("Krediter.WebViewPortal.Console", "KONFIRMASI waktu1 = " + waktu1);
+        android.util.Log.d("Krediter.WebViewPortal.Console", "KONFIRMASI waktu2 = " + waktu2);
+        android.util.Log.d("Krediter.WebViewPortal.Console", "KONFIRMASI waktu3 = " + waktu3);
+        String teks_data;
+        try {
+            JSONObject obj = new JSONObject();
+            obj.put("waktu1", waktu1);
+            obj.put("waktu2", waktu2);
+            obj.put("waktu3", waktu3);
+            obj.put("skor_misi", skor_misi);
+            String teks_json = obj.toString();
+            android.util.Log.d("Krediter.WebViewPortal.Console", "plainJson = " + teks_json);
+            teks_data = Utilitas.enAlp0(teks_json);
+        } catch (JSONException e) {
+            android.util.Log.e("Krediter.WebViewPortal.Console", e.getMessage());
+            return false;
         }
-        return super.shouldInterceptRequest(view, request);
+
+        try {
+            teks_data = java.net.URLEncoder.encode(teks_data, "UTF-8");
+        } catch (Exception e) {
+            android.util.Log.e("Krediter.WebViewPortal.Console", e.getMessage());
+            return false;
+        }
+
+        android.util.Log.d("Krediter.WebViewPortal.Console", "teksData = " + teks_data);
+        Uri newUrl = url.buildUpon()
+                    .appendQueryParameter("analytic_kogniter", teks_data)
+                    .build();
+        view.loadUrl(newUrl.toString());
+        android.util.Log.d("Krediter.WebViewPortal.Console", "url = " + newUrl.toString());
+
+        return true;
     }
 
     @Override
@@ -55,6 +84,7 @@ public class PortalWebKlien extends WebViewClient {
         } else if (path.endsWith("iklan.php")) {
             waktu3 = System.currentTimeMillis();
             android.util.Log.d("Krediter.WebViewPortal.Console", "IKLAN " + waktu3);
+            return qqqqq(view, request);
         }
         return false;
     }
@@ -92,13 +122,17 @@ public class PortalWebKlien extends WebViewClient {
         android.util.Log.d("Krediter.WebViewPortal.Console", "DEBUG: " + teks);
         konter_debug += 1;
         if (konter_debug == 1) {
-            skor_misi = Integer.parseInt(teks);
-        } else if (konter_debug == 2) {
             waktu1 = Long.parseLong(teks);
+        } else if (konter_debug == 2) {
+            String s = teks.split(": ")[1];
+            skor_misi = Integer.parseInt(s);
         } else if (konter_debug == 3) {
             // ...
-        }else if (konter_debug == 4) {
+        } else if (konter_debug == 4) {
             waktu2 = Long.parseLong(teks);
+        } else if (konter_debug == 5) {
+            String s = teks.split(": ")[1];
+            has_misi_aktif = s;
         }
     }
 
