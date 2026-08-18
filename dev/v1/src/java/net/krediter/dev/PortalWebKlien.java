@@ -124,14 +124,14 @@ public class PortalWebKlien extends WebViewClient {
         if (konter_debug == 1) {
             waktu1 = Long.parseLong(teks);
         } else if (konter_debug == 2) {
-            String s = teks.split(": ")[1];
+            String s = teks.split(": ", 2)[1];
             skor_misi = Integer.parseInt(s);
         } else if (konter_debug == 3) {
             // ...
         } else if (konter_debug == 4) {
             waktu2 = Long.parseLong(teks);
         } else if (konter_debug == 5) {
-            String s = teks.split(": ")[1];
+            String s = teks.split(": ", 2)[1];
             has_misi_aktif = s;
         }
     }
