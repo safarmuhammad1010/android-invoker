@@ -1,14 +1,14 @@
 package net.krediter.dev;
 
 
-import net.krediter.dev.Utilitas;
-
 import android.webkit.ConsoleMessage;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
+
+import net.krediter.dev.Utilitas;
 
 
 class Integrator {
@@ -180,13 +180,6 @@ class Integrator {
         JsInterfaceServis(MainActivity mainActivity, Integrator integrator) {
             mMainActivity = mainActivity;
             mIntegrator = integrator;
-        }
-
-        @JavascriptInterface
-        public String ll0(String plainJson) {
-            String s = Utilitas.enAlp0(plainJson);
-            android.util.Log.d("Krediter.Integrator.JsInterfaceServis", "enAlp0 => " + s);
-            return s;
         }
 
         @JavascriptInterface
