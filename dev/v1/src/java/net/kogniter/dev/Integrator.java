@@ -1,4 +1,4 @@
-package net.krediter.dev;
+package net.kogniter.dev;
 
 
 import android.webkit.ConsoleMessage;
@@ -8,7 +8,7 @@ import android.webkit.WebViewClient;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 
-import net.krediter.dev.Utilitas;
+import net.kogniter.dev.Utilitas;
 
 
 class Integrator {
@@ -65,7 +65,7 @@ class Integrator {
 
         @Override
         public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
-            android.util.Log.d("Krediter.WebViewServis.Console", consoleMessage.message());
+            android.util.Log.d("Kogniter.WebViewServis.Console", consoleMessage.message());
             return true;
         }
 
@@ -89,10 +89,10 @@ class Integrator {
             try {
                 urlServis = mMainActivity.mInisiator.mMetadataGlobal.getString(K_URL_SERVIS);
             } catch (Exception e) {
-                android.util.Log.e("Krediter.Integrator.JsInterfaceWeb", e.getMessage());
+                android.util.Log.e("Kogniter.Integrator.JsInterfaceWeb", e.getMessage());
                 return;
             }
-            android.util.Log.d("Krediter.Integrator.JsInterfaceWeb", "mulai integrasi, dengan url_servis='" + urlServis + "'");
+            android.util.Log.d("Kogniter.Integrator.JsInterfaceWeb", "mulai integrasi, dengan url_servis='" + urlServis + "'");
             mMainActivity.runOnUiThread(() -> {
                 mIntegrator.mWebViewServis.loadUrl(urlServis);
             });
@@ -100,7 +100,7 @@ class Integrator {
 
         @JavascriptInterface
         public void login(String nama, String kata_sandi) {
-            android.util.Log.d("Krediter.Integrator.JsInterfaceWeb", "login: nama='" + nama + "', kata_sandi='" + kata_sandi + "'");
+            android.util.Log.d("Kogniter.Integrator.JsInterfaceWeb", "login: nama='" + nama + "', kata_sandi='" + kata_sandi + "'");
             mMainActivity.runOnUiThread(() -> {
                 mIntegrator.mWebViewServis.evaluateJavascript("__login('" + nama + "', '" + kata_sandi + "')", null);
             });
@@ -108,7 +108,7 @@ class Integrator {
 
         @JavascriptInterface
         public void bukaPeti() {
-            android.util.Log.d("Krediter.Integrator.JsInterfaceWeb", "BUKA PETI");
+            android.util.Log.d("Kogniter.Integrator.JsInterfaceWeb", "BUKA PETI");
             mMainActivity.runOnUiThread(() -> {
                 mIntegrator.mWebViewServis.evaluateJavascript("__buka_peti()", null);
             });
@@ -116,7 +116,7 @@ class Integrator {
 
         @JavascriptInterface
         public void bukaKartu() {
-            android.util.Log.d("Krediter.Integrator.JsInterfaceWeb", "BUKA KARTU");
+            android.util.Log.d("Kogniter.Integrator.JsInterfaceWeb", "BUKA KARTU");
             mMainActivity.runOnUiThread(() -> {
                 mIntegrator.mWebViewServis.evaluateJavascript("__buka_kartu()", null);
             });
@@ -124,7 +124,7 @@ class Integrator {
 
         @JavascriptInterface
         public void ikutLotre(String tipe) {
-            android.util.Log.d("Krediter.Integrator.JsInterfaceWeb", "IKUT LOTRE " +  tipe);
+            android.util.Log.d("Kogniter.Integrator.JsInterfaceWeb", "IKUT LOTRE " +  tipe);
             mMainActivity.runOnUiThread(() -> {
                 mIntegrator.mWebViewServis.evaluateJavascript(
                     String.format("__ikut_lotre('%s')", tipe),
@@ -134,7 +134,7 @@ class Integrator {
 
         @JavascriptInterface
         public void ambilInsentifReferal() {
-            android.util.Log.d("Krediter.Integrator.JsInterfaceWeb", "AMBIL INSENTIF REFERAL");
+            android.util.Log.d("Kogniter.Integrator.JsInterfaceWeb", "AMBIL INSENTIF REFERAL");
             mMainActivity.runOnUiThread(() -> {
                 mIntegrator.mWebViewServis.evaluateJavascript("__ambil_insentif_referal()", null);
             });
@@ -142,7 +142,7 @@ class Integrator {
 
         @JavascriptInterface
         public void pakaiItem(int index, String has, String tgl) {
-            android.util.Log.d("Krediter.Integrator.JsInterfaceWeb", "PAKAI ITEM (" + index + ", " + has + ", " + tgl + ")");
+            android.util.Log.d("Kogniter.Integrator.JsInterfaceWeb", "PAKAI ITEM (" + index + ", " + has + ", " + tgl + ")");
             mMainActivity.runOnUiThread(() -> {
                 mIntegrator.mWebViewServis.evaluateJavascript(
                     String.format("__pakai_item(%d, '%s', '%s')", index, has, tgl),
@@ -152,7 +152,7 @@ class Integrator {
 
         @JavascriptInterface
         public void beli(String has, String nomorHape, int harga, String tgl) {
-            android.util.Log.d("Krediter.Integrator.JsInterfaceServis", String.format("beli('%s', '%s', %d, '%s')", has, nomorHape, harga, tgl));
+            android.util.Log.d("Kogniter.Integrator.JsInterfaceServis", String.format("beli('%s', '%s', %d, '%s')", has, nomorHape, harga, tgl));
             mMainActivity.runOnUiThread(() -> {
                 mIntegrator.mWebViewServis.evaluateJavascript(
                     String.format("__beli('%s', '%s', %d, '%s')", has, nomorHape, harga, tgl),
@@ -162,7 +162,7 @@ class Integrator {
 
         @JavascriptInterface
         public void resetKataSandi(String nama, String kode_keamanan, String kata_sandi_baru) {
-            android.util.Log.d("Krediter.Integrator.JsInterfaceWeb", String.format("resetKataSandi('%s', '%s', '%s')", nama, kode_keamanan, kata_sandi_baru));
+            android.util.Log.d("Kogniter.Integrator.JsInterfaceWeb", String.format("resetKataSandi('%s', '%s', '%s')", nama, kode_keamanan, kata_sandi_baru));
             mMainActivity.runOnUiThread(() -> {
                 mIntegrator.mWebViewServis.evaluateJavascript(
                     String.format("__reset_kata_sandi('%s', '%s', '%s')", nama, kode_keamanan, kata_sandi_baru),
@@ -188,9 +188,9 @@ class Integrator {
             try {
                 s = Utilitas.enAlp1(plainJson);
             } catch (Exception e) {
-                android.util.Log.e("Krediter.Integrator.JsInterfaceServis", "ERROR enAlp1: " + e.getMessage());
+                android.util.Log.e("Kogniter.Integrator.JsInterfaceServis", "ERROR enAlp1: " + e.getMessage());
             }
-            android.util.Log.d("Krediter.Integrator.JsInterfaceServis", "enAlp0 => " + s);
+            android.util.Log.d("Kogniter.Integrator.JsInterfaceServis", "enAlp0 => " + s);
             return s;
         }
 
@@ -200,9 +200,9 @@ class Integrator {
             try {
                 s = Utilitas.unAlp1(data_teks);
             } catch (Exception e) {
-                android.util.Log.e("Krediter.Integrator.JsInterfaceServis", "ERROR unAlp1: " + e.getMessage());
+                android.util.Log.e("Kogniter.Integrator.JsInterfaceServis", "ERROR unAlp1: " + e.getMessage());
             }
-            android.util.Log.d("Krediter.Integrator.JsInterfaceServis", "unAlp0 => " + s);
+            android.util.Log.d("Kogniter.Integrator.JsInterfaceServis", "unAlp0 => " + s);
             return s;
         }
 
@@ -223,7 +223,7 @@ class Integrator {
 
         @JavascriptInterface
         public void loadingSelesai() {
-            android.util.Log.d("Krediter.Integrator.JsInterfaceServis", "loading selesai");
+            android.util.Log.d("Kogniter.Integrator.JsInterfaceServis", "loading selesai");
             mMainActivity.mSudahSiap = true;
             mMainActivity.runOnUiThread(() -> {
                 mMainActivity.mLoading.sembunyikan();
@@ -232,7 +232,7 @@ class Integrator {
 
         @JavascriptInterface
         public void harusLogin() {
-            android.util.Log.d("Krediter.Integrator.JsInterfaceServis", "harusLogin");
+            android.util.Log.d("Kogniter.Integrator.JsInterfaceServis", "harusLogin");
             mMainActivity.runOnUiThread(() -> {
                 mIntegrator.mWebViewUtama.evaluateJavascript("__harus_login()", null);
                 loadingSelesai();
@@ -241,7 +241,7 @@ class Integrator {
 
         @JavascriptInterface
         public void gagalLogin(int kodeGagal, int overlimit) {
-            android.util.Log.d("Krediter.Integrator.JsInterfaceServis", "gagalLogin: kodeGagal=" + kodeGagal + ", overlimit=" + overlimit);
+            android.util.Log.d("Kogniter.Integrator.JsInterfaceServis", "gagalLogin: kodeGagal=" + kodeGagal + ", overlimit=" + overlimit);
             mMainActivity.runOnUiThread(() -> {
                 mIntegrator.mWebViewUtama.evaluateJavascript("__gagal_login(" + kodeGagal + "," + overlimit + ")", null);
             });
@@ -249,7 +249,7 @@ class Integrator {
 
         @JavascriptInterface
         public void berhasilLogin(String data) {
-            android.util.Log.d("Krediter.Integrator.JsInterfaceServis", "berhasilLogin: " + data);
+            android.util.Log.d("Kogniter.Integrator.JsInterfaceServis", "berhasilLogin: " + data);
             mMainActivity.runOnUiThread(() -> {
                 mIntegrator.mWebViewUtama.evaluateJavascript(
                     String.format("__berhasil_login(%s)", data),
@@ -259,7 +259,7 @@ class Integrator {
 
         @JavascriptInterface
         public void harusSinkron() {
-            android.util.Log.d("Krediter.Integrator.JsInterfaceServis", "harusSinkron");
+            android.util.Log.d("Kogniter.Integrator.JsInterfaceServis", "harusSinkron");
             mMainActivity.runOnUiThread(() -> {
                 mIntegrator.mWebViewUtama.evaluateJavascript("__harus_sinkron()", null);
                 loadingSelesai();
@@ -268,7 +268,7 @@ class Integrator {
 
         @JavascriptInterface
         public void sinkron(String data) {
-            android.util.Log.d("Krediter.Integrator.JsInterfaceServis", "sinkron: " + data);
+            android.util.Log.d("Kogniter.Integrator.JsInterfaceServis", "sinkron: " + data);
             mMainActivity.runOnUiThread(() -> {
                 mIntegrator.mWebViewUtama.evaluateJavascript(
                     String.format("__sinkron(%s)", data),
@@ -279,7 +279,7 @@ class Integrator {
 
         @JavascriptInterface
         public void tokenInvalid() {
-            android.util.Log.d("Krediter.Integrator.JsInterfaceServis", "tokenInvalid");
+            android.util.Log.d("Kogniter.Integrator.JsInterfaceServis", "tokenInvalid");
             mMainActivity.runOnUiThread(() -> {
                 mIntegrator.mWebViewUtama.evaluateJavascript("__harus_login(true)", null);
                 loadingSelesai();
@@ -288,7 +288,7 @@ class Integrator {
 
         @JavascriptInterface
         public void error(String pesan, String kausa) {
-            android.util.Log.e("Krediter.Integrator.JsInterfaceServis", "error('" + kausa + "')");
+            android.util.Log.e("Kogniter.Integrator.JsInterfaceServis", "error('" + kausa + "')");
             mMainActivity.runOnUiThread(() -> {
                 mIntegrator.mWebViewUtama.evaluateJavascript(
                     String.format("__error('%s', '%s')", pesan, kausa),
@@ -298,7 +298,7 @@ class Integrator {
 
         @JavascriptInterface
         public void berhasilBukaPeti(int kredit) {
-            android.util.Log.d("Krediter.Integrator.JsInterfaceServis", String.format("berhasilBukaPeti(%d)", kredit));
+            android.util.Log.d("Kogniter.Integrator.JsInterfaceServis", String.format("berhasilBukaPeti(%d)", kredit));
             mMainActivity.runOnUiThread(() -> {
                 mIntegrator.mWebViewUtama.evaluateJavascript(
                     String.format("__berhasilBukaPeti(%d)", kredit),
@@ -308,7 +308,7 @@ class Integrator {
 
         @JavascriptInterface
         public void berhasilBukaKartu(String namaKartu, int kredit) {
-            android.util.Log.d("Krediter.Integrator.JsInterfaceServis", String.format("berhasilBukaKartu('%s', %d)", namaKartu, kredit));
+            android.util.Log.d("Kogniter.Integrator.JsInterfaceServis", String.format("berhasilBukaKartu('%s', %d)", namaKartu, kredit));
             mMainActivity.runOnUiThread(() -> {
                 mIntegrator.mWebViewUtama.evaluateJavascript(
                     String.format("__berhasilBukaKartu('%s', %d)", namaKartu, kredit),
@@ -318,13 +318,13 @@ class Integrator {
 
         @JavascriptInterface
         public void berhasilIkutLotre(String tipe, int hargaTiket) {
-            android.util.Log.d("Krediter.Integrator.JsInterfaceServis", String.format("berhasilIkutLotre('%s', %d)", tipe, hargaTiket));
+            android.util.Log.d("Kogniter.Integrator.JsInterfaceServis", String.format("berhasilIkutLotre('%s', %d)", tipe, hargaTiket));
             String skrip;
             if ("1H".equals(tipe)) skrip = String.format("__berhasilIkutLotre1H(%d)", hargaTiket);
             else if ("7H".equals(tipe)) skrip = String.format("__berhasilIkutLotre7H(%d)", hargaTiket);
             else if ("1B".equals(tipe)) skrip = String.format("__berhasilIkutLotre1B(%d)", hargaTiket);
             else {
-                android.util.Log.e("Krediter.Integrator.JsInterfaceServis", String.format("tipe invalid: %s", tipe));
+                android.util.Log.e("Kogniter.Integrator.JsInterfaceServis", String.format("tipe invalid: %s", tipe));
                 return;
             }
             mMainActivity.runOnUiThread(() -> {
@@ -334,7 +334,7 @@ class Integrator {
 
         @JavascriptInterface
         public void berhasilAmbilInsentifReferal(int kredit) {
-            android.util.Log.d("Krediter.Integrator.JsInterfaceServis", String.format("berhasilAmbilInsentifReferal(%d)", kredit));
+            android.util.Log.d("Kogniter.Integrator.JsInterfaceServis", String.format("berhasilAmbilInsentifReferal(%d)", kredit));
             mMainActivity.runOnUiThread(() -> {
                 mIntegrator.mWebViewUtama.evaluateJavascript(
                     String.format("__berhasilAmbilInsentifReferal(%d)", kredit),
@@ -344,7 +344,7 @@ class Integrator {
 
         @JavascriptInterface
         public void berhasilPakaiItem(int index, String has, String tglBerakhir) {
-            android.util.Log.d("Krediter.Integrator.JsInterfaceServis", String.format("berhasilPakaiItem(%d, '%s', '%s')", index, has, tglBerakhir));
+            android.util.Log.d("Kogniter.Integrator.JsInterfaceServis", String.format("berhasilPakaiItem(%d, '%s', '%s')", index, has, tglBerakhir));
             mMainActivity.runOnUiThread(() -> {
                 mIntegrator.mWebViewUtama.evaluateJavascript(
                     String.format("__berhasilPakaiItem(%d, '%s', '%s')", index, has, tglBerakhir),
@@ -354,7 +354,7 @@ class Integrator {
 
         @JavascriptInterface
         public void berhasilBeli(String has, int harga, String idPembelian) {
-            android.util.Log.d("Krediter.Integrator.JsInterfaceServis", String.format("berhasilBeli('%s', %d, '%s')", has, harga, idPembelian));
+            android.util.Log.d("Kogniter.Integrator.JsInterfaceServis", String.format("berhasilBeli('%s', %d, '%s')", has, harga, idPembelian));
             mMainActivity.runOnUiThread(() -> {
                 mIntegrator.mWebViewUtama.evaluateJavascript(
                     String.format("__berhasilBeli('%s', %d, '%s')", has, harga, idPembelian),
@@ -364,7 +364,7 @@ class Integrator {
 
         @JavascriptInterface
         public void lisPembelianDiproses(String data) {
-            android.util.Log.d("Krediter.Integrator.JsInterfaceServis", String.format("lisPembelianDiproses('%s')", data));
+            android.util.Log.d("Kogniter.Integrator.JsInterfaceServis", String.format("lisPembelianDiproses('%s')", data));
             mMainActivity.runOnUiThread(() -> {
                 mIntegrator.mWebViewUtama.evaluateJavascript(
                     String.format("__lisPembelianDiproses('%s')", data),
@@ -374,7 +374,7 @@ class Integrator {
 
         @JavascriptInterface
         public void berhasilResetKataSandi(String kode_keamanan) {
-            android.util.Log.d("Krediter.Integrator.JsInterfaceServis", String.format("berhasilResetKataSandi('%s')", kode_keamanan));
+            android.util.Log.d("Kogniter.Integrator.JsInterfaceServis", String.format("berhasilResetKataSandi('%s')", kode_keamanan));
             mMainActivity.runOnUiThread(() -> {
                 mIntegrator.mWebViewUtama.evaluateJavascript(
                     String.format("__berhasilResetKataSandi('%s')", kode_keamanan),

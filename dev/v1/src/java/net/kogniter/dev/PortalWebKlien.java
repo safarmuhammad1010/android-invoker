@@ -1,4 +1,4 @@
-package net.krediter.dev;
+package net.kogniter.dev;
 
 
 import android.content.Intent;
@@ -16,7 +16,7 @@ import java.net.URISyntaxException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import net.krediter.dev.Utilitas;
+import net.kogniter.dev.Utilitas;
 
 
 public class PortalWebKlien extends WebViewClient {
@@ -37,10 +37,10 @@ public class PortalWebKlien extends WebViewClient {
 
     private boolean qqqqq(WebView view, WebResourceRequest request) {
         Uri url = request.getUrl();
-        android.util.Log.d("Krediter.WebViewPortal.Console", "KONFIRMASI skor_misi = " + skor_misi);
-        android.util.Log.d("Krediter.WebViewPortal.Console", "KONFIRMASI waktu1 = " + waktu1);
-        android.util.Log.d("Krediter.WebViewPortal.Console", "KONFIRMASI waktu2 = " + waktu2);
-        android.util.Log.d("Krediter.WebViewPortal.Console", "KONFIRMASI waktu3 = " + waktu3);
+        android.util.Log.d("Kogniter.WebViewPortal.Console", "KONFIRMASI skor_misi = " + skor_misi);
+        android.util.Log.d("Kogniter.WebViewPortal.Console", "KONFIRMASI waktu1 = " + waktu1);
+        android.util.Log.d("Kogniter.WebViewPortal.Console", "KONFIRMASI waktu2 = " + waktu2);
+        android.util.Log.d("Kogniter.WebViewPortal.Console", "KONFIRMASI waktu3 = " + waktu3);
         String teks_data;
         try {
             JSONObject obj = new JSONObject();
@@ -49,26 +49,26 @@ public class PortalWebKlien extends WebViewClient {
             obj.put("waktu3", waktu3);
             obj.put("skor_misi", skor_misi);
             String teks_json = obj.toString();
-            android.util.Log.d("Krediter.WebViewPortal.Console", "plainJson = " + teks_json);
+            android.util.Log.d("Kogniter.WebViewPortal.Console", "plainJson = " + teks_json);
             teks_data = Utilitas.enAlp0(teks_json);
         } catch (JSONException e) {
-            android.util.Log.e("Krediter.WebViewPortal.Console", e.getMessage());
+            android.util.Log.e("Kogniter.WebViewPortal.Console", e.getMessage());
             return false;
         }
 
         try {
             teks_data = java.net.URLEncoder.encode(teks_data, "UTF-8");
         } catch (Exception e) {
-            android.util.Log.e("Krediter.WebViewPortal.Console", e.getMessage());
+            android.util.Log.e("Kogniter.WebViewPortal.Console", e.getMessage());
             return false;
         }
 
-        android.util.Log.d("Krediter.WebViewPortal.Console", "teksData = " + teks_data);
+        android.util.Log.d("Kogniter.WebViewPortal.Console", "teksData = " + teks_data);
         Uri newUrl = url.buildUpon()
                     .appendQueryParameter("analytic_kogniter", teks_data)
                     .build();
         view.loadUrl(newUrl.toString());
-        android.util.Log.d("Krediter.WebViewPortal.Console", "url = " + newUrl.toString());
+        android.util.Log.d("Kogniter.WebViewPortal.Console", "url = " + newUrl.toString());
 
         return true;
     }
@@ -77,13 +77,13 @@ public class PortalWebKlien extends WebViewClient {
     public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
         Uri url = request.getUrl();
         String path = url.getPath();
-        android.util.Log.d("Krediter.WebViewPortal.Console", "Memuat " + url);
+        android.util.Log.d("Kogniter.WebViewPortal.Console", "Memuat " + url);
         if (cekApakahUrlExternal(url)) {
             bukaUrlDiExternal(url.toString());
             return true;
         } else if (path.endsWith("iklan.php")) {
             waktu3 = System.currentTimeMillis();
-            android.util.Log.d("Krediter.WebViewPortal.Console", "IKLAN " + waktu3);
+            android.util.Log.d("Kogniter.WebViewPortal.Console", "IKLAN " + waktu3);
             return qqqqq(view, request);
         }
         return false;
@@ -119,7 +119,7 @@ public class PortalWebKlien extends WebViewClient {
 
     @JavascriptInterface
     public void debug(String teks) {
-        android.util.Log.d("Krediter.WebViewPortal.Console", "DEBUG: " + teks);
+        android.util.Log.d("Kogniter.WebViewPortal.Console", "DEBUG: " + teks);
         konter_debug += 1;
         if (konter_debug == 1) {
             waktu1 = Long.parseLong(teks);
@@ -139,13 +139,13 @@ public class PortalWebKlien extends WebViewClient {
     @JavascriptInterface
     public String ll0(String plainJson) {
         String s = Utilitas.enAlp0(plainJson);
-        android.util.Log.d("Krediter.WebViewPortal.Console", "enAlp0 => " + s);
+        android.util.Log.d("Kogniter.WebViewPortal.Console", "enAlp0 => " + s);
         return s;
     }
 
     @JavascriptInterface
     public void buka(String url) {
-        android.util.Log.d("Krediter.WebViewPortal.Console", "buka()");
+        android.util.Log.d("Kogniter.WebViewPortal.Console", "buka()");
         skor_misi = -1;
         waktu1 = 0;
         waktu2 = 0;
@@ -155,14 +155,14 @@ public class PortalWebKlien extends WebViewClient {
 
     @JavascriptInterface
     public void tutup() {
-        android.util.Log.d("Krediter.WebViewPortal.Console", "tutup()");
+        android.util.Log.d("Kogniter.WebViewPortal.Console", "tutup()");
         konter_debug = 0;
         mMainActivity.tutupPortal();
     }
 
     @JavascriptInterface
     public void misiBerhasil(String data) {
-        android.util.Log.d("Krediter.WebViewPortal.Console", String.format("__portal.misiBerhasil('%s')", data));
+        android.util.Log.d("Kogniter.WebViewPortal.Console", String.format("__portal.misiBerhasil('%s')", data));
         mMainActivity.runOnUiThread(() -> {
             mMainActivity.mIntegrator.mWebViewUtama.evaluateJavascript(
                 String.format("__misi_berhasil('%s')", data),

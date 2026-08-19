@@ -1,5 +1,5 @@
 
-PACKAGE='net/krediter/dev'
+PACKAGE='net/kogniter/dev'
 NAMA_APK='kogniter-dev'
 
 

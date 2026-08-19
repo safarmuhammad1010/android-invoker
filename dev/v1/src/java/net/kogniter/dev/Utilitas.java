@@ -1,4 +1,4 @@
-package net.krediter.dev;
+package net.kogniter.dev;
 
 
 import java.util.Base64;

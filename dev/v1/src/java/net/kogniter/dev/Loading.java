@@ -1,4 +1,4 @@
-package net.krediter.dev;
+package net.kogniter.dev;
 
 
 import android.animation.ObjectAnimator;
