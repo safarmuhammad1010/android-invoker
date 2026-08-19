@@ -1,6 +1,6 @@
 
 PACKAGE='net/krediter/dev'
-NAMA_APK='krediter-dev'
+NAMA_APK='kogniter-dev'
 
 
 mkdir -p build/gen/ &&
