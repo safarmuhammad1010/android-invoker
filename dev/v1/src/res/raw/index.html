@@ -173,6 +173,7 @@ function fLihatEmail(ofset, n) {
 function fBacaEmail(has) {
     const email = data.find((x) => x.has == has);
     if (! email) return;
+    if (email.sudah_dibaca) return;
 
     email.sudah_dibaca = true;
     __data.simpan('email.data', JSON.stringify(data));
@@ -191,6 +192,13 @@ function fTambahEmail(objek) {
         pesan: objek.pesan,
         tanggal: objek.tanggal,
     };
+
+    for (const email0 of data) {
+        if (email0.has == email.has) return;
+    }
+
+    console.log('menambahkan email baru, dengan has = ' + email.has);
+
     data.unshift(email);
 
     __data.simpan('email.data', JSON.stringify(data));
@@ -1496,9 +1504,11 @@ function fBukaHalaman(asNamaHalaman, arg) {
 
 
 
+
 function fAktifkanHalaman() {
     if (Sistem.halaman.elHalamanSaatIni != null) {
         Sistem.halaman.elHalamanSaatIni.style.display = 'block';
+        window.__apakah_halaman_aktif = true;
     }
 }
 
@@ -1506,6 +1516,7 @@ function fAktifkanHalaman() {
 function fNonaktifkanHalaman() {
     if (Sistem.halaman.elHalamanSaatIni != null) {
         Sistem.halaman.elHalamanSaatIni.style.display = 'none';
+        window.__apakah_halaman_aktif = false;
     }
 }
 
