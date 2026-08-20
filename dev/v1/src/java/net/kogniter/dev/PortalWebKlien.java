@@ -146,6 +146,7 @@ public class PortalWebKlien extends WebViewClient {
     @JavascriptInterface
     public void buka(String url) {
         android.util.Log.d("Kogniter.WebViewPortal.Console", "buka()");
+        konter_debug = 0;
         skor_misi = -1;
         waktu1 = 0;
         waktu2 = 0;
@@ -156,7 +157,6 @@ public class PortalWebKlien extends WebViewClient {
     @JavascriptInterface
     public void tutup() {
         android.util.Log.d("Kogniter.WebViewPortal.Console", "tutup()");
-        konter_debug = 0;
         mMainActivity.tutupPortal();
     }
 
