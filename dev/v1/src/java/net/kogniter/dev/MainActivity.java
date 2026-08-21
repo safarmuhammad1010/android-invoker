@@ -133,6 +133,8 @@ public class MainActivity extends Activity {
             mWebView.getSettings().setForceDark(WebSettings.FORCE_DARK_ON);
         }
 
+        mWebView.setBackgroundColor(0xFF000000);
+
         mWebView.setWebViewClient(mWebKlien);
 
         mWebView.addJavascriptInterface(new JsInterface(this), "__apk");
@@ -167,6 +169,8 @@ public class MainActivity extends Activity {
         if (Build.VERSION.SDK_INT >= 29) {
             mPortal.getSettings().setForceDark(WebSettings.FORCE_DARK_ON);
         }
+
+        mPortal.setBackgroundColor(0xFF000000);
 
         mPortal.setWebViewClient(mPortalWebKlien);
 

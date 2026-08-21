@@ -12,12 +12,14 @@
     <WebView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/webview"/>
+        android:id="@+id/webview"
+        android:background="@android:color/black"/>
 
     <WebView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/portal__webview"
+        android:background="@android:color/black"
         android:visibility="gone"/>
 
     <RelativeLayout

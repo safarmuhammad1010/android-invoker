@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Error</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@500;700;900&display=swap');
+
+  :root {
+    --neon-cyan: #00f6ff;
+    --neon-magenta: #ff2ec4;
+    --neon-yellow: #f6ff00;
+    --bg-deep: #05050a;
+    --bg-panel: #0d0e1a;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background: var(--bg-deep);
+    overflow: hidden;
+  }
+
+  body {
+    font-family: 'Share Tech Mono', monospace;
+    color: #d8f9ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    position: relative;
+  }
+
+  /* grid latar belakang */
+  .grid-bg {
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,246,255,0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,246,255,0.07) 1px, transparent 1px);
+    background-size: 36px 36px;
+    -webkit-mask-image: radial-gradient(ellipse at center, black 10%, transparent 75%);
+    mask-image: radial-gradient(ellipse at center, black 10%, transparent 75%);
+    animation: gridMove 14s linear infinite;
+  }
+  @keyframes gridMove {
+    0% { background-position: 0 0; }
+    100% { background-position: 36px 72px; }
+  }
+
+  /* efek scanline */
+  .scanlines {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      to bottom,
+      rgba(0,0,0,0) 0px,
+      rgba(0,0,0,0) 2px,
+      rgba(0,0,0,0.15) 3px,
+      rgba(0,0,0,0.15) 3px
+    );
+    mix-blend-mode: overlay;
+    z-index: 5;
+  }
+
+  .vignette {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    box-shadow: inset 0 0 160px 40px rgba(0,0,0,0.85);
+    z-index: 4;
+  }
+
+  .panel {
+    position: relative;
+    z-index: 10;
+    width: 90%;
+    max-width: 420px;
+    background: linear-gradient(180deg, rgba(13,14,26,0.92), rgba(8,8,16,0.96));
+    border: 1px solid rgba(0,246,255,0.35);
+    border-radius: 4px;
+    padding: 32px 24px 26px;
+    text-align: center;
+    box-shadow:
+      0 0 0 1px rgba(0,0,0,0.6),
+      0 0 24px rgba(0,246,255,0.12),
+      0 0 60px rgba(255,46,196,0.08);
+    animation: panelIn 0.5s cubic-bezier(.2,.9,.3,1);
+  }
+  @keyframes panelIn {
+    from { opacity: 0; transform: translateY(10px) scale(0.98); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .panel::before,
+  .panel::after {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--neon-magenta);
+  }
+  .panel::before { top: -2px; left: -2px; border-right: none; border-bottom: none; }
+  .panel::after  { bottom: -2px; right: -2px; border-left: none; border-top: none; }
+
+  .tag {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--neon-magenta);
+    opacity: 0.85;
+    margin-bottom: 14px;
+  }
+
+  .icon {
+    font-size: 44px;
+    margin-bottom: 10px;
+    filter: drop-shadow(0 0 8px currentColor);
+  }
+  .icon.network { color: var(--neon-magenta); }
+  .icon.http { color: var(--neon-yellow); }
+
+  h1 {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 900;
+    font-size: 20px;
+    letter-spacing: 1px;
+    margin: 0 0 6px;
+    color: #fff;
+    text-shadow: 0 0 6px var(--neon-cyan), 0 0 18px rgba(0,246,255,0.5);
+    position: relative;
+  }
+
+  /* efek glitch pada judul */
+  h1 .glitch {
+    position: relative;
+    display: inline-block;
+  }
+  h1 .glitch::before,
+  h1 .glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    left: 0; top: 0;
+    width: 100%;
+    overflow: hidden;
+    background: transparent;
+  }
+  h1 .glitch::before {
+    color: var(--neon-magenta);
+    animation: glitchTop 3.5s infinite linear;
+    clip-path: inset(0 0 60% 0);
+  }
+  h1 .glitch::after {
+    color: var(--neon-cyan);
+    animation: glitchBottom 3.5s infinite linear;
+    clip-path: inset(60% 0 0 0);
+  }
+  @keyframes glitchTop {
+    0%, 92%, 100% { transform: translate(0,0); opacity: 0; }
+    93% { transform: translate(-2px,-1px); opacity: 0.8; }
+    94% { transform: translate(2px,1px); opacity: 0.8; }
+    95% { transform: translate(-1px,0); opacity: 0; }
+  }
+  @keyframes glitchBottom {
+    0%, 90%, 100% { transform: translate(0,0); opacity: 0; }
+    91% { transform: translate(2px,1px); opacity: 0.8; }
+    92% { transform: translate(-2px,-1px); opacity: 0.8; }
+    93% { transform: translate(1px,0); opacity: 0; }
+  }
+
+  .code {
+    font-size: 12px;
+    color: var(--neon-yellow);
+    opacity: 0.85;
+    margin: 0 0 14px;
+    letter-spacing: 1px;
+  }
+
+  p.message {
+    font-size: 13px;
+    line-height: 1.6;
+    color: #9fd8e0;
+    margin: 0 0 26px;
+  }
+
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0,246,255,0.4), transparent);
+    margin: 0 0 22px;
+  }
+
+  .btn-row {
+    display: flex;
+    gap: 10px;
+  }
+
+  button {
+    flex: 1;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    padding: 12px 10px;
+    border-radius: 2px;
+    cursor: pointer;
+    background: transparent;
+    transition: all 0.15s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .btn-retry {
+    border: 1px solid var(--neon-cyan);
+    color: var(--neon-cyan);
+    box-shadow: 0 0 10px rgba(0,246,255,0.15) inset;
+  }
+  .btn-retry:active {
+    background: var(--neon-cyan);
+    color: #05050a;
+    box-shadow: 0 0 18px rgba(0,246,255,0.7);
+  }
+
+  .btn-back {
+    border: 1px solid rgba(255,46,196,0.6);
+    color: var(--neon-magenta);
+  }
+  .btn-back:active {
+    background: var(--neon-magenta);
+    color: #05050a;
+    box-shadow: 0 0 18px rgba(255,46,196,0.6);
+  }
+
+  .footer-tag {
+    margin-top: 18px;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: rgba(0,246,255,0.35);
+  }
+
+  .blink { animation: blink 1.4s step-start infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+</style>
+</head>
+<body>
+
+  <div class="grid-bg"></div>
+  <div class="scanlines"></div>
+  <div class="vignette"></div>
+
+  <div class="panel">
+    <div class="tag" id="tag">// SYSTEM ALERT</div>
+
+    <div class="icon" id="icon">⚠</div>
+
+    <h1><span class="glitch" id="title" data-text="ERROR">ERROR</span></h1>
+
+    <div class="code" id="code"></div>
+
+    <p class="message" id="message">Memuat detail kesalahan...</p>
+
+    <div class="divider"></div>
+
+    <div class="btn-row">
+      <button class="btn-retry" onclick="retry()">↻ COBA LAGI</button>
+      <button class="btn-back" onclick="goBackToApp()">← KEMBALI</button>
+    </div>
+
+    <div class="footer-tag">CONNECTION_STATUS <span class="blink">_</span></div>
+  </div>
+
+<script>
+  function getParam(name) {
+    return new URLSearchParams(window.location.search).get(name);
+  }
+
+  var type = getParam('type');
+  var code = getParam('code');
+
+  var tagEl = document.getElementById('tag');
+  var iconEl = document.getElementById('icon');
+  var titleEl = document.getElementById('title');
+  var codeEl = document.getElementById('code');
+  var msgEl = document.getElementById('message');
+
+  if (type === 'network') {
+    tagEl.textContent = '// INTERNET ERROR';
+    iconEl.textContent = '⌁';
+    iconEl.className = 'icon network';
+    titleEl.setAttribute('data-text', 'NO SIGNAL');
+    titleEl.textContent = 'NO SIGNAL';
+    codeEl.textContent = code ? 'ERR_CODE ' + code : '';
+    msgEl.textContent = 'Koneksi ke jaringan terputus. Periksa Wi-Fi atau data seluler Anda, lalu coba sambungkan kembali.';
+  } else {
+    tagEl.textContent = '// SERVER ERROR';
+    iconEl.textContent = '⚠';
+    iconEl.className = 'icon http';
+    titleEl.setAttribute('data-text', 'ACCESS DENIED');
+    titleEl.textContent = 'KONEKSI GAGAL';
+    codeEl.textContent = code ? 'HTTP ' + code : '';
+    msgEl.textContent = 'Server tidak dapat memproses permintaan ini. Sistem mungkin sedang bermasalah atau tidak tersedia.';
+  }
+
+  function retry() {
+    __portal.muatUlang();
+  }
+
+  function goBackToApp() {
+    __portal.tutup();
+  }
+</script>

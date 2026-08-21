@@ -33,6 +33,7 @@ javac --release 11 -classpath "$PLATFORM/android.jar" -d build/obj \
 
 
 "$BUILD_TOOLS/aapt" package -f -M src/AndroidManifest.xml -S src/res/ \
+      -A src/assets \
       -I "$PLATFORM/android.jar" \
       -F build/$NAMA_APK.unsigned.apk build/apk/ &&
 

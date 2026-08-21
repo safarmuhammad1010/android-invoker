@@ -5,6 +5,6 @@
     </style>
     <style name="SplashScreen"
         parent="@android:style/Theme.Material.NoActionBar">
-        <item name="@android:windowBackground">#000000</item>
+        <item name="android:windowBackground">#000000</item>
     </style>
 </resources>

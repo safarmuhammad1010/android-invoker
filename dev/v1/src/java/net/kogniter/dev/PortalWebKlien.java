@@ -1,12 +1,14 @@
 package net.kogniter.dev;
 
 
+import android.graphics.Bitmap;
 import android.content.Intent;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceError;
 import android.webkit.ValueCallback;
 import android.net.Uri;
 
@@ -22,6 +24,9 @@ import net.kogniter.dev.Utilitas;
 public class PortalWebKlien extends WebViewClient {
 
     MainActivity mMainActivity;
+
+    private boolean isShowingError = false;
+    private String lastGoodUrl = null;
 
     private int konter_debug = 0;
 
@@ -89,7 +94,41 @@ public class PortalWebKlien extends WebViewClient {
         return false;
     }
 
+    @Override
+    public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+        if (request.isForMainFrame()) {
+            showErrorPage("network", error.getErrorCode(), error.getDescription().toString());
+        }
+    }
+
+    @Override
+    public void onReceivedHttpError(WebView view, WebResourceRequest request, WebResourceResponse errorResponse) {
+        if (request.isForMainFrame()) {
+            String reason = errorResponse.getReasonPhrase();
+            showErrorPage("http", errorResponse.getStatusCode(), reason != null ? reason : "");
+        }
+    }
+
+    @Override
+    public void onPageStarted(WebView view, String url, Bitmap favicon) {
+        android.util.Log.d("Kogniter.WebViewPortal.Console", "halaman dimulai: " + url);
+        isShowingError = url.startsWith("file:///android_asset/gagal_memuat.html");
+        if (!isShowingError) {
+            lastGoodUrl = url;
+        }
+    }
+
+    private void showErrorPage(String type, int code, String message) {
+        String url = "file:///android_asset/gagal_memuat.html?type=" + type
+                + "&code=" + code
+                + "&msg=" + Uri.encode(message);
+        mMainActivity.mPortal.loadUrl(url);
+    }
+
     private boolean cekApakahUrlExternal(Uri url) {
+        if (url.toString().startsWith("file:///android_asset/")) {
+            return false;
+        }
         if (mMainActivity.mUrlTargetPortal != null) {
             String host1 = getHostFromUrl(mMainActivity.mUrlTargetPortal);
             String host2 = url.getHost();
@@ -151,6 +190,7 @@ public class PortalWebKlien extends WebViewClient {
         waktu1 = 0;
         waktu2 = 0;
         waktu3 = 0;
+        lastGoodUrl = url;
         mMainActivity.bukaPortal(url);
     }
 
@@ -158,6 +198,17 @@ public class PortalWebKlien extends WebViewClient {
     public void tutup() {
         android.util.Log.d("Kogniter.WebViewPortal.Console", "tutup()");
         mMainActivity.tutupPortal();
+    }
+
+    @JavascriptInterface
+    public void muatUlang() {
+        android.util.Log.d("Kogniter.WebViewPortal.Console", "muatUlang()");
+        if (lastGoodUrl != null) {
+            android.util.Log.d("Kogniter.WebViewPortal.Console", "memuat ulang " + lastGoodUrl);
+            mMainActivity.runOnUiThread(() -> {
+                mMainActivity.mPortal.loadUrl(lastGoodUrl);
+            });
+        }
     }
 
     @JavascriptInterface
