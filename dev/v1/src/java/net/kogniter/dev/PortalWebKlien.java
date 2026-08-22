@@ -40,6 +40,22 @@ public class PortalWebKlien extends WebViewClient {
         mMainActivity = mainActivity;
     }
 
+    private String kkkkk() {
+        long t = System.currentTimeMillis();
+        String teks_data = Long.toString(t);
+
+        teks_data = Utilitas.enAlp0(teks_data);
+
+        try {
+            teks_data = java.net.URLEncoder.encode(teks_data, "UTF-8");
+        } catch (Exception e) {
+            android.util.Log.e("Kogniter.WebViewPortal.Console", "ERROR: " + e.getMessage());
+            return "";
+        }
+
+        return teks_data;
+    }
+
     private boolean qqqqq(WebView view, WebResourceRequest request) {
         Uri url = request.getUrl();
         android.util.Log.d("Kogniter.WebViewPortal.Console", "KONFIRMASI skor_misi = " + skor_misi);
@@ -180,6 +196,32 @@ public class PortalWebKlien extends WebViewClient {
         String s = Utilitas.enAlp0(plainJson);
         android.util.Log.d("Kogniter.WebViewPortal.Console", "enAlp0 => " + s);
         return s;
+    }
+
+    @JavascriptInterface
+    public void i1() {
+        android.util.Log.d("Kogniter.WebViewPortal.Console", "i1 VALID");
+    }
+
+    @JavascriptInterface
+    public void i2() {
+        android.util.Log.d("Kogniter.WebViewPortal.Console", "i2 VALID");
+    }
+
+    @JavascriptInterface
+    public void i3() {
+        android.util.Log.d("Kogniter.WebViewPortal.Console", "i3 VALID");
+    }
+
+    @JavascriptInterface
+    public void i4() {
+        String k = kkkkk();
+        android.util.Log.d("Kogniter.WebViewPortal.Console", "i4 VALID: " + k);
+        mMainActivity.runOnUiThread(() -> {
+            mMainActivity.mPortal.evaluateJavascript(
+                String.format("window.URL_KONFIRMASI += '&i4_kogniter=%s'", k),
+            null);
+        });
     }
 
     @JavascriptInterface
