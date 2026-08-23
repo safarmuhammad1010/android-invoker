@@ -60,10 +60,10 @@ public class PortalWebKlien extends WebViewClient {
 
     private boolean qqqqq(WebView view, WebResourceRequest request) {
         Uri url = request.getUrl();
-        android.util.Log.d("Kogniter.WebViewPortal.Console", "KONFIRMASI skor_misi = " + skor_misi);
-        android.util.Log.d("Kogniter.WebViewPortal.Console", "KONFIRMASI waktu1 = " + waktu1);
-        android.util.Log.d("Kogniter.WebViewPortal.Console", "KONFIRMASI waktu2 = " + waktu2);
-        android.util.Log.d("Kogniter.WebViewPortal.Console", "KONFIRMASI waktu3 = " + waktu3);
+        android.util.Log.d("Kogniter.WebViewPortal.Console", "skor_misi = " + skor_misi);
+        android.util.Log.d("Kogniter.WebViewPortal.Console", "waktu1 = " + waktu1);
+        android.util.Log.d("Kogniter.WebViewPortal.Console", "waktu2 = " + waktu2);
+        android.util.Log.d("Kogniter.WebViewPortal.Console", "waktu3 = " + waktu3);
         String teks_data;
         try {
             JSONObject obj = new JSONObject();
@@ -91,14 +91,14 @@ public class PortalWebKlien extends WebViewClient {
                     .build();
         view.loadUrl(urlBaru.toString());
 
-        android.util.Log.d("Kogniter.WebViewPortal.Console", "URL IKLAN BARU => " + urlBaru.toString());
+        android.util.Log.d("Kogniter.WebViewPortal.Console", "IKLAN => " + urlBaru.toString());
 
         return true;
     }
 
     private boolean iiiii(WebView view, WebResourceRequest request) {
-        if (! vi1) {
-            android.util.Log.d("Kogniter.WebViewPortal.Console", "VI1 INVALID");
+        if (! mMainActivity.jklmn) {
+            android.util.Log.d("Kogniter.WebViewPortal.Console", "i1 0");
             return false;
         }
 
@@ -119,7 +119,7 @@ public class PortalWebKlien extends WebViewClient {
                     .build();
         view.loadUrl(urlBaru.toString());
 
-        android.util.Log.d("Kogniter.WebViewPortal.Console", "URL INDEX BARU => " + urlBaru.toString());
+        android.util.Log.d("Kogniter.WebViewPortal.Console", "INDEX => " + urlBaru.toString());
 
         return true;
     }
@@ -128,13 +128,13 @@ public class PortalWebKlien extends WebViewClient {
     public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
         Uri url = request.getUrl();
         String path = url.getPath();
-        android.util.Log.d("Kogniter.WebViewPortal.Console", "Memuat " + url);
+        android.util.Log.d("Kogniter.WebViewPortal.Console", "memuat " + url);
         if (cekApakahUrlExternal(url)) {
             bukaUrlDiExternal(url.toString());
             return true;
         } else if (path.endsWith("iklan.php")) {
             waktu3 = System.currentTimeMillis();
-            android.util.Log.d("Kogniter.WebViewPortal.Console", "IKLAN " + waktu3);
+            android.util.Log.d("Kogniter.WebViewPortal.Console", "iklan.php " + waktu3);
             return qqqqq(view, request);
         } else if (path.endsWith("index.php")) {
             android.util.Log.d("Kogniter.WebViewPortal.Console", "INDEX: " + url);
@@ -227,19 +227,14 @@ public class PortalWebKlien extends WebViewClient {
     @JavascriptInterface
     public String ll0(String plainJson) {
         String s = Utilitas.enAlp0(plainJson);
-        android.util.Log.d("Kogniter.WebViewPortal.Console", "enAlp0 => " + s);
+        android.util.Log.d("Kogniter.WebViewPortal.Console", "ll0 => " + s);
         return s;
-    }
-
-    public void i1() {
-        android.util.Log.d("Kogniter.WebViewPortal.Console", "i1 VALID");
-        vi1 = true;
     }
 
     @JavascriptInterface
     public void i2() {
         String k = kkkkk();
-        android.util.Log.d("Kogniter.WebViewPortal.Console", "i2 VALID: " + k);
+        android.util.Log.d("Kogniter.WebViewPortal.Console", "i2 1: " + k);
         mMainActivity.runOnUiThread(() -> {
             mMainActivity.mPortal.evaluateJavascript(
                 String.format("window.URL_KONFIRMASI += '&i2_kogniter=%s'", k),
@@ -250,7 +245,7 @@ public class PortalWebKlien extends WebViewClient {
     @JavascriptInterface
     public void i3() {
         String k = kkkkk();
-        android.util.Log.d("Kogniter.WebViewPortal.Console", "i3 VALID: " + k);
+        android.util.Log.d("Kogniter.WebViewPortal.Console", "i3 1: " + k);
         mMainActivity.runOnUiThread(() -> {
             mMainActivity.mPortal.evaluateJavascript(
                 String.format("window.URL_KONFIRMASI += '&i3_kogniter=%s'", k),
@@ -261,7 +256,7 @@ public class PortalWebKlien extends WebViewClient {
     @JavascriptInterface
     public void i4() {
         String k = kkkkk();
-        android.util.Log.d("Kogniter.WebViewPortal.Console", "i4 VALID: " + k);
+        android.util.Log.d("Kogniter.WebViewPortal.Console", "i4 1: " + k);
         mMainActivity.runOnUiThread(() -> {
             mMainActivity.mPortal.evaluateJavascript(
                 String.format("window.URL_KONFIRMASI += '&i4_kogniter=%s'", k),

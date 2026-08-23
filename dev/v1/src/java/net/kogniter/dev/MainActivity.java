@@ -34,6 +34,8 @@ public class MainActivity extends Activity {
 
     static MainActivity instance;
 
+    boolean jklmn = false;
+
     WebView mWebView;
 
     View mLayoutBrowser;
