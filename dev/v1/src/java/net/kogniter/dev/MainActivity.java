@@ -58,8 +58,13 @@ public class MainActivity extends Activity {
     Inisiator mInisiator;
     Integrator mIntegrator;
 
+    boolean mApaMatikanTombolKembali = false;
+
     View mTombolUnduhApk;
     View mLayoutAplikasiKedaluwarsa;
+
+    View mPeringatanDnsAktif;
+    View mPeringatanVpnAktif;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +80,8 @@ public class MainActivity extends Activity {
         }
 
         setContentView(R.layout.activity_main);
+
+        mPeringatanDnsAktif = findViewById(R.id.private_dns_warning);
 
         mTombolUnduhApk = findViewById(R.id.tombol_unduh_aplikasi);
         mLayoutAplikasiKedaluwarsa = findViewById(R.id.aplikasi_kedaluwarsa);
@@ -117,6 +124,7 @@ public class MainActivity extends Activity {
 
     @Override
     public void onBackPressed() {
+        if (mApaMatikanTombolKembali) return;
         if (mLayoutBrowser.getVisibility() == View.VISIBLE) return;
         if (mLayoutPortal.getVisibility() == View.VISIBLE) return;
         if (mLayoutAdvertiser.getVisibility() == View.VISIBLE) return;
@@ -130,12 +138,18 @@ public class MainActivity extends Activity {
             if (apaDnsAktif) android.util.Log.d("Kogniter.MainActivity", "DNS AKTIF");
             if (apaVpnAktif) android.util.Log.d("Kogniter.MainActivity", "VPN AKTIF");
 
+            if (apaDnsAktif) {
+                mPeringatanDnsAktif.setVisibility(View.VISIBLE);
+            } else {
 
+            }
 
             jklmn = false;
+            mApaMatikanTombolKembali = true;
             return true;
         } else {
             jklmn = true;
+            mApaMatikanTombolKembali = false;
             return false;
         }
     }

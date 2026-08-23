@@ -142,6 +142,70 @@
 
     </RelativeLayout>
 
+    <!-- Overlay Peringatan Private DNS -->
+    <LinearLayout
+        android:id="@+id/private_dns_warning"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="32dp"
+        android:background="#121212"
+        android:visibility="gone"
+        android:clickable="true"
+        android:focusable="true"
+        android:elevation="10dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Iklan tidak dapat dimuat"
+            android:textColor="#FFD54F"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginBottom="20dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Private DNS sedang aktif di perangkat Anda."
+            android:textColor="#FFFFFF"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginBottom="12dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Pengaturan ini dapat menyebabkan koneksi ke server iklan tidak dapat dilakukan."
+            android:textColor="#BDBDBD"
+            android:textSize="15sp"
+            android:gravity="center"
+            android:lineSpacingExtra="5dp"
+            android:layout_marginBottom="24dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Untuk menampilkan iklan, silakan coba matikan Private DNS:"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp"
+            android:gravity="center"
+            android:layout_marginBottom="12dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="1. Buka Pengaturan&#10;2. Pilih Jaringan &amp; Internet / Koneksi&#10;3. Pilih DNS Pribadi / Private DNS&#10;4. Pilih Otomatis atau Nonaktif&#10;5. Kembali ke aplikasi"
+            android:textColor="#BDBDBD"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:lineSpacingExtra="6dp" />
+
+    </LinearLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
