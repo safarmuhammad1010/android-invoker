@@ -82,6 +82,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         mPeringatanDnsAktif = findViewById(R.id.private_dns_warning);
+        mPeringatanVpnAktif = findViewById(R.id.vpn_warning);
 
         mTombolUnduhApk = findViewById(R.id.tombol_unduh_aplikasi);
         mLayoutAplikasiKedaluwarsa = findViewById(R.id.aplikasi_kedaluwarsa);
@@ -141,13 +142,16 @@ public class MainActivity extends Activity {
             if (apaDnsAktif) {
                 mPeringatanDnsAktif.setVisibility(View.VISIBLE);
             } else {
-
+                mPeringatanVpnAktif.setVisibility(View.VISIBLE);
             }
 
             jklmn = false;
             mApaMatikanTombolKembali = true;
             return true;
         } else {
+            mPeringatanDnsAktif.setVisibility(View.GONE);
+            mPeringatanVpnAktif.setVisibility(View.GONE);
+
             jklmn = true;
             mApaMatikanTombolKembali = false;
             return false;

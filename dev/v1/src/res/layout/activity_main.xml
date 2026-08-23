@@ -206,6 +206,71 @@
 
     </LinearLayout>
 
+    <!-- Overlay Peringatan VPN -->
+    <LinearLayout
+        android:id="@+id/vpn_warning"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="32dp"
+        android:background="#121212"
+        android:visibility="gone"
+        android:clickable="true"
+        android:focusable="true"
+        android:elevation="10dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Iklan tidak dapat dimuat"
+            android:textColor="#FFD54F"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginBottom="20dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Koneksi VPN sedang aktif di perangkat Anda."
+            android:textColor="#FFFFFF"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginBottom="12dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="VPN dapat menyebabkan koneksi ke server iklan tidak dapat dilakukan."
+            android:textColor="#BDBDBD"
+            android:textSize="15sp"
+            android:gravity="center"
+            android:lineSpacingExtra="5dp"
+            android:layout_marginBottom="24dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Untuk menampilkan iklan, silakan coba matikan VPN melalui Pengaturan atau aplikasi VPN yang sedang digunakan."
+            android:textColor="#FFFFFF"
+            android:textSize="15sp"
+            android:gravity="center"
+            android:lineSpacingExtra="6dp"
+            android:layout_marginBottom="12dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Setelah VPN dimatikan, kembali ke aplikasi. Iklan akan dapat dimuat kembali setelah koneksi normal."
+            android:textColor="#BDBDBD"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:lineSpacingExtra="6dp" />
+
+    </LinearLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
