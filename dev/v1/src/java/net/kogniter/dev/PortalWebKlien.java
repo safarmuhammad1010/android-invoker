@@ -25,6 +25,8 @@ public class PortalWebKlien extends WebViewClient {
 
     MainActivity mMainActivity;
 
+    private boolean vi1 = false;
+
     private boolean isShowingError = false;
     private String lastGoodUrl = null;
 
@@ -73,23 +75,51 @@ public class PortalWebKlien extends WebViewClient {
             android.util.Log.d("Kogniter.WebViewPortal.Console", "plainJson = " + teks_json);
             teks_data = Utilitas.enAlp0(teks_json);
         } catch (JSONException e) {
-            android.util.Log.e("Kogniter.WebViewPortal.Console", e.getMessage());
+            android.util.Log.e("Kogniter.WebViewPortal.Console", "ERROR: " + e.getMessage());
             return false;
         }
 
         try {
             teks_data = java.net.URLEncoder.encode(teks_data, "UTF-8");
         } catch (Exception e) {
-            android.util.Log.e("Kogniter.WebViewPortal.Console", e.getMessage());
+            android.util.Log.e("Kogniter.WebViewPortal.Console", "ERROR: " + e.getMessage());
             return false;
         }
 
-        android.util.Log.d("Kogniter.WebViewPortal.Console", "teksData = " + teks_data);
-        Uri newUrl = url.buildUpon()
+        Uri urlBaru = url.buildUpon()
                     .appendQueryParameter("analytic_kogniter", teks_data)
                     .build();
-        view.loadUrl(newUrl.toString());
-        android.util.Log.d("Kogniter.WebViewPortal.Console", "url = " + newUrl.toString());
+        view.loadUrl(urlBaru.toString());
+
+        android.util.Log.d("Kogniter.WebViewPortal.Console", "URL IKLAN BARU => " + urlBaru.toString());
+
+        return true;
+    }
+
+    private boolean iiiii(WebView view, WebResourceRequest request) {
+        if (! vi1) {
+            android.util.Log.d("Kogniter.WebViewPortal.Console", "VI1 INVALID");
+            return false;
+        }
+
+        Uri url = request.getUrl();
+        long t = System.currentTimeMillis();
+
+        String teks_data = Long.toString(t);
+        teks_data = Utilitas.enAlp0(teks_data);
+        try {
+            teks_data = java.net.URLEncoder.encode(teks_data, "UTF-8");
+        } catch (Exception e) {
+            android.util.Log.e("Kogniter.WebViewPortal.Console", "ERROR: " + e.getMessage());
+            return false;
+        }
+
+        Uri urlBaru = url.buildUpon()
+                    .appendQueryParameter("i1", teks_data)
+                    .build();
+        view.loadUrl(urlBaru.toString());
+
+        android.util.Log.d("Kogniter.WebViewPortal.Console", "URL INDEX BARU => " + urlBaru.toString());
 
         return true;
     }
@@ -106,6 +136,9 @@ public class PortalWebKlien extends WebViewClient {
             waktu3 = System.currentTimeMillis();
             android.util.Log.d("Kogniter.WebViewPortal.Console", "IKLAN " + waktu3);
             return qqqqq(view, request);
+        } else if (path.endsWith("index.php")) {
+            android.util.Log.d("Kogniter.WebViewPortal.Console", "INDEX: " + url);
+            return iiiii(view, request);
         }
         return false;
     }
@@ -174,7 +207,7 @@ public class PortalWebKlien extends WebViewClient {
 
     @JavascriptInterface
     public void debug(String teks) {
-        android.util.Log.d("Kogniter.WebViewPortal.Console", "DEBUG: " + teks);
+        android.util.Log.d("Kogniter.WebViewPortal.Console", "DEBUG[" + konter_debug + "] " + teks);
         konter_debug += 1;
         if (konter_debug == 1) {
             waktu1 = Long.parseLong(teks);
@@ -198,9 +231,9 @@ public class PortalWebKlien extends WebViewClient {
         return s;
     }
 
-    @JavascriptInterface
     public void i1() {
         android.util.Log.d("Kogniter.WebViewPortal.Console", "i1 VALID");
+        vi1 = true;
     }
 
     @JavascriptInterface
