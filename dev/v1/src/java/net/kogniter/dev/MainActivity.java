@@ -34,7 +34,7 @@ public class MainActivity extends Activity {
 
     static MainActivity instance;
 
-    boolean jklmn = true;
+    boolean jklmn = false;
 
     WebView mWebView;
 
@@ -109,11 +109,35 @@ public class MainActivity extends Activity {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        android.util.Log.d("Kogniter.MainActivity", "onResume()");
+        if (cekVpnDns()) return;
+    }
+
+    @Override
     public void onBackPressed() {
         if (mLayoutBrowser.getVisibility() == View.VISIBLE) return;
         if (mLayoutPortal.getVisibility() == View.VISIBLE) return;
         if (mLayoutAdvertiser.getVisibility() == View.VISIBLE) return;
         mWebView.evaluateJavascript("__mundur()", null);
+    }
+
+    private boolean cekVpnDns() {
+        boolean apaDnsAktif = NetworkChecker.isPrivateDnsActive(this);
+        boolean apaVpnAktif = NetworkChecker.isVpnActive(this);
+        if (apaDnsAktif || apaVpnAktif) {
+            if (apaDnsAktif) android.util.Log.d("Kogniter.MainActivity", "DNS AKTIF");
+            if (apaVpnAktif) android.util.Log.d("Kogniter.MainActivity", "VPN AKTIF");
+
+
+
+            jklmn = false;
+            return true;
+        } else {
+            jklmn = true;
+            return false;
+        }
     }
 
     void bukaUrlDiExternal(String url) {

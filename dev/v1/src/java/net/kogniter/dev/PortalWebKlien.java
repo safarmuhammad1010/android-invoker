@@ -21,7 +21,7 @@ import org.json.JSONObject;
 import net.kogniter.dev.Utilitas;
 
 
-public class PortalWebKlien extends WebViewClient {
+class PortalWebKlien extends WebViewClient {
 
     MainActivity mMainActivity;
 

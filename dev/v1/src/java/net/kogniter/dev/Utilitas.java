@@ -14,7 +14,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 
-public final class Utilitas {
+final class Utilitas {
 
     private static final String ALP0 = "876T54gHuerEfdSwqqq";
 
