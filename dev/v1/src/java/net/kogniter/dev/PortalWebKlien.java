@@ -205,12 +205,24 @@ public class PortalWebKlien extends WebViewClient {
 
     @JavascriptInterface
     public void i2() {
-        android.util.Log.d("Kogniter.WebViewPortal.Console", "i2 VALID");
+        String k = kkkkk();
+        android.util.Log.d("Kogniter.WebViewPortal.Console", "i2 VALID: " + k);
+        mMainActivity.runOnUiThread(() -> {
+            mMainActivity.mPortal.evaluateJavascript(
+                String.format("window.URL_KONFIRMASI += '&i2_kogniter=%s'", k),
+            null);
+        });
     }
 
     @JavascriptInterface
     public void i3() {
-        android.util.Log.d("Kogniter.WebViewPortal.Console", "i3 VALID");
+        String k = kkkkk();
+        android.util.Log.d("Kogniter.WebViewPortal.Console", "i3 VALID: " + k);
+        mMainActivity.runOnUiThread(() -> {
+            mMainActivity.mPortal.evaluateJavascript(
+                String.format("window.URL_KONFIRMASI += '&i3_kogniter=%s'", k),
+            null);
+        });
     }
 
     @JavascriptInterface
