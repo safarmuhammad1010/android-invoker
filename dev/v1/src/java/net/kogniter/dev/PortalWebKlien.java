@@ -119,7 +119,7 @@ public class PortalWebKlien extends WebViewClient {
             }
 
             Uri urlBaru = urlLama.buildUpon()
-                        .appendQueryParameter("i1", teks_data)
+                        .appendQueryParameter("i1_kogniter", teks_data)
                         .build();
 
             android.util.Log.d("Kogniter.WebViewPortal.Console", "INDEX => " + urlBaru.toString());
