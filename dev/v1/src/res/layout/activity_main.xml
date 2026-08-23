@@ -159,7 +159,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Iklan tidak dapat dimuat"
+            android:text="Iklan Tidak Dapat Dimuat"
             android:textColor="#FFD54F"
             android:textSize="24sp"
             android:textStyle="bold"
@@ -169,7 +169,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Private DNS sedang aktif di perangkat Anda."
+            android:text="DNS Pribadi sedang aktif di perangkat Anda."
             android:textColor="#FFFFFF"
             android:textSize="17sp"
             android:textStyle="bold"
@@ -189,7 +189,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Untuk menampilkan iklan, silakan coba matikan Private DNS:"
+            android:text="Untuk menampilkan iklan, silakan coba matikan DNS Pribadi anda:"
             android:textColor="#FFFFFF"
             android:textSize="15sp"
             android:gravity="center"
@@ -223,7 +223,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Iklan tidak dapat dimuat"
+            android:text="Iklan Tidak Dapat Dimuat"
             android:textColor="#FFD54F"
             android:textSize="24sp"
             android:textStyle="bold"
@@ -245,11 +245,12 @@
             android:layout_height="wrap_content"
             android:text="VPN dapat menyebabkan koneksi ke server iklan tidak dapat dilakukan."
             android:textColor="#BDBDBD"
-            android:textSize="15sp"
+            android:textSize="12sp"
             android:gravity="center"
             android:lineSpacingExtra="5dp"
-            android:layout_marginBottom="24dp" />
+            android:layout_marginBottom="16dp" />
 
+        <!--
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -259,12 +260,13 @@
             android:gravity="center"
             android:lineSpacingExtra="6dp"
             android:layout_marginBottom="12dp" />
+        -->
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Setelah VPN dimatikan, kembali ke aplikasi. Iklan akan dapat dimuat kembali setelah koneksi normal."
-            android:textColor="#BDBDBD"
+            android:text="Silahkan matikan VPN melalui aplikasi VPN yang anda gunakan, atau melalui pengaturan perangkat anda."
+            android:textColor="#BFBFBF"
             android:textSize="14sp"
             android:gravity="center"
             android:lineSpacingExtra="6dp" />
