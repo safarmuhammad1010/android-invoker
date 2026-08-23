@@ -96,32 +96,38 @@ public class PortalWebKlien extends WebViewClient {
         return true;
     }
 
-    private boolean iiiii(WebView view, WebResourceRequest request) {
-        if (! mMainActivity.jklmn) {
-            android.util.Log.d("Kogniter.WebViewPortal.Console", "i1 0");
-            return false;
+    private String intersepsiUrl(String url) {
+        Uri urlLama = Uri.parse(url);
+        String path = urlLama.getPath();
+        android.util.Log.d("Kogniter.WebViewPortal.Console", "PATH: " + path);
+        if (path.endsWith("/misi_harian/index.php")) {
+            if (! mMainActivity.jklmn) {
+                android.util.Log.d("Kogniter.WebViewPortal.Console", "i1 0");
+                return url;
+            }
+
+            long t = System.currentTimeMillis();
+
+            String teks_data = Long.toString(t);
+            teks_data = Utilitas.enAlp0(teks_data);
+
+            try {
+                teks_data = java.net.URLEncoder.encode(teks_data, "UTF-8");
+            } catch (Exception e) {
+                android.util.Log.e("Kogniter.WebViewPortal.Console", "ERROR: " + e.getMessage());
+                return url;
+            }
+
+            Uri urlBaru = urlLama.buildUpon()
+                        .appendQueryParameter("i1", teks_data)
+                        .build();
+
+            android.util.Log.d("Kogniter.WebViewPortal.Console", "INDEX => " + urlBaru.toString());
+
+            return urlBaru.toString();
         }
 
-        Uri url = request.getUrl();
-        long t = System.currentTimeMillis();
-
-        String teks_data = Long.toString(t);
-        teks_data = Utilitas.enAlp0(teks_data);
-        try {
-            teks_data = java.net.URLEncoder.encode(teks_data, "UTF-8");
-        } catch (Exception e) {
-            android.util.Log.e("Kogniter.WebViewPortal.Console", "ERROR: " + e.getMessage());
-            return false;
-        }
-
-        Uri urlBaru = url.buildUpon()
-                    .appendQueryParameter("i1", teks_data)
-                    .build();
-        view.loadUrl(urlBaru.toString());
-
-        android.util.Log.d("Kogniter.WebViewPortal.Console", "INDEX => " + urlBaru.toString());
-
-        return true;
+        return url;
     }
 
     @Override
@@ -136,9 +142,6 @@ public class PortalWebKlien extends WebViewClient {
             waktu3 = System.currentTimeMillis();
             android.util.Log.d("Kogniter.WebViewPortal.Console", "iklan.php " + waktu3);
             return qqqqq(view, request);
-        } else if (path.endsWith("index.php")) {
-            android.util.Log.d("Kogniter.WebViewPortal.Console", "INDEX: " + url);
-            return iiiii(view, request);
         }
         return false;
     }
@@ -266,13 +269,14 @@ public class PortalWebKlien extends WebViewClient {
 
     @JavascriptInterface
     public void buka(String url) {
-        android.util.Log.d("Kogniter.WebViewPortal.Console", "buka()");
+        android.util.Log.d("Kogniter.WebViewPortal.Console", "buka(): " + url);
         konter_debug = 0;
         skor_misi = -1;
         waktu1 = 0;
         waktu2 = 0;
         waktu3 = 0;
         lastGoodUrl = url;
+        url = intersepsiUrl(url);
         mMainActivity.bukaPortal(url);
     }
 

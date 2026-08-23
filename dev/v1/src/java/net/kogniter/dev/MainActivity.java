@@ -34,7 +34,7 @@ public class MainActivity extends Activity {
 
     static MainActivity instance;
 
-    boolean jklmn = false;
+    boolean jklmn = true;
 
     WebView mWebView;
 
