@@ -211,6 +211,42 @@ class Integrator {
             return K.TAHAP_APK;
         }
 
+        String mDVersiApk = null;
+        @JavascriptInterface
+        public String dVersiApk() {
+            if (mDVersiApk != null) return mDVersiApk;
+            try {
+                mDVersiApk = mMainActivity.mInisiator.mMetadataGlobal.getString("versi_apk");
+            } catch (Exception e) {
+                android.util.Log.e("Kogniter.Integrator", e.getMessage());
+            }
+            return mDVersiApk;
+        }
+
+        String mDVersiWeb = null;
+        @JavascriptInterface
+        public String dVersiWeb() {
+            if (mDVersiWeb != null) return mDVersiWeb;
+            try {
+                mDVersiWeb = mMainActivity.mInisiator.mMetadataGlobal.getString("versi_web");
+            } catch (Exception e) {
+                android.util.Log.e("Kogniter.Integrator", e.getMessage());
+            }
+            return mDVersiWeb;
+        }
+
+        String mDVersiServis = null;
+        @JavascriptInterface
+        public String dVersiServis() {
+            if (mDVersiServis != null) return mDVersiServis;
+            try {
+                mDVersiServis = mMainActivity.mInisiator.mMetadataGlobal.getString("versi_servis");
+            } catch (Exception e) {
+                android.util.Log.e("Kogniter.Integrator", e.getMessage());
+            }
+            return mDVersiServis;
+        }
+
         @JavascriptInterface
         public int dSdkInt() {
             return android.os.Build.VERSION.SDK_INT;
