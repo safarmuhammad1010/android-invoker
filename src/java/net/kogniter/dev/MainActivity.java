@@ -158,10 +158,17 @@ public class MainActivity extends Activity {
         }
     }
 
-    void bukaUrlDiExternal(String url) {
+    boolean bukaUrlDiExternal(String url) {
         android.util.Log.d("Kogniter.MainActivity", "buka di external: " + url);
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-        this.startActivity(intent);
+        try {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            this.startActivity(intent);
+            return true;
+        } catch (Exception e) {
+            android.util.Log.d("Kogniter.MainActivity", "gagal buka di external: " + e.getMessage());
+            tos("Aplikasi tidak ditemukan");
+            return false;
+        }
     }
 
     void butuhPembaruan(String urlApk) {

@@ -136,7 +136,7 @@ class PortalWebKlien extends WebViewClient {
         String path = url.getPath();
         android.util.Log.d("Kogniter.WebViewPortal.Console", "memuat " + url);
         if (cekApakahUrlExternal(url)) {
-            bukaUrlDiExternal(url.toString());
+            mMainActivity.bukaUrlDiExternal(url.toString());
             return true;
         } else if (path.endsWith("iklan.php")) {
             waktu3 = System.currentTimeMillis();
@@ -191,11 +191,6 @@ class PortalWebKlien extends WebViewClient {
             }
         }
         return false;
-    }
-
-    private void bukaUrlDiExternal(String url) {
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-        mMainActivity.startActivity(intent);
     }
 
     public static String getHostFromUrl(String urlString) {
